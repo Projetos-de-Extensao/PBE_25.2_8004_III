@@ -6,11 +6,11 @@
 Descreva o seu projeto em linhas gerais. 
 
 # Equipe
-João Victor 
-João Mariano
-João Donda 
-Sarah Ferrari
-Caique Rechuan
+João Victor   
+João Mariano  
+João Donda   
+Sarah Ferrari  
+Caique Rechuan  
 
 ## Instalação 
 **Linguagens**: Python, Django<br>
