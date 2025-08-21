@@ -2,7 +2,7 @@
 
 **Código da Disciplina**: IBM8936<br>
 
-# Equipe: Frello
+# Frello
 
 ## Sobre 
 Descreva o seu projeto em linhas gerais.
