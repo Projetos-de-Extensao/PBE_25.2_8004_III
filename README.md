@@ -5,7 +5,7 @@
 ## Sobre 
 Descreva o seu projeto em linhas gerais. 
 
-# Equipe
+## Equipe
 João Victor   
 João Mariano  
 João Donda   
