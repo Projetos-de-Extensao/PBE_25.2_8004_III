@@ -1,18 +1,10 @@
 ---
 repo_url: https://github.com/jonh-carvalho/PBE_25.2_8003
-site_author: Jonh Carvalho
-site_name: PBE_25.2_8003
-copyright: Copyright ©️ 2025, Jonh Carvalho
+site_author: Sarah Ferrari, João Mariano, João Victor, João Donda e Caique Rechuan
+site_name: Frello
 
 nav: 
   - Home: index.md
-  - Disciplina:
-      - Aulas: Disciplina/aulas.md
-      - Ambiente: Disciplina/ambiente.md
-      - Github: Disciplina/github.md
-      - Mkdocs: Disciplina/mkdocs.md
-      - CodeSpace: Disciplina/codespace.md
-      - Avaliações: Disciplina/avaliacoes.md
   - Iniciação: 
       - Index: Iniciacao/index.md
       - Pesquisa: Iniciacao/pesquisa.md
@@ -115,7 +107,7 @@ theme:
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: deep orange
+      primary: deep blue
       accent: amber
       toggle:
         icon: material/toggle-switch-off
