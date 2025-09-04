@@ -10,9 +10,10 @@ Mapa mental consiste em criar resumos cheios de símbolos, cores, setas e frases
 </p>
  
 ## Metodologia
+
  
 <p align = "justify">
-Foi levantado um ponto importante sobre o app e, assim, foi produzido o mapa mental. O documento foi produzido utilizando a ferramenta...
+Foi levantado um ponto importante sobre o app e, assim, foi produzido o mapa mental. O documento foi produzido utilizando a ferramenta MindMeister
 </p>
  
 ## Mapa mental - Geral.
@@ -21,12 +22,8 @@ Foi levantado um ponto importante sobre o app e, assim, foi produzido o mapa men
  
 ### Mapa mental 1
  
-[![Mapa mental Entrevista](../assets/Mapas_Mentais/image.png)](../assets/Mapas_Mentais/image.png)
+<img width="1254" height="672" alt="Captura de tela 2025-09-03 210153" src="https://github.com/user-attachments/assets/414c7914-6d96-4b40-b3f1-d86c08f0db31" />
  
- 
-### Mapa mental 2
- 
-[![Mapa mental Brainstorm](../assets/Mapas_Mentais/image.png)](../assets/Mapas_Mentais/image.png)
  
 ## Conclusão
  
@@ -35,14 +32,13 @@ O mapa mental é uma ficha de estudos que ajuda a dar uma visão geral do tema, 
 </p>
  
 ## Referências
-> Mapa MentalXXX,  Disponível em: https://www.....
+> Mapa MentalXXX,  Disponível em: https://www](https://mm.tt/map/3807484870?t=iZCIRvZz00)
  
-> Ferramentas para Mapas Mentais. Disponível em: https://www....
+> Ferramentas para Mapas Mentais. Disponível em: https://www.mindmeister.com
  
-> Plataforma para usuários colaborar no desenho... Disponível em: https://...
+> Plataforma para usuários colaborar no desenho... Disponível em: https://www.mindmeister.com
  
 ## Versionamento
 | Data | Versão | Descrição | Autor(es) |
 | -- | -- | -- | -- |
-| dd/mm/yy | 1.0 | Criação do documento | xxx xxxx |
-| dd/mm/yy | 2.0 | Adicionado Mapa mental 2 | xxxx xxxx |
+| dd/mm/yy | 1.0 | Criação do documento | Joao Donda, Caique Rechuan|
