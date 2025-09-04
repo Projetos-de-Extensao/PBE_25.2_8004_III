@@ -18,7 +18,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ## **Brainstorm**
 
-### **Versão 1.0**
+### **Versão 2.0**
 
 ---
 
