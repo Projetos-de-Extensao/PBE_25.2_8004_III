@@ -47,3 +47,8 @@ As funcionalidades do sistema são divididas em três painéis principais: o pai
 
 ---
 
+## **Autor(es)**
+| Data | Versão | Descrição | Autor(es) |
+|-------|--------|-----------|------------|
+| 28/08/2025 | 1.0 | Criação do documento | João Mariano.
+

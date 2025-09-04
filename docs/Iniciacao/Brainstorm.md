@@ -155,4 +155,4 @@ Através da aplicação da técnica de brainstorm, foi possível elicitar os pri
 ## **Autor(es)**
 | Data | Versão | Descrição | Autor(es) |
 |-------|--------|-----------|------------|
-| 28/08/2025 | 1.0 | Criação do documento | Sarah Ferrari, João Mariano, João Victor, João Donda e Caique Rechuan.
+| 28/08/2025 | 1.0 | Criação do documento | Sarah Ferrari.
