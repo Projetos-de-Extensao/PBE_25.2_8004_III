@@ -43,7 +43,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
   
 - O aluno acessa a plataforma, cria um cadastro com e-mail institucional e senha.
   
-- O sistema deve validar o vínculo com a instituição (ex: e-mail verificado
+- O sistema deve validar o vínculo com a instituição (ex: e-mail verificado)
   
 - Após o login, o aluno poderá completar o perfil com informações pessoais e acadêmicas.
   
@@ -80,6 +80,8 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 - O sistema deve confirmar a inscrição e enviar uma notificação por e-mail.
    
 - Cada aluno só pode se candidatar a uma vaga por disciplina por semestre.
+  
+- O aluno deverá ter um CR geral maior que 7,0 e um CR na disciplina maior que 8 para se candidatar
   
 - O status da candidatura deve ser atualizado automaticamente no painel do aluno.
 </p>
@@ -155,4 +157,4 @@ Através da aplicação da técnica de brainstorm, foi possível elicitar os pri
 ## **Autor(es)**
 | Data | Versão | Descrição | Autor(es) |
 |-------|--------|-----------|------------|
-| 28/08/2025 | 1.0 | Criação do documento | Sarah Ferrari.
+| 28/08/2025 | 2.0 | Criação do documento | Sarah Ferrari.
