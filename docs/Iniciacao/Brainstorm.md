@@ -25,31 +25,31 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### **1. Qual o objetivo principal da aplicação?**
 <p align="justify">
 
-- A plataforma deve centralizar todas as vagas de monitoria da faculdade para facilitar o acesso dos alunos.  
+- A plataforma deve centralizar todas as vagas de monitoria da faculdade para facilitar o acesso dos alunos.    
    
-- O sistema deve permitir candidaturas rápidas e simplificadas.
+- O sistema deve permitir candidaturas rápidas e simplificadas.   
 
-- A aplicação deve automatizar parte do processo de aprovação dos candidatos.
+- A aplicação deve automatizar parte do processo de aprovação dos candidatos.   
     
-- O foco é ser simples e intuitivo, garantindo que todos entendam como usar.
+- O foco é ser simples e intuitivo, garantindo que todos entendam como usar.  
      
-- A plataforma também deve armazenar um histórico das candidaturas para futuras consultas.   
-</p>
+- A plataforma também deve armazenar um histórico das candidaturas para futuras consultas.     
+</p> 
 
 ---
 
 ### **2. Como será o processo para cadastrar um novo aluno (candidato)?**
 <p align="justify"> 
   
-- O aluno acessa a plataforma, cria um cadastro com e-mail institucional e senha.
+- O aluno acessa a plataforma, cria um cadastro com e-mail institucional e senha.  
   
-- O sistema deve validar o vínculo com a instituição (ex: e-mail verificado)
+- O sistema deve validar o vínculo com a instituição (ex: e-mail verificado).     
   
-- Após o login, o aluno poderá completar o perfil com informações pessoais e acadêmicas.
+- Após o login, o aluno poderá completar o perfil com informações pessoais e acadêmicas.  
   
-- O aluno deverá aceitar os termos de uso antes de finalizar o cadastro.
+- O aluno deverá aceitar os termos de uso antes de finalizar o cadastro.  
   
-- O cadastro deve ser simples para não desestimular novos usuários.
+- O cadastro deve ser simples para não desestimular novos usuários.  
 </p>
 
 ---
@@ -57,15 +57,15 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### **3. Como será a forma de adicionar vagas de monitoria?**
 <p align="justify">
   
-- Apenas professores ou administradores poderão cadastrar novas vagas.   
+- Apenas professores ou administradores poderão cadastrar novas vagas.     
   
-- As vagas devem conter informações como disciplina, pré-requisitos e prazo de inscrição.   
+- As vagas devem conter informações como disciplina, pré-requisitos e prazo de inscrição.    
 
-- O sistema deve permitir upload de documentos relacionados à vaga (ex: plano de atividades).   
+- O sistema deve permitir upload de documentos relacionados à vaga (ex: plano de atividades).     
   
-- É importante que as vagas fiquem visíveis em tempo real para os alunos.
+- É importante que as vagas fiquem visíveis em tempo real para os alunos.   
   
-- Vagas encerradas devem ser automaticamente arquivadas.   
+- Vagas encerradas devem ser automaticamente arquivadas.     
 </p>
 
 ---
@@ -73,17 +73,17 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### **4. Como será a candidatura às vagas?**
 <p align="justify"> 
 
-- O aluno logado poderá clicar em “Candidatar-se” diretamente na vaga.
+- O aluno logado poderá clicar em “Candidatar-se” diretamente na vaga.   
   
-- Será necessário anexar documentos obrigatórios, como histórico acadêmico.   
+- Será necessário anexar documentos obrigatórios, como histórico acadêmico.    
   
-- O sistema deve confirmar a inscrição e enviar uma notificação por e-mail.   
+- O sistema deve confirmar a inscrição e enviar uma notificação por e-mail.      
    
-- Cada aluno só pode se candidatar a uma vaga por disciplina por semestre.   
+- Cada aluno só pode se candidatar a uma vaga por disciplina por semestre.     
   
-- O aluno deverá ter um CR geral maior que 7,0 e um CR na disciplina maior que 8 para se candidatar
+- O aluno deverá ter um CR geral maior que 7,0 e um CR na disciplina maior que 8 para se candidatar.  
   
-- O status da candidatura deve ser atualizado automaticamente no painel do aluno.
+- O status da candidatura deve ser atualizado automaticamente no painel do aluno.    
 </p>
 
 ---
@@ -91,15 +91,15 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### **5. Quais funcionalidades o painel administrativo deve ter?**
 <p align="justify">  
   
-- Visualizar todos os candidatos inscritos em cada vaga.   
+- Visualizar todos os candidatos inscritos em cada vaga.    
   
 - Filtrar candidatos por critérios como média, curso ou histórico de monitoria.   
   
-- Alterar status do processo seletivo: "Em análise", "Aprovado", "Reprovado".
+- Alterar status do processo seletivo: "Em análise", "Aprovado", "Reprovado".   
   
-- Exportar listas de candidatos em PDF ou Excel.
+- Exportar listas de candidatos em PDF ou Excel.   
   
-- Histórico de processos seletivos para auditoria.
+- Histórico de processos seletivos para auditoria.   
 </p>
 
 ---
@@ -107,15 +107,15 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### **6. Quais informações seriam interessantes para os alunos?**
 <p align="justify"> 
   
-- Histórico de vagas que já se candidatou.   
+- Histórico de vagas que já se candidatou.    
   
-- Status atualizado da candidatura.   
+- Status atualizado da candidatura.    
    
-- Prazo de cada processo seletivo.   
+- Prazo de cada processo seletivo.     
   
-- Pré-requisitos e informações detalhadas da vaga.
+- Pré-requisitos e informações detalhadas da vaga.   
   
-- Notificações sobre alterações no processo.
+- Notificações sobre alterações no processo.   
 </p>
 
 ---
