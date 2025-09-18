@@ -3,10 +3,10 @@
 **Código da Disciplina**: IBM8936<br>
 
 # Frello
-Plataforma web voltada para a gestão de monitoria acadêmica. O sistema centraliza todas as vagas de monitoria da faculdade, permitindo que alunos criem perfis, se candidatem às vagas e acompanhem o status de suas candidaturas. Professores e administradores podem cadastrar novas vagas, gerenciar candidatos e acompanhar o histórico do processo seletivo, tudo de forma automatizada e intuitiva. O objetivo é facilitar o acesso às oportunidades de monitoria, aumentar a participação dos alunos e automatizar parte do processo de aprovação.
+
 
 ## Sobre 
-Descreva o seu projeto em linhas gerais.
+Plataforma web voltada para a gestão de monitoria acadêmica. O sistema centraliza todas as vagas de monitoria da faculdade, permitindo que alunos criem perfis, se candidatem às vagas e acompanhem o status de suas candidaturas. Professores e administradores podem cadastrar novas vagas, gerenciar candidatos e acompanhar o histórico do processo seletivo, tudo de forma automatizada e intuitiva. O objetivo é facilitar o acesso às oportunidades de monitoria, aumentar a participação dos alunos e automatizar parte do processo de aprovação.
 
 ## Equipe
 João Victor   
