@@ -5,7 +5,12 @@ title: Diagrama de Classes
 
 ## Classes
 
-### Descrição:
+### Descrição: 
+Este documento apresenta o **Diagrama de Classes** da plataforma de monitoria da IBMEC. O diagrama representa as principais entidades do sistema e seus relacionamentos, servindo como base para o desenvolvimento do **back-end** da aplicação.
+
+### **Objetivo**
+O diagrama tem como objetivo organizar a estrutura de dados da plataforma, definindo claramente os atributos e relacionamentos das classes principais, de modo que o desenvolvimento seja consistente e alinhado aos requisitos do projeto.
+
 
 - Aluno
 	- Nome
@@ -33,7 +38,11 @@ title: Diagrama de Classes
 	- Status
 	- Prazo de inscrição
 
+```plantuml
 @startuml 
+'-----------------------------------
+' Diagram: Plataforma de Monitoria
+'-----------------------------------
 
 class Aluno {
 	+ nome: string 
@@ -68,3 +77,4 @@ Aluno -> Vaga: se candidata
 Professor -> Vaga: cadastra
 
 @enduml
+```
