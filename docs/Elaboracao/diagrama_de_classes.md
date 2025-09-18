@@ -32,11 +32,26 @@ O diagrama tem como objetivo organizar a estrutura de dados da plataforma, defin
 - Vaga 	
     - Nome
 	- Identificador
-	- Documentos
 	- Pré-requisitos
 	- Disciplina
 	- Status
 	- Prazo de inscrição
+
+- Candidatura 
+	- Id
+	- Aluno
+	- Vaga
+	- Documentos
+	- Status
+	- Data da candidatura
+
+- Registro de Monitoria
+	- Id
+	- Aluno
+	- Vaga
+	- Horas trabalhadas
+	- Data de registro
+	- Validação
 
 ```plantuml
 @startuml 
@@ -66,15 +81,35 @@ class Professor {
 class Vaga {
 	+ nome: string 
 	+ identificador: int
-	+ documentos: string
 	+ preRequisitos: string
 	+ disciplina: string
 	+ status: string
 	+ prazoInscricao: date
 }
 
-Aluno -> Vaga: se candidata
+class Candidatura {
+	+ id: int
+	+ aluno: Aluno
+	+ vaga: Vaga
+	+ documentos: string
+	+ status: string
+	+ dataCandidatura: date
+	+ validarCR(): bool
+}
+
+class RegistroMonitoria {
+	+ id: int
+	+ aluno: Aluno
+	+ vaga: Vaga
+	+ horasTrabalhadas: float
+	+ dataRegistro: date
+	+ validadoPor: Professor
+}
+
+Aluno -> Candidatura: realiza
+Vaga -> Candidatura: recebe
 Professor -> Vaga: cadastra
+Candidatura -> RegistroMonitoria: gera
 
 @enduml
 ```
