@@ -1,150 +1,127 @@
+# Especificação de Requisitos – Plataforma de Monitoria
+
 ---
-id: documento_de_arquitetura
-title: Documento de Arquitetura
+
+## 1. Introdução
+Este documento descreve os requisitos funcionais e não funcionais da plataforma de monitoria da faculdade, cujo objetivo é centralizar e gerenciar vagas de monitoria para os alunos. A plataforma permitirá candidaturas rápidas e simplificadas, automatizará parte do processo seletivo e manterá histórico das candidaturas, garantindo uma experiência simples e intuitiva.
+
+**Escopo do Sistema:**
+- Gestão de vagas de monitoria.
+- Cadastro e autenticação de alunos.
+- Processo seletivo automatizado.
+- Painel administrativo para professores e administradores.
+- Notificações automáticas e histórico de candidaturas.
+
+**Definições importantes:**
+- **Aluno:** Estudante que pode se candidatar às vagas de monitoria.
+- **Professor:** Usuário que cadastra e gerencia vagas.
+- **Vaga:** Registro de oportunidade de monitoria.
+- **Candidatura:** Inscrição do aluno em uma vaga.
+- **RegistroMonitoria:** Controle de horas de monitoria.
+
 ---
-# Documento de Arquitetura de Software (DAS)
 
-# "Nome do Projeto"
+## 2. Visão Geral do Sistema
+A plataforma permite que alunos visualizem e se candidatem às vagas de monitoria e que professores ou administradores gerenciem essas vagas e o processo seletivo.  
 
-# Introdução
+**Principais Funcionalidades:**
+- Cadastro de alunos e validação de vínculo institucional.
+- Publicação e gerenciamento de vagas de monitoria.
+- Inscrição de alunos com upload de documentos.
+- Avaliação, aprovação e comunicação de candidatos.
+- Histórico de candidaturas e relatórios administrativos.
+- Notificações automáticas por e-mail.
+- Interface simples e intuitiva para todos os usuários.
 
-## Proposta
+**Restrições:**
+- Apenas alunos com e-mail institucional podem se cadastrar.
+- Cada aluno só pode se candidatar a uma vaga por disciplina a cada semestre.
+- Apenas professores ou administradores podem cadastrar vagas.
 
-<p align = "justify">
-Este documento apresenta uma visão geral da arquitetura do sistema, utilizando diferentes visões arquiteturais para destacar diferentes aspectos do sistema. É utilizado para capturar as decisões arquiteturais significativas que fizeram parte do sistema.
-</p>
+---
 
-## Escopo
+## 3. Requisitos Funcionais
 
-<p align = "justify">
-A aplicação "XXXX" tem o objetivo fornecer...
-</p>
+### Painel do Aluno
+- **RF01 [BS01]:** Cadastro e login via e-mail institucional.  
+- **RF02 [BS02]:** Validação do vínculo com a faculdade.  
+- **RF03 [BS03]:** Visualização de todas as vagas em tempo real.  
+- **RF04 [BS05]:** Upload de documentos obrigatórios durante candidatura.  
+- **RF05 [BS09]:** Restrição de candidatura: uma vaga por disciplina por semestre.  
+- **RF06 [BS08]:** Acompanhamento automático do status da candidatura.  
+- **RF07 [BS12]:** Acesso a histórico de candidaturas.  
+- **RF08 [BS14]:** Notificações automáticas por e-mail sobre alterações de status.
 
-## Definições, Acrônimos e Abreviações
+### Painel Administrativo
+- **RF09 [BS04]:** Cadastro de novas vagas com informações detalhadas.  
+- **RF10 [BS11]:** Arquivamento automático de vagas encerradas.  
+- **RF11 [BS07]:** Visualização e filtragem de candidatos por vaga.  
+- **RF12:** Avaliação de candidatos e acesso a documentos enviados.  
+- **RF13 [BS13]:** Alteração de status da candidatura no processo seletivo.  
+- **RF14 [BS10]:** Exportação de relatórios em PDF ou Excel.  
 
-- MVC -
-- MVT -
-- SIGLA PARA O APP - Nome do Aplicativo
+### Funcionalidades Gerais do Sistema
+- **RF15 [BS06]:** Envio automático de e-mails para candidatos.  
+- **RF16 [BS15]:** Interface simples e intuitiva.  
+- **RF17:** Armazenamento de histórico completo de candidaturas.
 
-## Visão Geral
+---
 
-<p align = "justify">
-O Documento de Arquitetura de Software (DAS) trata-se de uma visão geral de toda a arquitetura do sistema, observando diferentes aspectos do mesmo. Neste documento serão abordadas as seguintes visões da aplicação TCM:
-</p>
+## 4. Requisitos Não Funcionais
+- **RNF01 – Segurança:** Todas as senhas devem ser criptografadas com hash seguro (ex.: bcrypt).  
+- **RNF02 – Performance:** O sistema deve responder em menos de 2 segundos ao carregar as vagas disponíveis.  
+- **RNF03 – Disponibilidade:** Disponibilidade mínima de 99% durante o horário acadêmico.  
+- **RNF04 – Usabilidade:** Interface deve ser responsiva e compatível com dispositivos móveis.  
+- **RNF05 – Confiabilidade:** Sistema deve registrar logs de todas as ações administrativas e candidaturas.
 
-- Caso de Uso;
-- Lógica;
-- Implantação;
-- Implementação;
-- Dados;
+---
 
-# Representação Arquitetural
+## 5. Regras de Negócio
+- **RN01:** Apenas alunos com e-mail institucional válido podem se cadastrar.  
+- **RN02:** Cada aluno só pode se candidatar a uma vaga por disciplina por semestre.  
+- **RN03:** Apenas professores ou administradores podem cadastrar vagas.  
+- **RN04:** Vagas encerradas são automaticamente arquivadas pelo sistema.  
+- **RN05:** Alterações no status da candidatura devem ser registradas no histórico do aluno.  
 
-## Cliente-Servidor
+---
 
-<p align = "justify">
-Cliente-Servidor é um modelo de arquitetura...
-</p>
+## 6. Interfaces Externas
+- Integração com servidor de e-mail para envio de notificações automáticas.  
+- Banco de dados relacional para armazenamento de usuários, vagas e candidaturas.  
 
-Cliente (Frontend):
+---
 
-- View: Consiste.....
+## 7. Restrições
+- Cadastro limitado a alunos da instituição com e-mail institucional.  
+- Cada disciplina permite apenas um monitor por semestre.  
+- Processos seletivos devem seguir o calendário acadêmico definido pelo departamento.
 
-Servidor (Backend):
+---
 
-- Controller: faz a conexão entre as camadas...
-- Service: Responsável pela lógica...
-- Model: Responsável pela persistência...
+## 8. Critérios de Aceitação
+- Alunos conseguem criar conta e se candidatar a vagas corretamente.  
+- Professores podem cadastrar e gerenciar vagas.  
+- Status da candidatura é atualizado corretamente no painel do aluno.  
+- Sistema envia notificações automáticas em todos os eventos relevantes.  
+- Relatórios podem ser exportados em PDF ou Excel sem perda de dados.  
 
-# Objetivos de Arquitetura e Restrições
+---
 
-## Objetivos
+## 9. Glossário
+- **Aluno:** Estudante apto a se candidatar às vagas de monitoria.  
+- **Professor:** Usuário responsável por cadastrar vagas e gerenciar candidaturas.  
+- **Vaga:** Registro de oportunidade de monitoria.  
+- **Candidatura:** Inscrição do aluno em uma vaga.  
+- **RegistroMonitoria:** Controle de horas de monitoria de cada aluno.
 
-<p align = "justify">
-Segurança:
-   -
-Persistência:
-   - 
-Privacidade:
-   - Middlewares: Foi usado middlewares...
-Desempenho:
-   Requisições...
-Reusabilidade:
-   Componentes no Frontend...
-</p>
+---
 
-## Restrições
+## 10. Referências
+- Requisitos elicitados BS01 a BS15 (conforme levantamento interno).  
+- Normas de segurança de dados acadêmicos.  
+- Material de boas práticas de UX/UI para plataformas educacionais.
 
-<p align = "justify">
-Tamanho da tela:...
-
-Portabilidade:...
-
-| IE | Edge  | Firefox | Chrome | Safari | Googlebot |
-| -- | ----- | ------- | ------ | ------ | --------- |
-| 11 | >= 14 | >= 52   | >= 49  | >= 10  | Sim       |
-
-Serviços: Os serviços oferecidos....
-
-Acesso a internet: A aplicação está limitada apenas a conexão com internet
-
-</p>
-
-## Ferramentas Utilizadas
-
-- XXX: Ambiente de execução...
-- XXXX: Linguagem de programação...
-  Typescript: XXXX
-- XXXX: XXXX
-- XXX: XXXX
-- XXXX: XXXX
-- XXXX: XXXX
-- XXXX: XXXX
-- XXXXX: XXXX.
-
-# Visão de Caso de Uso
-
-<p align = "justify">
-O primeiro caso de uso descreve a ação...
-</p>
-
-![Caso de uso 1](../assets/Casos_de_Uso/Exemplocaso_de_uso_1.png)
-
-![Caso de uso 2](../assets/Casos_de_Uso/Exemplocaso_de_uso_1.png)
-
-# Visão Lógica
-
-# Visão de Implantação
-
-# Visão de Implementação
-
-## Visão Geral
-
-![Diagrama de Componentes](../assets/Casos_de_Uso/Exemplocaso_de_uso_1.png)
-
-# Visão de Dados
-
-## Modelo Entidade Relacionamento (MER)
-
-#### Entidades e Relacionamentos:
-
-## Diagrama Entidade Relacionamento (DER)
-
-# Tamanho e Desempenho
-
-# Qualidade
-
-</p>
-
-# Referências Bibliográficas
-
-# Histórico de Versão
-
-| Data       | Versão | Descrição                                                            | Autor(es)                                   |
-| ---------- | ------- | ---------------------------------------------------------------------- | ------------------------------------------- |
-| 08/11/2020 | 1.0     | Criada estrutura básica do documento                                  | xxx xxx, xxx xx, xxx xx, xxx xxx e xxx xxxx |
-| 15/11/2020 | 1.1     | Representação arquitetural e objetivos e restrições arquiteturais. | Autores                                     |
-| 19/11/2020 | 1.2     | Adição dos diagramas, visões, tamanho e desempenho e qualidade      | Autores                                     |
-| 20/11/2020 | 1.3     | Adição da descrição de MER e DER                                   | Autores                                     |
-| 20/11/2020 | 1.4     | Adição do tópico de qualidade                                       | Autores                                     |
-| 20/11/2020 | 1.5     | Revisão                                                               | Autores                                     |
+## **Autor(es)**
+| Data | Versão | Descrição | Autor(es) |
+|-------|--------|-----------|------------|
+| 18/09/2025 | 1.0 | Criação do documento | Sarah Ferrari.
