@@ -22,7 +22,7 @@
     
     
       
-        <title>Documento de Arquitetura - Frello</title>
+        <title>Requisitos - Frello</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#documento-de-arquitetura-de-software-das" class="md-skip">
+        <a href="#especificacao-de-requisitos-plataforma-de-monitoria" class="md-skip">
           Skip to content
         </a>
       
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Documento de Arquitetura
+              Requisitos
             
           </span>
         </div>
@@ -577,7 +577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Iniciacao/brainstorm.md" class="md-nav__link">
+      <a href="../../Iniciacao/brainstorm/" class="md-nav__link">
         
   
   
@@ -756,6 +756,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Requisitos
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -767,6 +780,157 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Introdução
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-visao-geral-do-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Visão Geral do Sistema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-requisitos-funcionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Requisitos Funcionais
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Requisitos Funcionais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#painel-do-aluno" class="md-nav__link">
+    <span class="md-ellipsis">
+      Painel do Aluno
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#painel-administrativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Painel Administrativo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcionalidades-gerais-do-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Funcionalidades Gerais do Sistema
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-requisitos-nao-funcionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Requisitos Não Funcionais
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-regras-de-negocio" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Regras de Negócio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-interfaces-externas" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Interfaces Externas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-restricoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Restrições
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-criterios-de-aceitacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Critérios de Aceitação
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-glossario" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Glossário
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Referências
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autor(es)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1109,117 +1273,122 @@
   
 
 
-<h1 id="documento-de-arquitetura-de-software-das">Documento de Arquitetura de Software (DAS)<a class="headerlink" href="#documento-de-arquitetura-de-software-das" title="Permanent link">&para;</a></h1>
-<h1 id="nome-do-projeto">"Nome do Projeto"<a class="headerlink" href="#nome-do-projeto" title="Permanent link">&para;</a></h1>
-<h1 id="introducao">Introdução<a class="headerlink" href="#introducao" title="Permanent link">&para;</a></h1>
-<h2 id="proposta">Proposta<a class="headerlink" href="#proposta" title="Permanent link">&para;</a></h2>
-<p align = "justify">
-Este documento apresenta uma visão geral da arquitetura do sistema, utilizando diferentes visões arquiteturais para destacar diferentes aspectos do sistema. É utilizado para capturar as decisões arquiteturais significativas que fizeram parte do sistema.
-</p>
-
-<h2 id="escopo">Escopo<a class="headerlink" href="#escopo" title="Permanent link">&para;</a></h2>
-<p align = "justify">
-A aplicação "XXXX" tem o objetivo fornecer...
-</p>
-
-<h2 id="definicoes-acronimos-e-abreviacoes">Definições, Acrônimos e Abreviações<a class="headerlink" href="#definicoes-acronimos-e-abreviacoes" title="Permanent link">&para;</a></h2>
+<h1 id="especificacao-de-requisitos-plataforma-de-monitoria">Especificação de Requisitos – Plataforma de Monitoria<a class="headerlink" href="#especificacao-de-requisitos-plataforma-de-monitoria" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="1-introducao">1. Introdução<a class="headerlink" href="#1-introducao" title="Permanent link">&para;</a></h2>
+<p>Este documento descreve os requisitos funcionais e não funcionais da plataforma de monitoria da faculdade, cujo objetivo é centralizar e gerenciar vagas de monitoria para os alunos. A plataforma permitirá candidaturas rápidas e simplificadas, automatizará parte do processo seletivo e manterá histórico das candidaturas, garantindo uma experiência simples e intuitiva.</p>
+<p><strong>Escopo do Sistema:</strong>
+- Gestão de vagas de monitoria.
+- Cadastro e autenticação de alunos.
+- Processo seletivo automatizado.
+- Painel administrativo para professores e administradores.
+- Notificações automáticas e histórico de candidaturas.</p>
+<p><strong>Definições importantes:</strong>
+- <strong>Aluno:</strong> Estudante que pode se candidatar às vagas de monitoria.
+- <strong>Professor:</strong> Usuário que cadastra e gerencia vagas.
+- <strong>Vaga:</strong> Registro de oportunidade de monitoria.
+- <strong>Candidatura:</strong> Inscrição do aluno em uma vaga.
+- <strong>RegistroMonitoria:</strong> Controle de horas de monitoria.</p>
+<hr />
+<h2 id="2-visao-geral-do-sistema">2. Visão Geral do Sistema<a class="headerlink" href="#2-visao-geral-do-sistema" title="Permanent link">&para;</a></h2>
+<p>A plataforma permite que alunos visualizem e se candidatem às vagas de monitoria e que professores ou administradores gerenciem essas vagas e o processo seletivo.  </p>
+<p><strong>Principais Funcionalidades:</strong>
+- Cadastro de alunos e validação de vínculo institucional.
+- Publicação e gerenciamento de vagas de monitoria.
+- Inscrição de alunos com upload de documentos.
+- Avaliação, aprovação e comunicação de candidatos.
+- Histórico de candidaturas e relatórios administrativos.
+- Notificações automáticas por e-mail.
+- Interface simples e intuitiva para todos os usuários.</p>
+<p><strong>Restrições:</strong>
+- Apenas alunos com e-mail institucional podem se cadastrar.
+- Cada aluno só pode se candidatar a uma vaga por disciplina a cada semestre.
+- Apenas professores ou administradores podem cadastrar vagas.</p>
+<hr />
+<h2 id="3-requisitos-funcionais">3. Requisitos Funcionais<a class="headerlink" href="#3-requisitos-funcionais" title="Permanent link">&para;</a></h2>
+<h3 id="painel-do-aluno">Painel do Aluno<a class="headerlink" href="#painel-do-aluno" title="Permanent link">&para;</a></h3>
 <ul>
-<li>MVC -</li>
-<li>MVT -</li>
-<li>SIGLA PARA O APP - Nome do Aplicativo</li>
+<li><strong>RF01 [BS01]:</strong> Cadastro e login via e-mail institucional.  </li>
+<li><strong>RF02 [BS02]:</strong> Validação do vínculo com a faculdade.  </li>
+<li><strong>RF03 [BS03]:</strong> Visualização de todas as vagas em tempo real.  </li>
+<li><strong>RF04 [BS05]:</strong> Upload de documentos obrigatórios durante candidatura.  </li>
+<li><strong>RF05 [BS09]:</strong> Restrição de candidatura: uma vaga por disciplina por semestre.  </li>
+<li><strong>RF06 [BS08]:</strong> Acompanhamento automático do status da candidatura.  </li>
+<li><strong>RF07 [BS12]:</strong> Acesso a histórico de candidaturas.  </li>
+<li><strong>RF08 [BS14]:</strong> Notificações automáticas por e-mail sobre alterações de status.</li>
 </ul>
-<h2 id="visao-geral">Visão Geral<a class="headerlink" href="#visao-geral" title="Permanent link">&para;</a></h2>
-<p align = "justify">
-O Documento de Arquitetura de Software (DAS) trata-se de uma visão geral de toda a arquitetura do sistema, observando diferentes aspectos do mesmo. Neste documento serão abordadas as seguintes visões da aplicação TCM:
-</p>
-
+<h3 id="painel-administrativo">Painel Administrativo<a class="headerlink" href="#painel-administrativo" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Caso de Uso;</li>
-<li>Lógica;</li>
-<li>Implantação;</li>
-<li>Implementação;</li>
-<li>Dados;</li>
+<li><strong>RF09 [BS04]:</strong> Cadastro de novas vagas com informações detalhadas.  </li>
+<li><strong>RF10 [BS11]:</strong> Arquivamento automático de vagas encerradas.  </li>
+<li><strong>RF11 [BS07]:</strong> Visualização e filtragem de candidatos por vaga.  </li>
+<li><strong>RF12:</strong> Avaliação de candidatos e acesso a documentos enviados.  </li>
+<li><strong>RF13 [BS13]:</strong> Alteração de status da candidatura no processo seletivo.  </li>
+<li><strong>RF14 [BS10]:</strong> Exportação de relatórios em PDF ou Excel.  </li>
 </ul>
-<h1 id="representacao-arquitetural">Representação Arquitetural<a class="headerlink" href="#representacao-arquitetural" title="Permanent link">&para;</a></h1>
-<h2 id="cliente-servidor">Cliente-Servidor<a class="headerlink" href="#cliente-servidor" title="Permanent link">&para;</a></h2>
-<p align = "justify">
-Cliente-Servidor é um modelo de arquitetura...
-</p>
-
-<p>Cliente (Frontend):</p>
+<h3 id="funcionalidades-gerais-do-sistema">Funcionalidades Gerais do Sistema<a class="headerlink" href="#funcionalidades-gerais-do-sistema" title="Permanent link">&para;</a></h3>
 <ul>
-<li>View: Consiste.....</li>
+<li><strong>RF15 [BS06]:</strong> Envio automático de e-mails para candidatos.  </li>
+<li><strong>RF16 [BS15]:</strong> Interface simples e intuitiva.  </li>
+<li><strong>RF17:</strong> Armazenamento de histórico completo de candidaturas.</li>
 </ul>
-<p>Servidor (Backend):</p>
+<hr />
+<h2 id="4-requisitos-nao-funcionais">4. Requisitos Não Funcionais<a class="headerlink" href="#4-requisitos-nao-funcionais" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Controller: faz a conexão entre as camadas...</li>
-<li>Service: Responsável pela lógica...</li>
-<li>Model: Responsável pela persistência...</li>
+<li><strong>RNF01 – Segurança:</strong> Todas as senhas devem ser criptografadas com hash seguro (ex.: bcrypt).  </li>
+<li><strong>RNF02 – Performance:</strong> O sistema deve responder em menos de 2 segundos ao carregar as vagas disponíveis.  </li>
+<li><strong>RNF03 – Disponibilidade:</strong> Disponibilidade mínima de 99% durante o horário acadêmico.  </li>
+<li><strong>RNF04 – Usabilidade:</strong> Interface deve ser responsiva e compatível com dispositivos móveis.  </li>
+<li><strong>RNF05 – Confiabilidade:</strong> Sistema deve registrar logs de todas as ações administrativas e candidaturas.</li>
 </ul>
-<h1 id="objetivos-de-arquitetura-e-restricoes">Objetivos de Arquitetura e Restrições<a class="headerlink" href="#objetivos-de-arquitetura-e-restricoes" title="Permanent link">&para;</a></h1>
-<h2 id="objetivos">Objetivos<a class="headerlink" href="#objetivos" title="Permanent link">&para;</a></h2>
-<p align = "justify">
-Segurança:
-   -
-Persistência:
-   - 
-Privacidade:
-   - Middlewares: Foi usado middlewares...
-Desempenho:
-   Requisições...
-Reusabilidade:
-   Componentes no Frontend...
-</p>
-
-<h2 id="restricoes">Restrições<a class="headerlink" href="#restricoes" title="Permanent link">&para;</a></h2>
-<p align = "justify">
-Tamanho da tela:...
-
-Portabilidade:...
-
-| IE | Edge  | Firefox | Chrome | Safari | Googlebot |
-| -- | ----- | ------- | ------ | ------ | --------- |
-| 11 | >= 14 | >= 52   | >= 49  | >= 10  | Sim       |
-
-Serviços: Os serviços oferecidos....
-
-Acesso a internet: A aplicação está limitada apenas a conexão com internet
-
-</p>
-
-<h2 id="ferramentas-utilizadas">Ferramentas Utilizadas<a class="headerlink" href="#ferramentas-utilizadas" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="5-regras-de-negocio">5. Regras de Negócio<a class="headerlink" href="#5-regras-de-negocio" title="Permanent link">&para;</a></h2>
 <ul>
-<li>XXX: Ambiente de execução...</li>
-<li>XXXX: Linguagem de programação...
-  Typescript: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXX: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXXXX: XXXX.</li>
+<li><strong>RN01:</strong> Apenas alunos com e-mail institucional válido podem se cadastrar.  </li>
+<li><strong>RN02:</strong> Cada aluno só pode se candidatar a uma vaga por disciplina por semestre.  </li>
+<li><strong>RN03:</strong> Apenas professores ou administradores podem cadastrar vagas.  </li>
+<li><strong>RN04:</strong> Vagas encerradas são automaticamente arquivadas pelo sistema.  </li>
+<li><strong>RN05:</strong> Alterações no status da candidatura devem ser registradas no histórico do aluno.  </li>
 </ul>
-<h1 id="visao-de-caso-de-uso">Visão de Caso de Uso<a class="headerlink" href="#visao-de-caso-de-uso" title="Permanent link">&para;</a></h1>
-<p align = "justify">
-O primeiro caso de uso descreve a ação...
-</p>
-
-<p><img alt="Caso de uso 1" src="../../assets/Casos_de_Uso/Exemplocaso_de_uso_1.png" /></p>
-<p><img alt="Caso de uso 2" src="../../assets/Casos_de_Uso/Exemplocaso_de_uso_1.png" /></p>
-<h1 id="visao-logica">Visão Lógica<a class="headerlink" href="#visao-logica" title="Permanent link">&para;</a></h1>
-<h1 id="visao-de-implantacao">Visão de Implantação<a class="headerlink" href="#visao-de-implantacao" title="Permanent link">&para;</a></h1>
-<h1 id="visao-de-implementacao">Visão de Implementação<a class="headerlink" href="#visao-de-implementacao" title="Permanent link">&para;</a></h1>
-<h2 id="visao-geral_1">Visão Geral<a class="headerlink" href="#visao-geral_1" title="Permanent link">&para;</a></h2>
-<p><img alt="Diagrama de Componentes" src="../../assets/Casos_de_Uso/Exemplocaso_de_uso_1.png" /></p>
-<h1 id="visao-de-dados">Visão de Dados<a class="headerlink" href="#visao-de-dados" title="Permanent link">&para;</a></h1>
-<h2 id="modelo-entidade-relacionamento-mer">Modelo Entidade Relacionamento (MER)<a class="headerlink" href="#modelo-entidade-relacionamento-mer" title="Permanent link">&para;</a></h2>
-<h4 id="entidades-e-relacionamentos">Entidades e Relacionamentos:<a class="headerlink" href="#entidades-e-relacionamentos" title="Permanent link">&para;</a></h4>
-<h2 id="diagrama-entidade-relacionamento-der">Diagrama Entidade Relacionamento (DER)<a class="headerlink" href="#diagrama-entidade-relacionamento-der" title="Permanent link">&para;</a></h2>
-<h1 id="tamanho-e-desempenho">Tamanho e Desempenho<a class="headerlink" href="#tamanho-e-desempenho" title="Permanent link">&para;</a></h1>
-<h1 id="qualidade">Qualidade<a class="headerlink" href="#qualidade" title="Permanent link">&para;</a></h1>
-</p>
-<h1 id="referencias-bibliograficas">Referências Bibliográficas<a class="headerlink" href="#referencias-bibliograficas" title="Permanent link">&para;</a></h1>
-<h1 id="historico-de-versao">Histórico de Versão<a class="headerlink" href="#historico-de-versao" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="6-interfaces-externas">6. Interfaces Externas<a class="headerlink" href="#6-interfaces-externas" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Integração com servidor de e-mail para envio de notificações automáticas.  </li>
+<li>Banco de dados relacional para armazenamento de usuários, vagas e candidaturas.  </li>
+</ul>
+<hr />
+<h2 id="7-restricoes">7. Restrições<a class="headerlink" href="#7-restricoes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Cadastro limitado a alunos da instituição com e-mail institucional.  </li>
+<li>Cada disciplina permite apenas um monitor por semestre.  </li>
+<li>Processos seletivos devem seguir o calendário acadêmico definido pelo departamento.</li>
+</ul>
+<hr />
+<h2 id="8-criterios-de-aceitacao">8. Critérios de Aceitação<a class="headerlink" href="#8-criterios-de-aceitacao" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Alunos conseguem criar conta e se candidatar a vagas corretamente.  </li>
+<li>Professores podem cadastrar e gerenciar vagas.  </li>
+<li>Status da candidatura é atualizado corretamente no painel do aluno.  </li>
+<li>Sistema envia notificações automáticas em todos os eventos relevantes.  </li>
+<li>Relatórios podem ser exportados em PDF ou Excel sem perda de dados.  </li>
+</ul>
+<hr />
+<h2 id="9-glossario">9. Glossário<a class="headerlink" href="#9-glossario" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Aluno:</strong> Estudante apto a se candidatar às vagas de monitoria.  </li>
+<li><strong>Professor:</strong> Usuário responsável por cadastrar vagas e gerenciar candidaturas.  </li>
+<li><strong>Vaga:</strong> Registro de oportunidade de monitoria.  </li>
+<li><strong>Candidatura:</strong> Inscrição do aluno em uma vaga.  </li>
+<li><strong>RegistroMonitoria:</strong> Controle de horas de monitoria de cada aluno.</li>
+</ul>
+<hr />
+<h2 id="10-referencias">10. Referências<a class="headerlink" href="#10-referencias" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Requisitos elicitados BS01 a BS15 (conforme levantamento interno).  </li>
+<li>Normas de segurança de dados acadêmicos.  </li>
+<li>Material de boas práticas de UX/UI para plataformas educacionais.</li>
+</ul>
+<h2 id="autores"><strong>Autor(es)</strong><a class="headerlink" href="#autores" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1231,40 +1400,10 @@ O primeiro caso de uso descreve a ação...
 </thead>
 <tbody>
 <tr>
-<td>08/11/2020</td>
+<td>18/09/2025</td>
 <td>1.0</td>
-<td>Criada estrutura básica do documento</td>
-<td>xxx xxx, xxx xx, xxx xx, xxx xxx e xxx xxxx</td>
-</tr>
-<tr>
-<td>15/11/2020</td>
-<td>1.1</td>
-<td>Representação arquitetural e objetivos e restrições arquiteturais.</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>19/11/2020</td>
-<td>1.2</td>
-<td>Adição dos diagramas, visões, tamanho e desempenho e qualidade</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>20/11/2020</td>
-<td>1.3</td>
-<td>Adição da descrição de MER e DER</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>20/11/2020</td>
-<td>1.4</td>
-<td>Adição do tópico de qualidade</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>20/11/2020</td>
-<td>1.5</td>
-<td>Revisão</td>
-<td>Autores</td>
+<td>Criação do documento</td>
+<td>Sarah Ferrari.</td>
 </tr>
 </tbody>
 </table>
@@ -1274,9 +1413,6 @@ O primeiro caso de uso descreve a ação...
 
 
 
-
-  
-  
 
 
 
