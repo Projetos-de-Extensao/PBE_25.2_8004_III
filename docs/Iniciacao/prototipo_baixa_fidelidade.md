@@ -72,7 +72,7 @@ link para o `<a href="https://www.figma.com/design/pBnwhRAnD0LddgZ96sGIuD/PBE?no
 ## Conclusão
 
 <p align = "justify">
-A partir da elaboração do protótipo foi possível ter uma noção inicial da interface do usuário, definindo fluxo, paleta de cores, botões, app bars e diversas outras funcionalidades
+A partir da elaboração do protótipo foi possível ter uma noção inicial da interface do usuário, definindo fluxo, paleta de cores, botões, app bars e diversas outras funcionalidades.
 </p>
 
 ## Referências
