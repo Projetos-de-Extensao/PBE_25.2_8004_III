@@ -93,7 +93,7 @@ plugins:
 
 theme:
   name: material
-  logo: assets/ibmec_logo.png
+  logo: assets/IbmecLogo.png
   palette:
     
     - media: "(prefers-color-scheme)"
