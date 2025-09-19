@@ -64,8 +64,7 @@ Na primeira versão do protótipo utilizamos a ferramenta <a href="https://mater
 </p>
 
 ### Versão 1.0
-
-link para o `<a href="https://www.figma.com/design/pBnwhRAnD0LddgZ96sGIuD/PBE?node-id=0-1&p=f">`Protótipo no Figma`</a>`
+Link para o Protótipo no [Figma](https://www.figma.com/design/pBnwhRAnD0LddgZ96sGIuD/PBE?node-id=0-1&p=f)
 > senha: frello 
 
 ---
