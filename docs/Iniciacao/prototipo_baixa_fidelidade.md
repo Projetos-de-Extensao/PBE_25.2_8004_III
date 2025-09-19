@@ -14,61 +14,50 @@ A construção do protótipo de alta fidelidade auxilia a equipe de desenvolvime
 Iniciamos o projeto através dos levantamentos iniciais da equipe, após discussões a ferramenta Figma foi selecionada para produzir o protótipo de alta fidelidade com auxílio do Material Design Color Tool.
 </p>
 
-## Protótipo de alta fidelidade
+## Protótipo de baixa fidelidade
 
 ### Versão 1.0
 
 ### Tela Login
 
-[![Prototipo 1](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 1](../assets/Prototipo/Login.png)](../assets/Prototipo/Login.png)
 
-### Tela Cadastro 1
+### Tela Cadastro de Alunos
 
-[![Prototipo 2](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 2](../assets/Prototipo/CadastroAluno.png)](../assets/Prototipo/CadastroAluno.png)
 
-### Tela Cadastro 2
+### Tela Cadastro de Professores
 
-[![Prototipo 3](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 3](../assets/Prototipo/CadastroProf.png)](../assets/Prototipo/CadastroProf.png)
 
-### Tela Esqueceu Senha
+### Tela Cadastro de Vagas
 
-[![Prototipo 4](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 4](../assets/Prototipo/CadastroVaga.png)](../assets/Prototipo/CadastroVaga.png)
 
-### Tela do Feed
+### Tela Home
 
-[![Prototipo 5](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 5](../assets/Prototipo/Home.png)](../assets/Prototipo/Home.png)
 
-### Tela Feed com configurações
+### Tela Dashboard
 
-[![Prototipo 6](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 6](../assets/Prototipo/Dashboard.png)](../assets/Prototipo/Dashboard.png)
 
-### Tela Perfil
+### Tela Lista de Vagas
 
-[![Prototipo 7](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+[![Prototipo 7](../assets/Prototipo/ListaVagas.png)](../assets/Prototipo/ListaVagas.png)
 
-### Tela Cadastrar torneio 1
+### Tela Detalhes da Vaga
+[![Prototipo 8](../assets/Prototipo/Vaga.png)](../assets/Prototipo/Vaga.png)
 
-[![Prototipo 8](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+### Tela Painel do Monitor
 
-### Tela Cadastrar torneio 2
+[![Prototipo 9](../assets/Prototipo/PainelMonitor.png)](../assets/Prototipo/PainelMonitor.png)
 
-[![Prototipo 9](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
+### Tela Painel do Administrador
 
-### Tela Cadastrar torneio 3
+[![Prototipo 10](../assets/Prototipo/PainelAdmin.png)](../assets/Prototipo/PainelAdmin.png)
 
-[![Prototipo 10](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
 
-### Tela Cadastrar torneio 4
-
-[![Prototipo 11](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela com meus torneios
-
-[![Prototipo 12](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela de inscrição em torneio
-
-[![Prototipo 13](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
 
 <p align = "justify">
 Na primeira versão do protótipo utilizamos a ferramenta <a href="https://material.io/resources/color/#!/?view.left=0&view.right=0">Material Design Color Tool</a>  para auxiliar na criação da paleta de cores do aplicativo, definimos as cores base do aplicativo mas as cores definidas para as telas 12 e 13 ainda não foram decididas.
@@ -150,7 +139,6 @@ A partir da elaboração do protótipo foi possível ter uma noção inicial da 
 
 | Data     | Versão | Descrição                            | Autor(es)                                                                            |
 | -------- | ------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
-| 07/09/20 | 1.0     | Criação do documento                 | Lucas Alexandre e Matheus Estanislau                                                 |
-| 07/09/20 | 1.1     | Adicionado as imagens do protótipo    | Lucas Alexandre e Matheus Estanislau                                                 |
-| 07/09/20 | 1.2     | Adicionado conclusão e referências   | Lucas Alexandre e Matheus Estanislau                                                 |
-| 26/10/20 | 2.0     | Adicionada a versão 2.0 do protótipo | João Pedro, Lucas Alexandre, Matheus Estanislau, Moacir Mascarenha e Renan Cristyan |
+| 19/09/25 | 1.0     | Criação do documento                 | Sarah Ferrari                                                |
+| 19/09/25 | 1.1     | Criação das imagens do protótipo    | João Victor                                              |
+
