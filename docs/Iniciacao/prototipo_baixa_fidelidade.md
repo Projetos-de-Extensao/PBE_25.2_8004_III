@@ -63,64 +63,12 @@ Iniciamos o projeto através dos levantamentos iniciais da equipe, após discuss
 Na primeira versão do protótipo utilizamos a ferramenta <a href="https://material.io/resources/color/#!/?view.left=0&view.right=0">Material Design Color Tool</a>  para auxiliar na criação da paleta de cores do aplicativo, definimos as cores base do aplicativo mas as cores definidas para as telas 12 e 13 ainda não foram decididas.
 </p>
 
-### Versão 2.0
-
 ### Versão 1.0
 
-### Tela Login
+link para o `<a href="https://www.figma.com/design/pBnwhRAnD0LddgZ96sGIuD/PBE?node-id=0-1&p=f">`Protótipo no Figma`</a>`
+> senha: frello 
 
-[![Prototipo 1](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Cadastro 1
-
-[![Prototipo 2](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Cadastro 2
-
-[![Prototipo 3](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Esqueceu Senha
-
-[![Prototipo 4](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela do Feed
-
-[![Prototipo 5](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Feed com configurações
-
-[![Prototipo 6](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Perfil
-
-[![Prototipo 7](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Cadastrar torneio 1
-
-[![Prototipo 8](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Cadastrar torneio 2
-
-[![Prototipo 9](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Cadastrar torneio 3
-
-[![Prototipo 10](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela Cadastrar torneio 4
-
-[![Prototipo 11](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela com meus torneios
-
-[![Prototipo 12](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-### Tela de inscrição em torneio
-
-[![Prototipo 13](../assets/Prototipo/image.png)](../assets/Prototipo/image.png)
-
-link para o `<a href="https://www.figma.com/">`Protótipo`</a>`
-
+---
 ## Conclusão
 
 <p align = "justify">
