@@ -1,0 +1,69 @@
+@startuml
+left to right direction
+
+actor Aluno
+actor "Professor/Admin" as Admin
+actor Sistema
+
+rectangle "Gestão de Candidaturas" {
+  usecase "Criar conta (e-mail institucional)" as UC1
+  usecase "Validar vínculo com faculdade" as UC2
+  usecase "Aceitar termos de uso" as UC3
+  usecase "Completar perfil" as UC4
+  usecase "Visualizar vagas disponíveis" as UC5
+  usecase "Validação de candidatura" as UC6
+  usecase "Candidatar-se à vaga" as UC7
+  usecase "Upload de documentos obrigatórios" as UC8
+  usecase "Receber notificações por e-mail" as UC9
+  usecase "Visualizar status da candidatura" as UC10
+  usecase "Visualizar histórico de candidaturas" as UC11
+}
+
+rectangle "Gestão de Vagas" {
+  usecase "Cadastrar nova vaga" as UC12
+  usecase "Upload de documentos da vaga" as UC13
+  usecase "Arquivar vagas encerradas" as UC14
+}
+
+rectangle "Painel Administrativo" {
+  usecase "Gerenciar candidatos" as UC15
+  usecase "Filtrar candidatos" as UC16
+  usecase "Alterar status do processo seletivo" as UC17
+  usecase "Exportar lista (PDF/Excel)" as UC18
+  usecase "Visualizar histórico de processos" as UC19
+}
+
+Aluno --> UC1
+Aluno --> UC2
+Aluno --> UC3
+Aluno --> UC4
+Aluno --> UC5
+Aluno --> UC6
+Aluno --> UC7
+Aluno --> UC8
+Aluno --> UC9
+Aluno --> UC10
+Aluno --> UC11
+
+Admin --> UC12
+Admin --> UC13
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+
+Sistema --> UC6
+Sistema --> UC9
+Sistema --> UC10
+Sistema --> UC14
+
+UC7 .> UC8 : <<include>>
+UC7 .> UC9 : <<include>>
+UC7 .> UC10 : <<include>>
+UC7 .> UC11 : <<include>>
+UC15 .> UC16 : <<include>>
+UC15 .> UC17 : <<include>>
+UC15 .> UC18 : <<include>>
+UC15 .> UC19 : <<include>>
+@enduml
