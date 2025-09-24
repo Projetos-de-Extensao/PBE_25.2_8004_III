@@ -255,3 +255,8 @@ a. Documento inválido: sistema solicita novo envio.
 **Regras de Negócio:** Exibe todos os processos do Admin.
 
 ---
+
+## **Autor(es)**
+| Data | Versão | Descrição | Autor(es) |
+|-------|--------|-----------|------------|
+| 24/09/2025 | 1.0 | Criação do documento | Caique Rechuan, Joao Vitor Donda e Joao Victor Carvalho.
