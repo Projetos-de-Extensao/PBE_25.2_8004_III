@@ -94,7 +94,7 @@ a. Se CR geral < 7 ou CR da disciplina < 8: sistema bloqueia candidatura e exibe
 
 ## Candidatar-se à vaga
 **Ator:** Aluno  
-**Descrição:** Permite ao aluno se candidatar a uma vaga.  
+**Descrição:** Permite ao aluno se candidatar à vaga.  
 **Pré-condição:** Perfil completo, vaga disponível e validação de candidatura aprovada.  
 **Fluxo Principal:**  
 1. Aluno seleciona vaga.  

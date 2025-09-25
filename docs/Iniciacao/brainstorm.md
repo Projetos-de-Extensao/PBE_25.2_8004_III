@@ -132,7 +132,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 | BS06  | O sistema deve enviar notificações automáticas por e-mail aos candidatos. |
 | BS07  | O painel administrativo deve permitir a visualização, filtragem e gerenciamento de candidatos. |
 | BS08  | O sistema deve atualizar automaticamente o status da candidatura no painel do aluno. |
-| BS09  | Apenas uma candidatura por disciplina será permitida por semestre. |
+| BS09  | Administradores/professores determinam a quantidade de vagas por disciplina. |
 | BS10  | O painel administrativo deve permitir exportar listas em PDF ou Excel. |
 | BS11  | Vagas encerradas devem ser arquivadas automaticamente. |
 | BS12  | O sistema deve armazenar histórico de candidaturas para consulta futura. |

@@ -11,7 +11,7 @@ As funcionalidades do sistema são divididas em três painéis principais: o pai
 * **Visualização de Vagas [BS03]:** Um painel exibe todas as vagas de monitoria disponíveis em tempo real.
 * **Candidatura Simplificada:**
     * **Upload de Documentos [BS05]:** Permite que o aluno anexe documentos obrigatórios (histórico, currículo, etc.) durante a candidatura.
-    * **Restrição de Candidatura [BS09]:** Garante que o aluno possa se candidatar a apenas uma vaga por disciplina a cada semestre.
+    * **Restrição de Candidatura [BS09]:** Garante que o aluno possa se candidatar a uma ou mais vagas por disciplina a cada semestre.
 * **Acompanhamento de Status [BS08]:** O aluno pode visualizar o status atual de suas candidaturas (Ex: `Inscrito`, `Em Análise`, `Aprovado`).
 * **Notificações Automáticas [BS14]:** Recebimento de notificações por e-mail sobre qualquer alteração no status da candidatura.
     * **Histórico de Candidaturas [BS12]:** Acesso a um registro de todas as candidaturas realizadas anteriormente.

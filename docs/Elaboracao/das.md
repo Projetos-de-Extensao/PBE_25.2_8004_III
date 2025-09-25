@@ -47,7 +47,7 @@ A plataforma permite que alunos visualizem e se candidatem às vagas de monitori
 - **RF02 [BS02]:** Validação do vínculo com a faculdade.  
 - **RF03 [BS03]:** Visualização de todas as vagas em tempo real.  
 - **RF04 [BS05]:** Upload de documentos obrigatórios durante candidatura.  
-- **RF05 [BS09]:** Restrição de candidatura: uma vaga por disciplina por semestre.  
+- **RF05 [BS09]:** Restrição de candidatura: Admin determinan número de vagas por disciplina por semestre.  
 - **RF06 [BS08]:** Acompanhamento automático do status da candidatura.  
 - **RF07 [BS12]:** Acesso a histórico de candidaturas.  
 - **RF08 [BS14]:** Notificações automáticas por e-mail sobre alterações de status.
@@ -78,7 +78,7 @@ A plataforma permite que alunos visualizem e se candidatem às vagas de monitori
 
 ## 5. Regras de Negócio
 - **RN01:** Apenas alunos com e-mail institucional válido podem se cadastrar.  
-- **RN02:** Cada aluno só pode se candidatar a uma vaga por disciplina por semestre.  
+- **RN02:** Cada aluno pode se candidatar a uma ou mais vagas por disciplina por semestre.  
 - **RN03:** Apenas professores ou administradores podem cadastrar vagas.  
 - **RN04:** Vagas encerradas são automaticamente arquivadas pelo sistema.  
 - **RN05:** Alterações no status da candidatura devem ser registradas no histórico do aluno.  
@@ -93,7 +93,7 @@ A plataforma permite que alunos visualizem e se candidatem às vagas de monitori
 
 ## 7. Restrições
 - Cadastro limitado a alunos da instituição com e-mail institucional.  
-- Cada disciplina permite apenas um monitor por semestre.  
+- Cada disciplina permite uma quantidade pré-definida de monitores por semestre.  
 - Processos seletivos devem seguir o calendário acadêmico definido pelo departamento.
 
 ---
