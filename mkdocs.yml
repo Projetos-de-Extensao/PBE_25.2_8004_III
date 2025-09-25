@@ -21,6 +21,7 @@ nav:
       - Diagrama de Classes: Elaboracao/diagrama_de_classes.md
       - Diagrama de Sequência: Elaboracao/diagrama_de_sequencia.md
       - Protótipo de Alta Fidelidade: Elaboracao/prototipo_alta_fidelidade.md
+      - Apresentação: Elaboracao/Slides.pdf
   - Construção:
       - Index: Construcao/index.md
       - Git Issues: Construcao/git_issues.md
