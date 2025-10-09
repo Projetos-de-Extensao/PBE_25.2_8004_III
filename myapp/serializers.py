@@ -23,9 +23,9 @@ class VagaSerializer(serializers.ModelSerializer):
 class CandidaturaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidatura
-        fields = ['id', 'documentos', 'status', 'data_candidatura']
+        fields = ['id', 'aluno', 'vaga', 'documentos', 'status', 'data_candidatura']
 
 class RegistroMonitoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistroMonitoria
-        fields = ['id', 'horas_trabalhadas', 'data_registro', 'validacao']
+        fields = ['id', 'aluno', 'vaga', 'horas_trabalhadas', 'data_registro', 'validacao']
