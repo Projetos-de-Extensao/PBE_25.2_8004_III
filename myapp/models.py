@@ -25,7 +25,7 @@ class Professor(models.Model):
     
 class Vaga(models.Model):
     nome = models.CharField(max_length=100)
-    id = models.IntegerField(max_length=3, unique=True, primary_key=True)
+    id = models.IntegerField(unique=True, primary_key=True)
     pre_requisitos = models.TextField()
     disciplina = models.CharField(max_length=40)
     status = models.CharField(max_length=20)
@@ -35,7 +35,7 @@ class Vaga(models.Model):
         return self.id
     
 class Candidatura(models.Model):
-    id = models.IntegerField(max_length=3, unique=True, primary_key=True)
+    id = models.IntegerField(unique=True, primary_key=True)
     # aluno =  // será substituído por conta do relacionamento
     # vaga =  // será substituído por conta do relacionamento
     documentos = models.FileField()
@@ -46,7 +46,7 @@ class Candidatura(models.Model):
         return self.id
     
 class RegistroMonitoria(models.Model):
-    id = models.IntegerField(max_length=3, unique=True, primary_key=True)
+    id = models.IntegerField(unique=True, primary_key=True)
     # aluno =  // será substituído por conta do relacionamento
     # vaga =  // será substituído por conta do relacionamento
     horas_trabalhadas = models.DecimalField(max_digits=4, decimal_places=2)
