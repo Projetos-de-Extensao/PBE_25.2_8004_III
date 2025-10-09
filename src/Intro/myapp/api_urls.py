@@ -7,5 +7,4 @@ router.register(r'produtos', ProdutoViewSet, basename='produto')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api/', include('myapp.api_urls')),  # URLs da API
 ]
