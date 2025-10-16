@@ -2,10 +2,6 @@
 id: diagrama_de_classes
 title: Diagrama de Classes
 ---
-## objevação para adicionar
-Classe de Monitor TEA
-Classe de registro de alunos que foram a monitoria 
-atributo para o monitor enviar documento 
 
 ## Classes
 
@@ -141,21 +137,10 @@ Representa o registro das atividades e horas trabalhadas por um monitor.
 
 **Atributos:**
 - `id`: int
+- `codigoDisciplina`: string
 - `horasTrabalhadas`: float
 - `dataRegistro`: date
 - `validacao`: boolean
-
-**Métodos:**
-- `submeter()`
-- `visualizarDetalhes()`
-
----
-
-### RegistroAulaMonitoria
-Representa o registro das atividades e horas trabalhadas por um monitor.
-
-**Atributos:**
-- `codigo`: string
 - `dia`: date
 - `matriculaAluno`: string
 - `nomeAluno`: string
