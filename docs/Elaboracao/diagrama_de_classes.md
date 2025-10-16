@@ -2,6 +2,10 @@
 id: diagrama_de_classes
 title: Diagrama de Classes
 ---
+## objevação para adicionar
+Classe de Monitor TEA
+Classe de registro de alunos que foram a monitoria 
+atributo para o monitor enviar documento 
 
 ## Classes
 
@@ -58,10 +62,28 @@ Representa um aluno que foi aprovado para atuar como monitor, com responsabilida
 **Herança:** Herda de `Aluno` (um Monitor é um tipo especial de Aluno)
 
 ---
+### MonitorTEA
+Representa um aluno que foi aprovado para atuar como monitor pago, com responsabilidades adicionais.
 
+**Atributos:**
+- 'salario : float
+  
+**Métodos:**
+- `gerenciarDisponibilidade()`
+- `visualizarAgenda()`
+- `submeterRelatorioHoras(registro: RegistroAtividadeMonitoria)`
+
+**Herança:** Herda de `Monitor` (um Monitor é um tipo especial de Aluno)
+
+
+
+---
 ### Professor
 Representa um professor que pode cadastrar vagas, aprovar candidaturas e validar horas de monitoria.
 
+**Atributos:**
+- 'cpf': string
+  
 **Métodos:**
 - `cadastrarVaga(vaga: VagaMonitoria)`
 - `aprovarCandidatura(candidatura: Candidatura)`
@@ -122,6 +144,21 @@ Representa o registro das atividades e horas trabalhadas por um monitor.
 - `horasTrabalhadas`: float
 - `dataRegistro`: date
 - `validacao`: boolean
+
+**Métodos:**
+- `submeter()`
+- `visualizarDetalhes()`
+
+---
+
+### RegistroAulaMonitoria
+Representa o registro das atividades e horas trabalhadas por um monitor.
+
+**Atributos:**
+- `codigo`: string
+- 'dia': date
+- `matriculaAluno`: string
+- `nomeAluno`: string
 
 **Métodos:**
 - `submeter()`
@@ -248,4 +285,4 @@ Monitor "1" -- "0..*" RegistroAtividadeMonitoria : registra >
 | Data | Versão | Descrição | Autor(es) |
 |-------|--------|-----------|------------|
 | 18/09/2025 | 1.0 | Criação do documento | João Mariano e Sarah Ferrari.
-| 16/10/2025 | 2.0 | Criação do documento | João Victor de C.
+| 16/10/2025 | 2.0 | Aprimoramento do documento | João Victor de C.
