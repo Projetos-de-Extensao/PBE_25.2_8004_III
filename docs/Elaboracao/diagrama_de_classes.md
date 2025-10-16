@@ -82,7 +82,7 @@ Representa um aluno que foi aprovado para atuar como monitor pago, com responsab
 Representa um professor que pode cadastrar vagas, aprovar candidaturas e validar horas de monitoria.
 
 **Atributos:**
-- 'cpf': string
+- `cpf`: string
   
 **Métodos:**
 - `cadastrarVaga(vaga: VagaMonitoria)`
@@ -156,7 +156,7 @@ Representa o registro das atividades e horas trabalhadas por um monitor.
 
 **Atributos:**
 - `codigo`: string
-- 'dia': date
+- `dia`: date
 - `matriculaAluno`: string
 - `nomeAluno`: string
 
