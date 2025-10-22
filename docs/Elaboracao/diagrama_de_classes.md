@@ -12,150 +12,160 @@ Este documento apresenta o **Diagrama de Classes** da plataforma de monitoria da
 O diagrama tem como objetivo organizar a estrutura de dados da plataforma, definindo claramente os atributos e relacionamentos das classes principais, de modo que o desenvolvimento seja consistente e alinhado aos requisitos do projeto.
 
 
-### Usuario (Classe Abstrata)
-Classe base que define atributos e comportamentos comuns a todos os usuários do sistema.
+### 1. Usuario (Classe Abstrata)
+Classe base que agrupa atributos e comportamentos comuns a todos os perfis de usuário do sistema.
 
 **Atributos:**
-- `id`: int
-- `nome`: string
-- `email`: string
-- `senhaHash`: string
-- `telefone`: string
+- `id`: `int`
+- `nome`: `string`
+- `email`: `string`
+- `senhaHash`: `string` (Para segurança, armazena o hash da senha)
+- `telefone`: `string`
 
 **Métodos:**
-- `login()`
-- `logout()`
-- `alterarSenha()`
+- `login()`: `void`
+- `logout()`: `void`
+- `alterarSenha()`: `void`
 
 ---
 
-### Aluno
-Representa um estudante que pode se candidatar a vagas de monitoria e buscar monitorias disponíveis.
+### 2. Aluno
+Representa um estudante matriculado na instituição, com a capacidade de buscar e se candidatar a vagas de monitoria, além de gerenciar suas matrículas em disciplinas.
 
 **Atributos:**
-- `matricula`: string
-- `crGeral`: float
-- `crDisciplina`: float
-- `curso`: string
+- `matricula`: `string`
+- `crGeral`: `float`
+- `curso`: `string`
 
 **Métodos:**
-- `matricularEmDisciplina(disciplina: Disciplina)`
-- `buscarMonitoria(disciplina: Disciplina)`
-- `realizarCandidatura(vaga: VagaMonitoria)`
+- `matricularEmDisciplina(disciplina: Disciplina)`: `void`
+- `buscarMonitoria(disciplina: Disciplina)`: `void`
+- `realizarCandidatura(vaga: VagaMonitoria)`: `void`
 
-**Herança:** Herda de `Usuario`
+**Herança:** Herda de `Usuario`.
 
 ---
 
-### Monitor
-Representa um aluno que foi aprovado para atuar como monitor, com responsabilidades adicionais.
-
-**Métodos:**
-- `gerenciarDisponibilidade()`
-- `visualizarAgenda()`
-- `submeterRelatorioHoras(registro: RegistroAtividadeMonitoria)`
-
-**Herança:** Herda de `Aluno` (um Monitor é um tipo especial de Aluno)
-
----
-### MonitorTEA
-Representa um aluno que foi aprovado para atuar como monitor pago, com responsabilidades adicionais.
+### 3. Monitor
+Representa um `Aluno` que foi aprovado e atua como monitor. Ele herda todas as características de um aluno e possui responsabilidades adicionais relacionadas à gestão de suas atividades de monitoria.
 
 **Atributos:**
-- 'salario : float
-  
-**Métodos:**
-- `gerenciarDisponibilidade()`
-- `visualizarAgenda()`
-- `submeterRelatorioHoras(registro: RegistroAtividadeMonitoria)`
-
-**Herança:** Herda de `Monitor` (um Monitor é um tipo especial de Aluno)
-
-
-
----
-### Professor
-Representa um professor que pode cadastrar vagas, aprovar candidaturas e validar horas de monitoria.
-
-**Atributos:**
-- `cpf`: string
-  
-**Métodos:**
-- `cadastrarVaga(vaga: VagaMonitoria)`
-- `aprovarCandidatura(candidatura: Candidatura)`
-- `validarHoras(registro: RegistroAtividadeMonitoria)`
-- `indicarAlunoParaMonitoria(aluno: Aluno)`
-
-**Herança:** Herda de `Usuario`
-
----
-
-### Disciplina
-Representa uma disciplina oferecida pela instituição.
-
-**Atributos:**
-- `id`: int
-- `nome`: string
-- `codigo`: string
-
----
-
-### VagaMonitoria
-Representa uma vaga de monitoria disponível para candidatura.
-
-**Atributos:**
-- `id`: int
-- `nome`: string
-- `preRequisitos`: string
-- `status`: string
-- `prazoInscricao`: date
+- `crDisciplina`: `float` (Adicionado para consistência, se for específico do Monitor)
 
 **Métodos:**
-- `verDetalhes()`
-- `visualizarCandidaturas()`
+- `gerenciarDisponibilidade()`: `void`
+- `visualizarAgenda()`: `void`
+- `submeterRelatorioHoras(registro: RegistroAtividadeMonitoria)`: `void`
+
+**Herança:** Herda de `Aluno`.
 
 ---
 
-### Candidatura
-Representa a candidatura de um aluno a uma vaga de monitoria.
+### 4. MonitorTEA
+Representa um `Monitor` que foi aprovado para atuar como monitor remunerado (TEA - Trabalho de Ensino Assistido). Ele herda todas as características de um `Monitor` e possui um atributo específico relacionado à sua remuneração.
 
 **Atributos:**
-- `id`: int
-- `documentos`: string
-- `status`: string
-- `dataCandidatura`: date
+- `salario`: `float`
 
 **Métodos:**
-- `validarCR(): boolean`
-- `submeter()`
-- `cancelar()`
+- _Nenhum método adicional específico, herda de `Monitor`._
+
+**Herança:** Herda de `Monitor`.
 
 ---
 
-### RegistroAtividadeMonitoria
-Representa o registro das atividades e horas trabalhadas por um monitor.
+### 5. Professor
+Representa um professor da instituição, responsável por criar e gerenciar vagas de monitoria, bem como validar as atividades e horas dos monitores.
 
 **Atributos:**
-- `id`: int
-- `codigoDisciplina`: string
-- `horasTrabalhadas`: float
-- `dataRegistro`: date
-- `validacao`: boolean
-- `dia`: date
-- `matriculaAluno`: string
-- `nomeAluno`: string
+- `cpf`: `string` (Atributo adicional para o professor)
 
-**Métodos:**
-- `submeter()`
-- `visualizarDetalhes()`
+**Herança:** Herda de `Usuario`.
 
 ---
 
-## Relacionamentos
+### 6. Coordenador 
+Representa um professor da instituição, responsável por criar e gerenciar vagas de monitoria, bem como validar as atividades e horas dos monitores.
+
+**Métodos:**
+- `cadastrarVaga(vaga: VagaMonitoria)`: `void`
+- `aprovarCandidatura(candidatura: Candidatura)`: `void`
+- `validarHoras(registro: RegistroAtividadeMonitoria)`: `void`
+- `indicarAlunoParaMonitoria(aluno: Aluno)`: `void`
+
+**Herança:** Herda de `Professor`.
+
+---
+
+### 7. Disciplina
+Representa uma disciplina acadêmica oferecida na instituição.
+
+**Atributos:**
+- `id`: `int`
+- `nome`: `string`
+- `codigo`: `string`
+
+---
+
+### 8. VagaMonitoria
+Representa uma oportunidade de monitoria específica para uma disciplina, com seus requisitos, status e prazos.
+
+**Atributos:**
+- `id`: `int`
+- `titulo`: `string` (Nome da vaga, mais descritivo que `nome`)
+- `preRequisitos`: `string`
+- `status`: `string` (Ex: "Aberta", "Fechada", "Em Análise")
+- `prazoInscricao`: `date`
+
+**Métodos:**
+- `verDetalhes()`: `void`
+- `visualizarCandidaturas()`: `void`
+
+---
+
+### 9. Candidatura
+Representa o processo de um `Aluno` se candidatar a uma `VagaMonitoria`, incluindo a documentação e o status do processo.
+
+**Atributos:**
+- `id`: `int`
+- `documentos`: `string` (Ex: URL para upload, ou lista de nomes de arquivos)
+- `status`: `string` (Ex: "Pendente", "Aprovada", "Rejeitada")
+- `dataCandidatura`: `date`
+
+**Métodos:**
+- `validarCR()`: `boolean` (Verifica se o CR do aluno atende aos requisitos)
+- `submeter()`: `void`
+- `cancelar()`: `void`
+
+---
+
+### 10. RegistroAtividadeMonitoria
+Documenta as horas e atividades realizadas por um `Monitor` em uma `Monitoria` específica, aguardando validação do `Professor`.
+
+**Atributos:**
+- `id`: `int`
+- `descricaoAtividade`: `string` (Melhor que `codigoDisciplina` aqui, pois a vaga já liga à disciplina)
+- `horasTrabalhadas`: `float`
+- `dataRegistro`: `date`
+- `statusValidacao`: `string` (Melhor que `validacao: boolean` para ter mais estados como "Pendente", "Aprovado", "Rejeitado")
+- `dia`: `date` (Se for diferente de `dataRegistro`)
+- `observacoes`: `string` (Campo para comentários do monitor ou professor)
+
+**Métodos:**
+- `submeter()`: `void`
+- `visualizarDetalhes()`: `void`
+- `aprovar()`: `void` (Ação que o professor faria)
+- `rejeitar()`: `void` (Ação que o professor faria)
+
+---
+
+## Visão Geral dos Relacionamentos
 
 ### Heranças
-- `Usuario` é classe base de `Aluno` e `Professor`
-- `Aluno` é classe base de `Monitor`
+- `Usuario` é a classe base para `Aluno` e `Professor`.
+- `Aluno` é a classe base para `Monitor`.
+- `Monitor` é a classe base para `MonitorTEA`. (Um `MonitorTEA` é um tipo específico de `Monitor`, que por sua vez é um `Aluno`.)
+
 
 ### Associações
 - **Disciplina → VagaMonitoria**: Uma disciplina oferece uma ou mais vagas (1 → 1..*)
@@ -188,7 +198,6 @@ abstract class Usuario {
 class Aluno {
   +matricula: string
   +crGeral: float
-  +crDisciplina: float
   +curso: string
   +matricularEmDisciplina(disciplina: Disciplina)
   +buscarMonitoria(disciplina: Disciplina)
@@ -196,12 +205,21 @@ class Aluno {
 }
 
 class Monitor {
+  +crDisciplina: float
   +gerenciarDisponibilidade()
   +visualizarAgenda()
   +submeterRelatorioHoras(registro: RegistroAtividadeMonitoria)
 }
 
+class MonitorTEA {
+  +salario: float
+}
+
 class Professor {
+  +cpf: string
+}
+
+class Coordenador {
   +cadastrarVaga(vaga: VagaMonitoria)
   +aprovarCandidatura(candidatura: Candidatura)
   +validarHoras(registro: RegistroAtividadeMonitoria)
@@ -216,7 +234,7 @@ class Disciplina {
 
 class VagaMonitoria {
   +id: int
-  +nome: string
+  +titulo: string
   +preRequisitos: string
   +status: string
   +prazoInscricao: date
@@ -236,11 +254,16 @@ class Candidatura {
 
 class RegistroAtividadeMonitoria {
   +id: int
+  +descricaoAtividade: string
   +horasTrabalhadas: float
   +dataRegistro: date
-  +validacao: boolean
+  +statusValidacao: string
+  +dia: date
+  +observacoes: string
   +submeter()
   +visualizarDetalhes()
+  +aprovar()
+  +rejeitar()
 }
 
 ' -----------------------------------
@@ -251,16 +274,16 @@ class RegistroAtividadeMonitoria {
 Usuario <|-- Aluno
 Usuario <|-- Professor
 Aluno <|-- Monitor
+Monitor <|-- MonitorTEA
+Professor <|-- Coordenador
 
 ' Associações
 Disciplina "1" -- "1..*" VagaMonitoria : oferece >
-Professor "1" -- "0..*" VagaMonitoria : cadastra >
+Coordenador "1" -- "0..*" VagaMonitoria : cadastra >
 Aluno "1" -- "0..*" Candidatura : realiza >
 VagaMonitoria "1" -- "0..*" Candidatura : recebe >
 Candidatura "1" -- "0..*" RegistroAtividadeMonitoria : gera >
-Professor "1" -- "0..*" RegistroAtividadeMonitoria : valida >
-
-' Apenas o Monitor pode registrar atividades
+Coordenador "1" -- "0..*" RegistroAtividadeMonitoria : valida >
 Monitor "1" -- "0..*" RegistroAtividadeMonitoria : registra >
 
 @enduml
@@ -271,3 +294,4 @@ Monitor "1" -- "0..*" RegistroAtividadeMonitoria : registra >
 |-------|--------|-----------|------------|
 | 18/09/2025 | 1.0 | Criação do documento | João Mariano e Sarah Ferrari.
 | 16/10/2025 | 2.0 | Aprimoramento do documento | João Victor de C.
+| 22/10/2025 | 3.0 | Aprimoramento do documento | João Victor de C.
