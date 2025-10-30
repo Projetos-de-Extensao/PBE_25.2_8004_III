@@ -12,53 +12,49 @@ class Usuario(models.Model):
     class Meta:
         abstract = True
 
-    def login(self):
-        raise NotImplementedError("Método login() deve ser implementado")
-
-    def logout(self):
-        raise NotImplementedError("Método logout() deve ser implementado")
-
-    def alterarSenha(self, nova_senha):
-        self.senha_hash = make_password(nova_senha)
-        self.save()
-        return True
-
-
 class Aluno(Usuario):
     matricula = models.CharField(max_length=12, unique=True, primary_key=True)
     cr_geral = models.FloatField()
+    cr_disciplina = models.FloatField()
     curso = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.matricula} - {self.nome}"
 
-    def matricularEmDisciplina(self, disciplina):
-        raise NotImplementedError("Método matricularEmDisciplina() deve ser implementado")
-
-    def buscarMonitoria(self, disciplina):
+    def buscarVaga(self, disciplina):
         return VagaMonitoria.objects.filter(disciplina_obj=disciplina, status='Aberta')
 
-    def realizarCandidatura(self, vaga):
+    def realizarCandidatura(self, vagaMonitoria):
         candidatura = Candidatura.objects.create(
             aluno=self,
-            vaga=vaga,
+            vaga = vagaMonitoria,
             status='Pendente'
         )
         return candidatura
 
 
 class Monitor(Aluno):
-    cr_disciplina = models.FloatField()
+    dia_semana = models.CharField(max_length=10)
 
     class Meta:
         verbose_name = 'Monitor'
         verbose_name_plural = 'Monitores'
 
-    def gerenciarDisponibilidade(self):
-        raise NotImplementedError("Método gerenciarDisponibilidade() deve ser implementado")
+    def gerenciarDisponibilidade(self, horario):
+        horarios = [
+            {"dia": "Segunda", "inicio": "12:00", "fim": "13:00"},
+            {"dia": "Terça", "inicio": "12:00", "fim": "13:00"},
+            {"dia": "Quarta", "inicio": "12:00", "fim": "13:00"},
+            {"dia": "Quinta", "inicio": "12:00", "fim": "13:00"},
+            {"dia": "Sexta", "inicio": "12:00", "fim": "13:00"}
+        ]
 
-    def visualizarAgenda(self):
-        raise NotImplementedError("Método visualizarAgenda() deve ser implementado")
+        horario_escolhido = []
+
+        for horario in horarios:
+            horario_escolhido.append(horario)
+        
+        return horario_escolhido
 
     def submeterRelatorioHoras(self, registro):
         if hasattr(registro, 'submeter'):
