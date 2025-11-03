@@ -3,6 +3,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import date
 
 
+# Classe abstrata que serve como base para todos os tipos de usuários do sistema
+# Não cria tabela no banco, apenas fornece estrutura comum
 class Usuario(models.Model):
     nome = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
@@ -10,8 +12,21 @@ class Usuario(models.Model):
     senha_hash = models.CharField(max_length=128)
 
     class Meta:
-        abstract = True
+        abstract = True  # Define que esta classe não gera tabela no banco
 
+    def login(self):
+        raise NotImplementedError("Método login() deve ser implementado")
+
+    def logout(self):
+        raise NotImplementedError("Método logout() deve ser implementado")
+
+    def alterarSenha(self, nova_senha):
+        self.senha_hash = make_password(nova_senha)
+        self.save()
+        return True
+
+
+# Estudante da instituição
 class Aluno(Usuario):
     matricula = models.CharField(max_length=12, unique=True, primary_key=True)
     cr_geral = models.FloatField()
@@ -22,25 +37,48 @@ class Aluno(Usuario):
         return f"{self.matricula} - {self.nome}"
 
     def buscarVaga(self, disciplina):
-        return VagaMonitoria.objects.filter(disciplina_obj=disciplina, status='Aberta')
+        return VagaMonitoria.objects.filter(disciplina=disciplina, status='Aberta')
 
     def realizarCandidatura(self, vagaMonitoria):
-        candidatura = Candidatura.objects.create(
+        return Candidatura.objects.create(
             aluno=self,
-            vaga = vagaMonitoria,
+            vaga=vagaMonitoria,
             status='Pendente'
         )
-        return candidatura
 
 
+# Aluno aprovado para dar monitoria
 class Monitor(Aluno):
-    dia_semana = models.CharField(max_length=10)
-
     class Meta:
         verbose_name = 'Monitor'
         verbose_name_plural = 'Monitores'
 
+    def gerenciarDisponibilidade(self):
+        raise NotImplementedError("Método gerenciarDisponibilidade() deve ser implementado")
+
+    def visualizarAgenda(self):
+        raise NotImplementedError("Método visualizarAgenda() deve ser implementado")
+
+    def submeterRelatorioHoras(self, registro):
+        if hasattr(registro, 'submeter'):
+            return registro.submeter()
+        raise ValueError("Registro inválido")
+
+
+# Monitor TEA é um tipo especial de monitor que recebe remuneração
+# TEA = Trabalho de Ensino Assistido (monitoria remunerada)
+# Herda de Aluno (poderia herdar de Monitor também, dependendo da modelagem)
+class MonitorTEA(Aluno):
+    # Valor do salário mensal que o monitor TEA recebe
+    salario = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        verbose_name = 'Monitor TEA'
+        verbose_name_plural = 'Monitores TEA'
+
+    # Define os horários disponíveis do monitor TEA para atendimento
     def gerenciarDisponibilidade(self, horario):
+        # Lista de horários padrão de segunda a sexta, das 12h às 13h
         horarios = [
             {"dia": "Segunda", "inicio": "12:00", "fim": "13:00"},
             {"dia": "Terça", "inicio": "12:00", "fim": "13:00"},
@@ -49,33 +87,28 @@ class Monitor(Aluno):
             {"dia": "Sexta", "inicio": "12:00", "fim": "13:00"}
         ]
 
+        # Lista que armazenará os horários escolhidos
         horario_escolhido = []
 
+        # Adiciona todos os horários na lista de escolhidos
         for horario in horarios:
             horario_escolhido.append(horario)
         
         return horario_escolhido
 
+    # Permite que o monitor TEA registre as horas trabalhadas
     def submeterRelatorioHoras(self, registro):
+        # Verifica se o registro tem o método 'submeter' antes de chamar
         if hasattr(registro, 'submeter'):
             return registro.submeter()
         raise ValueError("Registro inválido")
 
-    def __str__(self):
-        return f"Monitor {self.matricula} - {self.nome}"
-
-
-class MonitorTEA(Monitor):
-    salario = models.FloatField()
-
-    class Meta:
-        verbose_name = 'Monitor TEA'
-        verbose_name_plural = 'Monitores TEA'
-
+    # Como o monitor TEA aparece quando convertido para texto
     def __str__(self):
         return f"MonitorTEA {self.matricula} - Salário: R$ {self.salario}"
 
 
+# Professor da instituição
 class Professor(Usuario):
     matricula = models.CharField(max_length=12, unique=True, primary_key=True)
     cpf = models.CharField(max_length=14, unique=True)
@@ -84,6 +117,7 @@ class Professor(Usuario):
         return f"{self.matricula} - {self.nome}"
 
 
+# Professor com responsabilidades administrativas (gerencia programa de monitoria)
 class Coordenador(Professor):
     class Meta:
         verbose_name = 'Coordenador'
@@ -97,19 +131,17 @@ class Coordenador(Professor):
         candidatura.status = 'Aprovada'
         candidatura.save()
         return candidatura
-
-    def validarHoras(self, registro):
-        registro.status_validacao = 'Aprovado'
-        registro.save()
-        return registro
-
-    def indicarAlunoParaMonitoria(self, aluno):
-        raise NotImplementedError("Método indicarAlunoParaMonitoria() deve ser implementado")
+    
+    def rejeitarCandidatura(self, candidatura):
+        candidatura.status = 'Rejeitada'
+        candidatura.save()
+        return candidatura
 
     def __str__(self):
         return f"Coordenador {self.matricula} - {self.nome}"
 
 
+# Disciplina/matéria oferecida pela instituição
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)
     codigo = models.CharField(max_length=20, unique=True)
@@ -118,6 +150,7 @@ class Disciplina(models.Model):
         return f"{self.codigo} - {self.nome}"
 
 
+# Oportunidade de monitoria em uma disciplina
 class VagaMonitoria(models.Model):
     titulo = models.CharField(max_length=100)
     pre_requisitos = models.TextField()
@@ -161,6 +194,7 @@ class VagaMonitoria(models.Model):
         return self.candidaturas_recebidas.all()
 
 
+# Candidatura de um aluno a uma vaga de monitoria
 class Candidatura(models.Model):
     documentos = models.TextField()
     status = models.CharField(
@@ -174,18 +208,18 @@ class Candidatura(models.Model):
     )
     data_candidatura = models.DateField(default=date.today)
     aluno = models.ForeignKey(
-        'Aluno',                 
-        on_delete=models.CASCADE,  
+        'Aluno',
+        on_delete=models.CASCADE,
         related_name='candidaturas_realizadas'
     )
     vaga = models.ForeignKey(
-        'VagaMonitoria',                  
-        on_delete=models.CASCADE, 
+        'VagaMonitoria',
+        on_delete=models.CASCADE,
         related_name='candidaturas_recebidas'
     )
 
     def validarCR(self) -> bool:
-        return self.aluno.cr_geral >= 7.0
+        return self.aluno.cr_geral >= 7.0 and self.aluno.cr_disciplina >= 8.0
 
     def submeter(self):
         self.status = 'Pendente'
@@ -201,66 +235,55 @@ class Candidatura(models.Model):
         return f"Candidatura de {self.aluno.nome} para {self.vaga.titulo} - {self.status}"
 
 
-class RegistroAtividadeMonitoria(models.Model):
-    descricao_atividade = models.TextField()
-    horas_trabalhadas = models.FloatField()
-    data_registro = models.DateField(default=date.today)
-    status_validacao = models.CharField(
-        max_length=20,
-        choices=[
-            ('Pendente', 'Pendente'),
-            ('Aprovado', 'Aprovado'),
-            ('Rejeitado', 'Rejeitado')
-        ],
-        default='Pendente'
+# Registro de uma sessão de monitoria realizada pelo MonitorTEA
+class RegistroMonitoria(models.Model):
+    data_monitoria = models.DateField()
+    horario_inicio = models.TimeField()
+    horario_fim = models.TimeField()
+    horas_trabalhadas = models.DecimalField(max_digits=4, decimal_places=2)
+    codigo_disciplina = models.CharField(max_length=20)
+    descricao_atividade = models.TextField(help_text="O que foi ensinado/abordado na monitoria")
+    alunos_participantes = models.JSONField(
+        default=list,
+        help_text="Lista de dicionários com 'matricula' e 'nome' dos alunos participantes"
     )
-    dia = models.DateField()
+    quantidade_alunos = models.IntegerField(default=0)
+    data_registro = models.DateField(auto_now_add=True)
     observacoes = models.TextField(blank=True, null=True)
     
-    monitor = models.ForeignKey(
-        'Monitor',                 
-        on_delete=models.CASCADE,  
-        related_name='registros_monitor'
+    monitor_tea = models.ForeignKey(
+        'MonitorTEA',
+        on_delete=models.CASCADE,
+        related_name='registros_monitorias'
     )
     candidatura = models.ForeignKey(
         'Candidatura',
         on_delete=models.CASCADE,
         related_name='registros_atividade'
     )
-    coordenador_validador = models.ForeignKey(
-        'Coordenador',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='registros_validados'
-    )
+
+    class Meta:
+        verbose_name = 'Registro de Monitoria'
+        verbose_name_plural = 'Registros de Monitoria'
+        ordering = ['-data_monitoria']
 
     def submeter(self):
-        self.status_validacao = 'Pendente'
         self.save()
         return self
 
     def visualizarDetalhes(self):
         return {
             'id': self.id,
-            'monitor': str(self.monitor),
+            'monitor': str(self.monitor_tea),
+            'data_monitoria': self.data_monitoria.isoformat(),
+            'horario': f"{self.horario_inicio} - {self.horario_fim}",
+            'horas_trabalhadas': float(self.horas_trabalhadas),
+            'codigo_disciplina': self.codigo_disciplina,
             'descricao_atividade': self.descricao_atividade,
-            'horas_trabalhadas': self.horas_trabalhadas,
-            'data_registro': self.data_registro.isoformat() if self.data_registro else None,
-            'status_validacao': self.status_validacao,
-            'dia': self.dia.isoformat() if self.dia else None,
+            'alunos_participantes': self.alunos_participantes,
+            'quantidade_alunos': self.quantidade_alunos,
             'observacoes': self.observacoes,
         }
 
-    def aprovar(self):
-        self.status_validacao = 'Aprovado'
-        self.save()
-        return self
-
-    def rejeitar(self):
-        self.status_validacao = 'Rejeitado'
-        self.save()
-        return self
-
     def __str__(self):
-        return f"Registro {self.id} - {self.monitor.nome} - {self.horas_trabalhadas}h"
+        return f"Monitoria {self.data_monitoria} - {self.monitor_tea.nome} - {self.quantidade_alunos} alunos"

@@ -3,13 +3,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from myapp.models import (
     Aluno, Monitor, MonitorTEA, Professor, Coordenador,
-    Disciplina, VagaMonitoria, Candidatura, RegistroAtividadeMonitoria
+    Disciplina, VagaMonitoria, Candidatura, RegistroMonitoria
 )
 from myapp.serializers import (
     AlunoSerializer, MonitorSerializer, MonitorTEASerializer,
     ProfessorSerializer, CoordenadorSerializer, DisciplinaSerializer,
-    VagaMonitoriaSerializer, CandidaturaSerializer, RegistroAtividadeMonitoriaSerializer
+    VagaMonitoriaSerializer, CandidaturaSerializer, RegistroMonitoriaSerializer
 )
+
 
 
 class DisciplinaViewSet(viewsets.ModelViewSet):
@@ -52,7 +53,7 @@ class CandidaturaViewSet(viewsets.ModelViewSet):
     serializer_class = CandidaturaSerializer
 
 
-class RegistroAtividadeMonitoriaViewSet(viewsets.ModelViewSet):
-    queryset = RegistroAtividadeMonitoria.objects.all()
-    serializer_class = RegistroAtividadeMonitoriaSerializer 
+class RegistroMonitoriaViewSet(viewsets.ModelViewSet):
+    queryset = RegistroMonitoria.objects.all()
+    serializer_class = RegistroMonitoriaSerializer
 

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from myapp.models import (
     Aluno, Monitor, MonitorTEA, Professor, Coordenador,
-    Disciplina, VagaMonitoria, Candidatura, RegistroAtividadeMonitoria
+    Disciplina, VagaMonitoria, Candidatura, RegistroMonitoria
 )
 
 # models -> serializer -> url -> view
@@ -20,7 +20,7 @@ class DisciplinaSerializer(serializers.ModelSerializer):
 class AlunoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aluno
-        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'curso']
+        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'cr_disciplina', 'curso']
         extra_kwargs = {
             'senha_hash': {'write_only': True}
         }
@@ -88,17 +88,16 @@ class CandidaturaSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'data_candidatura']
 
 
-class RegistroAtividadeMonitoriaSerializer(serializers.ModelSerializer):
-    monitor_detalhes = MonitorSerializer(source='monitor', read_only=True)
+class RegistroMonitoriaSerializer(serializers.ModelSerializer):
+    monitor_tea_detalhes = MonitorTEASerializer(source='monitor_tea', read_only=True)
     candidatura_detalhes = CandidaturaSerializer(source='candidatura', read_only=True)
-    coordenador_validador_detalhes = CoordenadorSerializer(source='coordenador_validador', read_only=True)
-    
+
     class Meta:
-        model = RegistroAtividadeMonitoria
+        model = RegistroMonitoria
         fields = [
-            'id', 'monitor', 'monitor_detalhes', 'candidatura', 'candidatura_detalhes',
-            'coordenador_validador', 'coordenador_validador_detalhes',
-            'descricao_atividade', 'horas_trabalhadas', 'data_registro',
-            'status_validacao', 'dia', 'observacoes'
+            'id', 'monitor_tea', 'monitor_tea_detalhes', 'candidatura', 'candidatura_detalhes',
+            'data_monitoria', 'horario_inicio', 'horario_fim', 'horas_trabalhadas',
+            'codigo_disciplina', 'descricao_atividade', 'alunos_participantes', 'quantidade_alunos',
+            'data_registro', 'observacoes'
         ]
         read_only_fields = ['id', 'data_registro']
