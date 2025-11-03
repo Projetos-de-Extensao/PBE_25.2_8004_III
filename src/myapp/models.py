@@ -53,6 +53,22 @@ class Monitor(Aluno):
         verbose_name = 'Monitor'
         verbose_name_plural = 'Monitores'
 
+ 
+
+
+
+# Monitor TEA é um tipo especial de monitor que recebe remuneração
+# TEA = Trabalho de Ensino Assistido (monitoria remunerada)
+# Herda de Aluno (poderia herdar de Monitor também, dependendo da modelagem)
+class MonitorTEA(Aluno):
+    # Valor do salário mensal que o monitor TEA recebe
+    salario = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        verbose_name = 'Monitor TEA'
+        verbose_name_plural = 'Monitores TEA'
+
+    # Define os horários disponíveis do monitor TEA para atendimento
     def gerenciarDisponibilidade(self, horario):
         # Lista de horários padrão de segunda a sexta, das 12h às 13h
         horarios = [
