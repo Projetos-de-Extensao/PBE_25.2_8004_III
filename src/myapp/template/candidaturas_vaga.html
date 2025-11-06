@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Candidaturas - {{ vaga.titulo }} - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* cabeçalho da página */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+        opacity: 0.9;
+    }
+
+    /* informações da vaga */
+    .vaga-info {
+        background-color: var(--white);
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    .vaga-info p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* filtros e contadores */
+    .candidaturas-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .status-filters {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--primary-color);
+        background-color: var(--white);
+        color: var(--primary-color);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+        background-color: var(--primary-color);
+        color: var(--white);
+    }
+
+    /* cartão de candidatura */
+    .candidatura-card {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .candidatura-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .candidatura-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+    }
+
+    .aluno-info h3 {
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .aluno-info p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .candidatura-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .candidatura-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Candidaturas - {{ vaga.titulo }}</h1>
+    <p>{{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}</p>
+</div>
+
+<div class="vaga-info">
+    <p><strong>Pré-requisitos:</strong> {{ vaga.pre_requisitos }}</p>
+    <p><strong>Prazo de Inscrição:</strong> {{ vaga.prazo_inscricao|date:"d/m/Y" }}</p>
+    <p><strong>Status da Vaga:</strong> <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">{{ vaga.status }}</span></p>
+</div>
+
+<div class="candidaturas-header">
+    <h2>Candidaturas Recebidas ({{ candidaturas.count }})</h2>
+    <div class="status-filters">
+        <button class="filter-btn active" data-status="all">Todas</button>
+        <button class="filter-btn" data-status="Pendente">Pendentes</button>
+        <button class="filter-btn" data-status="Aprovada">Aprovadas</button>
+        <button class="filter-btn" data-status="Rejeitada">Rejeitadas</button>
+    </div>
+</div>
+
+{% if candidaturas %}
+    <div id="candidaturas-container">
+        {% for candidatura in candidaturas %}
+        <div class="candidatura-card" data-status="{{ candidatura.status }}">
+            <div class="candidatura-header">
+                <div class="aluno-info">
+                    <h3>{{ candidatura.aluno.nome }}</h3>
+                    <p>Matrícula: {{ candidatura.aluno.matricula }} | Curso: {{ candidatura.aluno.curso }}</p>
+                </div>
+                <span class="badge badge-{% if candidatura.status == 'Pendente' %}warning{% elif candidatura.status == 'Aprovada' %}success{% else %}danger{% endif %}">
+                    {{ candidatura.status }}
+                </span>
+            </div>
+
+            <div class="candidatura-details">
+                <div class="detail-item">
+                    <span class="detail-label">CR Geral</span>
+                    <span class="detail-value">{{ candidatura.aluno.cr_geral|floatformat:2 }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">CR na Disciplina</span>
+                    <span class="detail-value">{{ candidatura.cr_disciplina|floatformat:2 }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Data da Candidatura</span>
+                    <span class="detail-value">{{ candidatura.data_candidatura|date:"d/m/Y" }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Requisitos Atendidos</span>
+                    <span class="detail-value">
+                        {% if candidatura.validarCR %}
+                            <span style="color: var(--success-color);">✓ Sim</span>
+                        {% else %}
+                            <span style="color: var(--danger-color);">✗ Não</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            {% if candidatura.documentos %}
+            <div style="margin-top: 1rem;">
+                <strong>Documentos/Observações:</strong>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">{{ candidatura.documentos|truncatewords:30 }}</p>
+            </div>
+            {% endif %}
+
+            <div class="candidatura-actions">
+                <a href="{% url 'detalhes_candidatura' candidatura.id %}" class="btn btn-primary">Ver Detalhes</a>
+                {% if candidatura.status == 'Pendente' %}
+                    <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn btn-success" onclick="return confirm('Confirma a aprovação desta candidatura?')">Aprovar</a>
+                    <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn btn-danger" onclick="return confirm('Confirma a rejeição desta candidatura?')">Rejeitar</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>Nenhuma candidatura recebida ainda</h2>
+        <p>Quando houver candidaturas, elas aparecerão aqui.</p>
+    </div>
+{% endif %}
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Voltar para Vagas</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Filtro por status
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const candidaturaCards = document.querySelectorAll('.candidatura-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const status = button.getAttribute('data-status');
+            
+            // Atualizar botões ativos
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Filtrar cartões
+            candidaturaCards.forEach(card => {
+                if (status === 'all' || card.getAttribute('data-status') === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

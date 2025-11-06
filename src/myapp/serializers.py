@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from myapp.models import (
-    Aluno, Monitor, MonitorTEA, Professor, Coordenador,
+    Aluno, Monitor, MonitorTEA, Professor, Coordenador, Casa,
     Disciplina, VagaMonitoria, Candidatura, RegistroMonitoria
 )
 
@@ -20,7 +20,7 @@ class DisciplinaSerializer(serializers.ModelSerializer):
 class AlunoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aluno
-        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'cr_disciplina', 'curso']
+        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'curso']
         extra_kwargs = {
             'senha_hash': {'write_only': True}
         }
@@ -29,7 +29,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 class MonitorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Monitor
-        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'curso', 'cr_disciplina']
+        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'curso']
         extra_kwargs = {
             'senha_hash': {'write_only': True}
         }
@@ -38,7 +38,7 @@ class MonitorSerializer(serializers.ModelSerializer):
 class MonitorTEASerializer(serializers.ModelSerializer):
     class Meta:
         model = MonitorTEA
-        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'curso', 'cr_disciplina', 'salario']
+        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cr_geral', 'curso', 'salario']
         extra_kwargs = {
             'senha_hash': {'write_only': True}
         }
@@ -47,7 +47,7 @@ class MonitorTEASerializer(serializers.ModelSerializer):
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Professor
-        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cpf']
+        fields = ['cpf', 'nome', 'email', 'telefone', 'senha_hash']
         extra_kwargs = {
             'senha_hash': {'write_only': True}
         }
@@ -56,10 +56,20 @@ class ProfessorSerializer(serializers.ModelSerializer):
 class CoordenadorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coordenador
-        fields = ['matricula', 'nome', 'email', 'telefone', 'senha_hash', 'cpf']
+        fields = ['cpf', 'nome', 'email', 'telefone', 'senha_hash']
         extra_kwargs = {
             'senha_hash': {'write_only': True}
         }
+
+
+class CasaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Casa
+        fields = ['id', 'nome', 'email', 'telefone', 'senha_hash']
+        extra_kwargs = {
+            'senha_hash': {'write_only': True}
+        }
+        read_only_fields = ['id']
 
 
 class VagaMonitoriaSerializer(serializers.ModelSerializer):
@@ -83,7 +93,7 @@ class CandidaturaSerializer(serializers.ModelSerializer):
         model = Candidatura
         fields = [
             'id', 'aluno', 'aluno_detalhes', 'vaga', 'vaga_detalhes',
-            'documentos', 'status', 'data_candidatura'
+            'documentos', 'cr_disciplina', 'status', 'data_candidatura'
         ]
         read_only_fields = ['id', 'data_candidatura']
 

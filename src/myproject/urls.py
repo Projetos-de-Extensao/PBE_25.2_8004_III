@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myapp.api_urls')),
     path('api/token/', obtain_auth_token, name='api_token_auth'),
-]  # URLs da API
+    path('', include('myapp.urls')),  # URLs das páginas web
+]

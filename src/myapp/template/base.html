@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Monitoria{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- barra de navegação -->
+    {% block navbar %}
+    {% if user_type %}
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <h1>Sistema de Monitoria</h1>
+            </div>
+            <!-- menu de navegação -->
+            <ul class="navbar-menu">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                
+                <!-- Menu para ALUNOS: apenas Vagas -->
+                {% if user_type == 'aluno' %}
+                <li><a href="{% url 'lista_vagas' %}">Vagas Disponíveis</a></li>
+                {% endif %}
+                
+                <!-- Menu para PROFESSORES: apenas Gestão Simplificada e Vagas -->
+                {% if user_type == 'professor' %}
+                <li><a href="{% url 'painel_coordenador' %}">Gestão Simplificada</a></li>
+                <li><a href="{% url 'lista_vagas' %}">Vagas Disponíveis</a></li>
+                {% endif %}
+                
+                <!-- Menu para COORDENADORES: acesso completo -->
+                {% if user_type == 'coordenador' %}
+                <li><a href="{% url 'painel_coordenador' %}">Painel Administrativo</a></li>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'lista_vagas' %}">Vagas</a></li>
+                {% endif %}
+                
+                <!-- Menu para MONITORES -->
+                {% if user_type == 'monitor' %}
+                <li><a href="{% url 'painel_monitor' %}">Painel do Monitor</a></li>
+                <li><a href="{% url 'lista_vagas' %}">Vagas</a></li>
+                {% endif %}
+                
+                <!-- Menu para CASA: acesso total -->
+                {% if user_type == 'casa' %}
+                <li><a href="{% url 'painel_coordenador' %}">Painel Administrativo</a></li>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'lista_vagas' %}">Vagas</a></li>
+                {% endif %}
+                
+                {% if user_nome %}
+                <li style="color: var(--white); padding: 0.5rem 1rem;">👤 {{ user_nome }}</li>
+                {% endif %}
+                <li><a href="{% url 'logout' %}">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+    {% endif %}
+    {% endblock %}
+
+    <!-- conteúdo principal da página -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- rodapé -->
+    {% block footer %}
+    <footer class="footer">
+        <p>&copy; 2025 Sistema de Monitoria - Todos os direitos reservados</p>
+    </footer>
+    {% endblock %}
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Candidatar-se à Vaga - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cadastro_aluno.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>Candidatura para Vaga de Monitoria</h2>
+            <p>Preencha os dados para se candidatar à vaga</p>
+        </div>
+
+        <!-- Informações da vaga -->
+        <div class="vaga-info" style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">{{ vaga.titulo }}</h3>
+            <p><strong>Disciplina:</strong> {{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}</p>
+            <p><strong>Pré-requisitos:</strong> {{ vaga.pre_requisitos }}</p>
+            <p><strong>Prazo de Inscrição:</strong> {{ vaga.prazo_inscricao|date:"d/m/Y" }}</p>
+            {% if vaga.coordenador %}
+            <p><strong>Coordenador:</strong> {{ vaga.coordenador.nome }}</p>
+            {% endif %}
+        </div>
+
+        <form method="POST" class="form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="cr_disciplina" class="form-label">CR na Disciplina {{ vaga.disciplina.nome }} *</label>
+                <input type="number" id="cr_disciplina" name="cr_disciplina" class="form-input" required step="0.01" min="0" max="10" placeholder="Informe seu CR nesta disciplina">
+                <small class="form-help">Coeficiente de Rendimento mínimo exigido: 8.0</small>
+            </div>
+
+            <div class="form-group">
+                <label for="documentos" class="form-label">Documentos e Observações</label>
+                <textarea id="documentos" name="documentos" class="form-input" rows="5" placeholder="Descreva sua experiência, motivação e anexe links para documentos (histórico escolar, certificados, etc.)"></textarea>
+                <small class="form-help">Opcional: Adicione informações complementares que julgar relevantes</small>
+            </div>
+
+            <div class="alert alert-info" style="background-color: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <strong>Requisitos para aprovação:</strong>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>CR Geral mínimo: 7.0</li>
+                    <li>CR na Disciplina mínimo: 8.0</li>
+                </ul>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Enviar Candidatura</button>
+                <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

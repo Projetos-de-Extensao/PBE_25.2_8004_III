@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes da Candidatura - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cadastro_aluno.css' %}">
+<style>
+    .info-section {
+        background-color: var(--white);
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .info-section h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .info-item {
+        padding: 0.75rem;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+    }
+
+    .validation-box {
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin-top: 1rem;
+    }
+
+    .validation-box.success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    .validation-box.error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>Detalhes da Candidatura</h2>
+            <span class="badge badge-{% if candidatura.status == 'Pendente' %}warning{% elif candidatura.status == 'Aprovada' %}success{% else %}danger{% endif %}" style="font-size: 1rem;">
+                {{ candidatura.status }}
+            </span>
+        </div>
+
+        <!-- Informações do Aluno -->
+        <div class="info-section">
+            <h3>👤 Informações do Aluno</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Nome Completo</div>
+                    <div class="info-value">{{ candidatura.aluno.nome }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Matrícula</div>
+                    <div class="info-value">{{ candidatura.aluno.matricula }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Curso</div>
+                    <div class="info-value">{{ candidatura.aluno.curso }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">E-mail</div>
+                    <div class="info-value" style="font-size: 0.9rem;">{{ candidatura.aluno.email }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Telefone</div>
+                    <div class="info-value">{{ candidatura.aluno.telefone }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações da Vaga -->
+        <div class="info-section">
+            <h3>📚 Vaga de Monitoria</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Título</div>
+                    <div class="info-value">{{ candidatura.vaga.titulo }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Disciplina</div>
+                    <div class="info-value">{{ candidatura.vaga.disciplina.codigo }} - {{ candidatura.vaga.disciplina.nome }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status da Vaga</div>
+                    <div class="info-value">{{ candidatura.vaga.status }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Prazo de Inscrição</div>
+                    <div class="info-value">{{ candidatura.vaga.prazo_inscricao|date:"d/m/Y" }}</div>
+                </div>
+            </div>
+            <div style="margin-top: 1rem;">
+                <div class="info-label">Pré-requisitos</div>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">{{ candidatura.vaga.pre_requisitos }}</p>
+            </div>
+        </div>
+
+        <!-- Desempenho Acadêmico -->
+        <div class="info-section">
+            <h3>📊 Desempenho Acadêmico</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">CR Geral</div>
+                    <div class="info-value" style="color: {% if candidatura.aluno.cr_geral >= 7.0 %}var(--success-color){% else %}var(--danger-color){% endif %};">
+                        {{ candidatura.aluno.cr_geral|floatformat:2 }}
+                    </div>
+                    <small>Mínimo: 7.0</small>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">CR na Disciplina</div>
+                    <div class="info-value" style="color: {% if candidatura.cr_disciplina >= 8.0 %}var(--success-color){% else %}var(--danger-color){% endif %};">
+                        {{ candidatura.cr_disciplina|floatformat:2 }}
+                    </div>
+                    <small>Mínimo: 8.0</small>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Data da Candidatura</div>
+                    <div class="info-value">{{ candidatura.data_candidatura|date:"d/m/Y H:i" }}</div>
+                </div>
+            </div>
+
+            {% if cr_valido %}
+            <div class="validation-box success">
+                <strong>✓ Requisitos Atendidos</strong>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">O candidato atende aos requisitos mínimos de CR.</p>
+            </div>
+            {% else %}
+            <div class="validation-box error">
+                <strong>✗ Requisitos NÃO Atendidos</strong>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">O candidato não atende aos requisitos mínimos de CR.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Documentos e Observações -->
+        {% if candidatura.documentos %}
+        <div class="info-section">
+            <h3>📄 Documentos e Observações</h3>
+            <p style="color: var(--text-secondary); white-space: pre-line;">{{ candidatura.documentos }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Ações -->
+        <div class="action-buttons">
+            {% if candidatura.status == 'Pendente' %}
+                <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn btn-success" onclick="return confirm('Confirma a aprovação desta candidatura?')">
+                    ✓ Aprovar Candidatura
+                </a>
+                <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn btn-danger" onclick="return confirm('Confirma a rejeição desta candidatura?')">
+                    ✗ Rejeitar Candidatura
+                </a>
+            {% endif %}
+            <a href="{% url 'candidaturas_vaga' candidatura.vaga.id %}" class="btn btn-secondary">Voltar para Candidaturas</a>
+            <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Voltar para Vagas</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

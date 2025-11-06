@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cadastro de Vaga - Sistema de Monitoria{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header">
+        <h2>Cadastrar Nova Vaga de Monitoria</h2>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="{% url 'cadastro_vaga' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="titulo" class="form-label">Título da Vaga *</label>
+            <input type="text" id="titulo" name="titulo" class="form-input" required placeholder="Ex: Monitor de Cálculo I">
+        </div>
+
+        <div class="form-group">
+            <label for="disciplina" class="form-label">Disciplina *</label>
+            <select id="disciplina" name="disciplina" class="form-select" required>
+                <option value="">Selecione uma disciplina</option>
+                {% for disciplina in disciplinas %}
+                    <option value="{{ disciplina.id }}">{{ disciplina.codigo }} - {{ disciplina.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="pre_requisitos" class="form-label">Pré-requisitos *</label>
+            <textarea id="pre_requisitos" name="pre_requisitos" class="form-textarea" required placeholder="Descreva os pré-requisitos necessários para a vaga..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="prazo_inscricao" class="form-label">Prazo de Inscrição *</label>
+            <input type="date" id="prazo_inscricao" name="prazo_inscricao" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="form-label">Status *</label>
+            <select id="status" name="status" class="form-select" required>
+                <option value="Aberta">Aberta</option>
+                <option value="Fechada">Fechada</option>
+                <option value="Em Análise">Em Análise</option>
+            </select>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">Cadastrar Vaga</button>
+            <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

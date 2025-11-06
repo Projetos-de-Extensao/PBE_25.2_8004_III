@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Painel do Monitor - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* cabeçalho colorido */
+    .painel-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .painel-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    /* sistema de abas */
+    .tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--gray-200);
+    }
+
+    .tab {
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .tab.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* formulário de registro de monitoria */
+    .registro-form {
+        background-color: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    /* grade de horários disponíveis */
+    .horarios-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .horario-card {
+        padding: 1rem;
+        border: 2px solid var(--gray-300);
+        border-radius: var(--border-radius);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .horario-card.selected {
+        border-color: var(--primary-color);
+        background-color: var(--primary-color);
+        color: var(--white);
+    }
+
+    .horario-card:hover {
+        border-color: var(--primary-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="painel-header">
+    <h1>Painel do Monitor</h1>
+    <p>Olá, {{ user.nome }}! Gerencie suas atividades de monitoria</p>
+</div>
+
+<div class="tabs">
+    <button class="tab active" data-tab="atividades">Minhas Atividades</button>
+    <button class="tab" data-tab="registros">Registrar Monitoria</button>
+    <button class="tab" data-tab="horarios">Horários</button>
+    <button class="tab" data-tab="historico">Histórico</button>
+</div>
+
+<!-- Tab: Minhas Atividades -->
+<div class="tab-content active" id="atividades">
+    <div class="card">
+        <div class="card-header">Atividades Pendentes</div>
+        
+        {% if atividades_pendentes %}
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Disciplina</th>
+                        <th>Horário</th>
+                        <th>Alunos</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for atividade in atividades_pendentes %}
+                    <tr>
+                        <td>{{ atividade.data_monitoria|date:"d/m/Y" }}</td>
+                        <td>{{ atividade.codigo_disciplina }}</td>
+                        <td>{{ atividade.horario_inicio }} - {{ atividade.horario_fim }}</td>
+                        <td>{{ atividade.quantidade_alunos }}</td>
+                        <td><span class="badge badge-warning">Pendente</span></td>
+                        <td>
+                            <a href="#" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Ver Detalhes</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="text-align: center; padding: 2rem; color: var(--text-secondary);">Nenhuma atividade pendente</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Tab: Registrar Monitoria -->
+<div class="tab-content" id="registros">
+    <div class="registro-form">
+        <h2 style="margin-bottom: 1.5rem;">Registrar Nova Monitoria</h2>
+        
+        <form method="POST" action="{% url 'registrar_monitoria' %}">
+            {% csrf_token %}
+            
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="data_monitoria" class="form-label">Data da Monitoria *</label>
+                    <input type="date" id="data_monitoria" name="data_monitoria" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="codigo_disciplina" class="form-label">Código da Disciplina *</label>
+                    <input type="text" id="codigo_disciplina" name="codigo_disciplina" class="form-input" required>
+                </div>
+            </div>
+
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="horario_inicio" class="form-label">Horário de Início *</label>
+                    <input type="time" id="horario_inicio" name="horario_inicio" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="horario_fim" class="form-label">Horário de Término *</label>
+                    <input type="time" id="horario_fim" name="horario_fim" class="form-input" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao_atividade" class="form-label">Descrição da Atividade *</label>
+                <textarea id="descricao_atividade" name="descricao_atividade" class="form-textarea" required placeholder="Descreva o que foi abordado na monitoria..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="quantidade_alunos" class="form-label">Quantidade de Alunos *</label>
+                <input type="number" id="quantidade_alunos" name="quantidade_alunos" class="form-input" required min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="observacoes" class="form-label">Observações</label>
+                <textarea id="observacoes" name="observacoes" class="form-textarea" placeholder="Observações adicionais (opcional)"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registrar Monitoria</button>
+        </form>
+    </div>
+</div>
+
+<!-- Tab: Horários -->
+<div class="tab-content" id="horarios">
+    <div class="card">
+        <div class="card-header">Gerenciar Disponibilidade</div>
+        
+        <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Selecione seus horários disponíveis para monitoria:</p>
+        
+        <div class="horarios-grid">
+            <div class="horario-card">
+                <strong>Segunda</strong>
+                <p>12:00 - 13:00</p>
+            </div>
+            <div class="horario-card">
+                <strong>Terça</strong>
+                <p>12:00 - 13:00</p>
+            </div>
+            <div class="horario-card selected">
+                <strong>Quarta</strong>
+                <p>12:00 - 13:00</p>
+            </div>
+            <div class="horario-card">
+                <strong>Quinta</strong>
+                <p>12:00 - 13:00</p>
+            </div>
+            <div class="horario-card selected">
+                <strong>Sexta</strong>
+                <p>12:00 - 13:00</p>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" style="margin-top: 1.5rem;">Salvar Horários</button>
+    </div>
+</div>
+
+<!-- Tab: Histórico -->
+<div class="tab-content" id="historico">
+    <div class="card">
+        <div class="card-header">Histórico de Monitorias</div>
+        
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Disciplina</th>
+                        <th>Horas</th>
+                        <th>Alunos</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in historico %}
+                    <tr>
+                        <td>{{ registro.data_monitoria|date:"d/m/Y" }}</td>
+                        <td>{{ registro.codigo_disciplina }}</td>
+                        <td>{{ registro.horas_trabalhadas }}h</td>
+                        <td>{{ registro.quantidade_alunos }}</td>
+                        <td><span class="badge badge-success">Validado</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-secondary);">Nenhum registro encontrado</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.getAttribute('data-tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            
+            tab.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
+
+    // Horário selection
+    const horarioCards = document.querySelectorAll('.horario-card');
+    horarioCards.forEach(card => {
+        card.addEventListener('click', () => {
+            card.classList.toggle('selected');
+        });
+    });
+</script>
+{% endblock %}

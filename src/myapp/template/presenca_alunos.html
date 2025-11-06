@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Presença dos Alunos - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/presenca_alunos.css' %}">
+{% endblock %}
+
+{% block content %}
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .presenca-header {
+        margin-bottom: 2rem;
+    }
+
+    .presenca-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .presenca-header p {
+        color: var(--text-secondary);
+    }
+
+    /* formulário de registro */
+    .presenca-form {
+        background-color: var(--bg-card);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 2fr 2fr 1fr;
+        gap: 1rem;
+        align-items: end;
+    }
+
+    /* lista de presenças registradas */
+    .presenca-list {
+        background-color: var(--bg-card);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .list-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .list-header h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .list-stats {
+        display: flex;
+        gap: 2rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .list-stats span {
+        color: var(--accent-blue);
+        font-weight: 600;
+    }
+
+    .presenca-item {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: grid;
+        grid-template-columns: 3fr 2fr 2fr 1fr;
+        gap: 1rem;
+        align-items: center;
+        transition: var(--transition);
+    }
+
+    .presenca-item:hover {
+        background-color: var(--bg-hover);
+    }
+
+    .presenca-item:last-child {
+        border-bottom: none;
+    }
+
+    .student-info h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 0.25rem 0;
+    }
+
+    .student-info p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .presenca-data {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .presenca-hora {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .presenca-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-remove {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        transition: var(--transition);
+    }
+
+    .btn-remove:hover {
+        color: var(--accent-red);
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+        .presenca-container {
+            padding: 1rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .presenca-item {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .presenca-actions {
+            justify-content: flex-start;
+        }
+
+        .list-stats {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="presenca-container">
+    <div class="presenca-header">
+        <h1>Presença dos Alunos</h1>
+        <p>Registre e acompanhe a presença dos alunos nas monitorias</p>
+    </div>
+
+    <!-- Formulário de Registro -->
+    <div class="presenca-form">
+        <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem;">
+            Registrar Presença
+        </h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="margin-bottom: 1.5rem;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" id="presencaForm">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nome" class="form-label">Nome do Aluno</label>
+                    <input 
+                        type="text" 
+                        id="nome" 
+                        name="nome" 
+                        class="form-input" 
+                        required 
+                        placeholder="Digite o nome completo"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="matricula" class="form-label">Matrícula</label>
+                    <input 
+                        type="text" 
+                        id="matricula" 
+                        name="matricula" 
+                        class="form-input" 
+                        required 
+                        placeholder="Digite a matrícula"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Dar presença
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista de Presenças -->
+    <div class="presenca-list">
+        <div class="list-header">
+            <h2>Presenças Registradas Hoje</h2>
+            <div class="list-stats">
+                <div>Total: <span>{{ total_presencas|default:12 }}</span></div>
+                <div>Últimas 24h: <span>{{ presencas_24h|default:8 }}</span></div>
+            </div>
+        </div>
+
+        {% if presencas %}
+            {% for presenca in presencas %}
+                <div class="presenca-item">
+                    <div class="student-info">
+                        <h3>{{ presenca.aluno_nome }}</h3>
+                        <p>Matrícula: {{ presenca.aluno_matricula }}</p>
+                    </div>
+                    <div class="presenca-data">
+                        {{ presenca.data|date:"d/m/Y" }}
+                    </div>
+                    <div class="presenca-hora">
+                        {{ presenca.hora|time:"H:i" }}
+                    </div>
+                    <div class="presenca-actions">
+                        <button 
+                            class="btn-remove" 
+                            onclick="removePresenca({{ presenca.id }})"
+                            title="Remover presença"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <!-- Sample Data for Demonstration -->
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>João Silva Santos</h3>
+                    <p>Matrícula: 2024001234</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    14:30
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Maria Oliveira Costa</h3>
+                    <p>Matrícula: 2024001235</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    14:25
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Pedro Henrique Alves</h3>
+                    <p>Matrícula: 2024001236</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    14:15
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Ana Carolina Lima</h3>
+                    <p>Matrícula: 2024001237</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    14:10
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Carlos Eduardo Souza</h3>
+                    <p>Matrícula: 2024001238</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    14:05
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Juliana Ferreira Rocha</h3>
+                    <p>Matrícula: 2024001239</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    13:58
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Rafael Santos Melo</h3>
+                    <p>Matrícula: 2024001240</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    13:45
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+
+            <div class="presenca-item">
+                <div class="student-info">
+                    <h3>Beatriz Gomes Martins</h3>
+                    <p>Matrícula: 2024001241</p>
+                </div>
+                <div class="presenca-data">
+                    {% now "d/m/Y" %}
+                </div>
+                <div class="presenca-hora">
+                    13:30
+                </div>
+                <div class="presenca-actions">
+                    <button class="btn-remove" title="Remover presença">✕</button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/presenca_alunos.js' %}"></script>
+{% endblock %}

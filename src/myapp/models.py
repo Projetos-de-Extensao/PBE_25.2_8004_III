@@ -30,7 +30,6 @@ class Usuario(models.Model):
 class Aluno(Usuario):
     matricula = models.CharField(max_length=12, unique=True, primary_key=True)
     cr_geral = models.FloatField()
-    cr_disciplina = models.FloatField()
     curso = models.CharField(max_length=100)
 
     def __str__(self):
@@ -102,11 +101,27 @@ class MonitorTEA(Aluno):
 
 # Professor da instituição
 class Professor(Usuario):
-    matricula = models.CharField(max_length=12, unique=True, primary_key=True)
-    cpf = models.CharField(max_length=14, unique=True)
+    cpf = models.CharField(max_length=14, unique=True, primary_key=True)
 
     def __str__(self):
-        return f"{self.matricula} - {self.nome}"
+        return f"{self.cpf} - {self.nome}"
+
+
+# Administrador supremo do sistema - Apenas criado via Django Admin
+# Tem permissão total e é o único que pode cadastrar coordenadores
+class Casa(Usuario):
+    class Meta:
+        verbose_name = 'Casa (Administrador)'
+        verbose_name_plural = 'Casa (Administradores)'
+
+    def cadastrarCoordenador(self, coordenador_data):
+        """Apenas a Casa pode cadastrar novos coordenadores"""
+        coordenador = Coordenador(**coordenador_data)
+        coordenador.save()
+        return coordenador
+
+    def __str__(self):
+        return f"Casa - {self.nome}"
 
 
 # Professor com responsabilidades administrativas (gerencia programa de monitoria)
@@ -130,7 +145,7 @@ class Coordenador(Professor):
         return candidatura
 
     def __str__(self):
-        return f"Coordenador {self.matricula} - {self.nome}"
+        return f"Coordenador {self.cpf} - {self.nome}"
 
 
 # Disciplina/matéria oferecida pela instituição
@@ -189,6 +204,7 @@ class VagaMonitoria(models.Model):
 # Candidatura de um aluno a uma vaga de monitoria
 class Candidatura(models.Model):
     documentos = models.TextField()
+    cr_disciplina = models.FloatField(default=0.0, help_text="CR (Coeficiente de Rendimento) na disciplina da vaga")
     status = models.CharField(
         max_length=20,
         choices=[
@@ -211,7 +227,7 @@ class Candidatura(models.Model):
     )
 
     def validarCR(self) -> bool:
-        return self.aluno.cr_geral >= 7.0 and self.aluno.cr_disciplina >= 8.0
+        return self.aluno.cr_geral >= 7.0 and self.cr_disciplina >= 8.0
 
     def submeter(self):
         self.status = 'Pendente'

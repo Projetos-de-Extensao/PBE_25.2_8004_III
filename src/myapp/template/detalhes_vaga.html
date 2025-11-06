@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ vaga.titulo }} - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    .vaga-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .vaga-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .vaga-header .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .info-card {
+        background-color: var(--white);
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .info-card h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .info-item {
+        padding: 0.75rem;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+    }
+
+    .pre-requisitos {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        border-left: 4px solid var(--primary-color);
+        margin-top: 1rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .requisitos-list {
+        background-color: #e7f3ff;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin-top: 1rem;
+    }
+
+    .requisitos-list ul {
+        margin: 0.5rem 0 0 1.5rem;
+    }
+
+    .requisitos-list li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="vaga-header">
+    <h1>{{ vaga.titulo }}</h1>
+    <p class="subtitle">{{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}</p>
+    <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}" style="font-size: 1rem; margin-top: 0.5rem;">
+        {{ vaga.status }}
+    </span>
+</div>
+
+<!-- Informações da Vaga -->
+<div class="info-card">
+    <h3>📋 Informações da Vaga</h3>
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">Disciplina</div>
+            <div class="info-value">{{ vaga.disciplina.codigo }}</div>
+            <small>{{ vaga.disciplina.nome }}</small>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Status</div>
+            <div class="info-value">
+                <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
+                    {{ vaga.status }}
+                </span>
+            </div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Prazo de Inscrição</div>
+            <div class="info-value">{{ vaga.prazo_inscricao|date:"d/m/Y" }}</div>
+        </div>
+        {% if vaga.coordenador %}
+        <div class="info-item">
+            <div class="info-label">Coordenador Responsável</div>
+            <div class="info-value" style="font-size: 0.95rem;">{{ vaga.coordenador.nome }}</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Pré-requisitos -->
+<div class="info-card">
+    <h3>📚 Pré-requisitos</h3>
+    <div class="pre-requisitos">
+        <p style="white-space: pre-line;">{{ vaga.pre_requisitos }}</p>
+    </div>
+</div>
+
+<!-- Requisitos Mínimos -->
+<div class="info-card">
+    <h3>✓ Requisitos Mínimos para Candidatura</h3>
+    <div class="requisitos-list">
+        <ul>
+            <li><strong>CR Geral:</strong> Mínimo de 7.0</li>
+            <li><strong>CR na Disciplina:</strong> Mínimo de 8.0</li>
+            <li><strong>Prazo:</strong> Candidatura deve ser realizada até {{ vaga.prazo_inscricao|date:"d/m/Y" }}</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Ações -->
+<div class="action-buttons">
+    {% if user_type == 'aluno' and vaga.status == 'Aberta' %}
+        <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-success">
+            Candidatar-se a esta Vaga
+        </a>
+    {% endif %}
+    
+    {% if user_type == 'coordenador' or user_type == 'casa' %}
+        <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-primary">Editar Vaga</a>
+        <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-warning">Ver Candidaturas</a>
+    {% endif %}
+    
+    <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Voltar para Vagas</a>
+</div>
+{% endblock %}

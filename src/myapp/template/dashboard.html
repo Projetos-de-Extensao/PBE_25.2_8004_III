@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Dashboard de Métricas</h1>
+        <p>Visão geral do programa de monitoria</p>
+    </div>
+
+    <!-- Métricas Principais -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon blue">📊</div>
+            </div>
+            <div class="metric-value">{{ total_vagas|default:24 }}</div>
+            <div class="metric-label">Total de Vagas</div>
+            <div class="metric-trend">↑ +{{ novas_vagas_mes|default:5 }} este mês</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon green">📝</div>
+            </div>
+            <div class="metric-value">{{ total_candidaturas|default:156 }}</div>
+            <div class="metric-label">Candidaturas</div>
+            <div class="metric-trend">↑ +{{ candidaturas_mes|default:23 }} este mês</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon orange">👥</div>
+            </div>
+            <div class="metric-value">{{ monitores_ativos|default:18 }}</div>
+            <div class="metric-label">Monitores Ativos</div>
+            <div class="metric-trend">↑ {{ monitores_novos|default:3 }} novos</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon red">⏰</div>
+            </div>
+            <div class="metric-value">{{ horas_monitoria|default:342 }}</div>
+            <div class="metric-label">Horas de Monitoria</div>
+            <div class="metric-trend">↑ {{ horas_mes|default:78 }}h este mês</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon blue">✅</div>
+            </div>
+            <div class="metric-value">{{ taxa_aprovacao|default:87 }}%</div>
+            <div class="metric-label">Taxa de Aprovação</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon green">🎓</div>
+            </div>
+            <div class="metric-value">{{ alunos_atendidos|default:234 }}</div>
+            <div class="metric-label">Alunos Atendidos</div>
+            <div class="metric-trend">↑ {{ alunos_mes|default:45 }} este mês</div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <!-- Charts Section -->
+        <div>
+            <!-- Presença dos Alunos (Bar Chart) -->
+            <div class="chart-card">
+                <div class="chart-header">Presença dos Alunos</div>
+                <div class="chart-wrapper">
+                    <canvas id="presencaChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Distribuição por Disciplina (Pie Chart) -->
+            <div class="chart-card" style="margin-top: 2rem;">
+                <div class="chart-header">Distribuição por Disciplina</div>
+                <div class="chart-wrapper">
+                    <canvas id="disciplinasChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <div>
+            <div class="activity-feed">
+                <div class="chart-header">Atividades Recentes</div>
+                
+                <div class="activity-item">
+                    <p><strong>Nova candidatura</strong> para Cálculo I</p>
+                    <p class="activity-time">Há 5 minutos</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Monitoria registrada</strong> - 3 horas</p>
+                    <p class="activity-time">Há 1 hora</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Nova vaga cadastrada</strong> - Física II</p>
+                    <p class="activity-time">Há 2 horas</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Candidatura aprovada</strong> para Programação</p>
+                    <p class="activity-time">Há 3 horas</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Monitor cadastrado</strong> - João Silva</p>
+                    <p class="activity-time">Há 5 horas</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Vaga fechada</strong> - Algoritmos</p>
+                    <p class="activity-time">Ontem</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Presença registrada</strong> - Maria Santos</p>
+                    <p class="activity-time">Ontem</p>
+                </div>
+
+                <div class="activity-item">
+                    <p><strong>Nova candidatura</strong> para Banco de Dados</p>
+                    <p class="activity-time">2 dias atrás</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status das Vagas -->
+    <div class="chart-card">
+        <div class="chart-header">Status das Vagas</div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Quantidade</th>
+                        <th>Percentual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-success">Aberta</span></td>
+                        <td>{{ vagas_abertas|default:15 }}</td>
+                        <td>{{ vagas_abertas_percent|default:62 }}%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">Em Análise</span></td>
+                        <td>{{ vagas_analise|default:6 }}</td>
+                        <td>{{ vagas_analise_percent|default:25 }}%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-danger">Fechada</span></td>
+                        <td>{{ vagas_fechadas|default:3 }}</td>
+                        <td>{{ vagas_fechadas_percent|default:13 }}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

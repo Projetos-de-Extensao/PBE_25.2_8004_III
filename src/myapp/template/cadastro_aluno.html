@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cadastro de Aluno - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* container do formulário */
+    .cadastro-container {
+        max-width: 700px;
+        margin: 2rem auto;
+    }
+
+    /* cabeçalho do cadastro */
+    .cadastro-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .cadastro-header h1 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .cadastro-header p {
+        color: var(--text-secondary);
+    }
+
+    /* layout de duas colunas */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    /* responsivo para mobile */
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+<!-- remove navbar para página de cadastro -->
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="cadastro-container">
+    <div class="card">
+        <div class="cadastro-header">
+            <h1>Cadastro de Aluno</h1>
+            <p>Preencha os dados abaixo para criar sua conta</p>
+        </div>
+
+        <!-- formulário de cadastro -->        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'cadastro_aluno' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="nome" class="form-label">Nome Completo *</label>
+                <input type="text" id="nome" name="nome" class="form-input" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="matricula" class="form-label">Matrícula *</label>
+                    <input type="text" id="matricula" name="matricula" class="form-input" required maxlength="12">
+                </div>
+
+                <div class="form-group">
+                    <label for="curso" class="form-label">Curso *</label>
+                    <input type="text" id="curso" name="curso" class="form-input" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail *</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone" class="form-label">Telefone *</label>
+                    <input type="tel" id="telefone" name="telefone" class="form-input" required maxlength="15" placeholder="(00) 00000-0000">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cr_geral" class="form-label">CR Geral *</label>
+                    <input type="number" id="cr_geral" name="cr_geral" class="form-input" required step="0.01" min="0" max="10">
+                </div>
+
+                <div class="form-group">
+                    <label for="curso" class="form-label">Curso *</label>
+                    <input type="text" id="curso" name="curso" class="form-input" required maxlength="100">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="senha" class="form-label">Senha *</label>
+                    <input type="password" id="senha" name="senha" class="form-input" required minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar_senha" class="form-label">Confirmar Senha *</label>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha" class="form-input" required minlength="6">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                <p>Já tem uma conta? <a href="{% url 'login' %}" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Fazer login</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validação de confirmação de senha
+    const form = document.querySelector('form');
+    const senha = document.getElementById('senha');
+    const confirmarSenha = document.getElementById('confirmar_senha');
+
+    form.addEventListener('submit', function(e) {
+        if (senha.value !== confirmarSenha.value) {
+            e.preventDefault();
+            alert('As senhas não coincidem! Por favor, verifique.');
+            confirmarSenha.focus();
+            return false;
+        }
+    });
+</script>
+{% endblock %}

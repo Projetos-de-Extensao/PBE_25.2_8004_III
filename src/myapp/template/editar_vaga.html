@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Vaga - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cadastro_aluno.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>Editar Vaga de Monitoria</h2>
+            <p>Atualize as informações da vaga</p>
+        </div>
+
+        <form method="POST" class="form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="titulo" class="form-label">Título da Vaga *</label>
+                <input type="text" id="titulo" name="titulo" class="form-input" required value="{{ vaga.titulo }}">
+            </div>
+
+            <div class="form-group">
+                <label for="disciplina" class="form-label">Disciplina *</label>
+                <select id="disciplina" name="disciplina" class="form-input" required>
+                    <option value="">Selecione uma disciplina</option>
+                    {% for disciplina in disciplinas %}
+                    <option value="{{ disciplina.id }}" {% if disciplina.id == vaga.disciplina.id %}selected{% endif %}>
+                        {{ disciplina.codigo }} - {{ disciplina.nome }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pre_requisitos" class="form-label">Pré-requisitos *</label>
+                <textarea id="pre_requisitos" name="pre_requisitos" class="form-input" rows="4" required>{{ vaga.pre_requisitos }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prazo_inscricao" class="form-label">Prazo de Inscrição *</label>
+                    <input type="date" id="prazo_inscricao" name="prazo_inscricao" class="form-input" required value="{{ vaga.prazo_inscricao|date:'Y-m-d' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="status" class="form-label">Status *</label>
+                    <select id="status" name="status" class="form-input" required>
+                        <option value="Aberta" {% if vaga.status == 'Aberta' %}selected{% endif %}>Aberta</option>
+                        <option value="Fechada" {% if vaga.status == 'Fechada' %}selected{% endif %}>Fechada</option>
+                        <option value="Em Análise" {% if vaga.status == 'Em Análise' %}selected{% endif %}>Em Análise</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

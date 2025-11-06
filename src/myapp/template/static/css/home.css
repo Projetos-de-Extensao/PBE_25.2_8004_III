@@ -1,0 +1,124 @@
+/* container da home */
+    .home-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* seção hero com gradiente */
+    .hero {
+        background: linear-gradient(135deg, rgba(91, 155, 213, 0.15) 0%, rgba(112, 196, 112, 0.15) 100%);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 4rem 2rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+    }
+
+    /* grade de funcionalidades */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* cartão de funcionalidade */
+    .feature-card {
+        background-color: var(--bg-card);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-blue);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .feature-description {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-section {
+        background-color: var(--bg-card);
+        padding: 3rem 2rem;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        text-align: center;
+    }
+
+    .cta-section h2 {
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        font-size: 2rem;
+    }
+
+    .cta-section p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .home-container {
+            padding: 1rem;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+
+        .cta-buttons .btn {
+            width: 100%;
+        }
+    }

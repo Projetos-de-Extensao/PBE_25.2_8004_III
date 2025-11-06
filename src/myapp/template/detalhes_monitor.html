@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes do Monitor - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cadastro_aluno.css' %}">
+<style>
+    .monitor-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .monitor-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .info-section {
+        background-color: var(--white);
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .info-section h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .info-item {
+        padding: 0.75rem;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+    }
+
+    .disciplina-card {
+        background-color: var(--white);
+        border-left: 4px solid var(--primary-color);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .disciplina-card h4 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .registro-card {
+        background-color: var(--bg-light);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 1rem;
+        border-left: 3px solid var(--secondary-color);
+    }
+
+    .registro-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .badge-tea {
+        background-color: #ffc107;
+        color: #000;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="monitor-header">
+    <h1>{{ monitor.nome }}</h1>
+    <p>Matrícula: {{ monitor.matricula }} | Curso: {{ monitor.curso }}</p>
+    {% if is_monitor_tea %}
+    <span class="badge-tea">Monitor TEA (Remunerado)</span>
+    {% endif %}
+</div>
+
+<!-- Informações Pessoais -->
+<div class="info-section">
+    <h3>👤 Informações Pessoais</h3>
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">Nome Completo</div>
+            <div class="info-value">{{ monitor.nome }}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Matrícula</div>
+            <div class="info-value">{{ monitor.matricula }}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Curso</div>
+            <div class="info-value">{{ monitor.curso }}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">E-mail</div>
+            <div class="info-value" style="font-size: 0.9rem;">{{ monitor.email }}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Telefone</div>
+            <div class="info-value">{{ monitor.telefone }}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">CR Geral</div>
+            <div class="info-value">{{ monitor.cr_geral|floatformat:2 }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Disciplinas de Monitoria -->
+<div class="info-section">
+    <h3>📚 Disciplinas de Monitoria</h3>
+    {% if candidaturas_aprovadas %}
+        {% for candidatura in candidaturas_aprovadas %}
+        <div class="disciplina-card">
+            <h4>{{ candidatura.vaga.disciplina.codigo }} - {{ candidatura.vaga.disciplina.nome }}</h4>
+            <p><strong>Vaga:</strong> {{ candidatura.vaga.titulo }}</p>
+            <p><strong>CR na Disciplina:</strong> {{ candidatura.cr_disciplina|floatformat:2 }}</p>
+            <p><strong>Status:</strong> <span class="badge badge-success">{{ candidatura.status }}</span></p>
+            <p><strong>Data de Aprovação:</strong> {{ candidatura.data_candidatura|date:"d/m/Y" }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color: var(--text-secondary);">Nenhuma monitoria aprovada ainda.</p>
+    {% endif %}
+</div>
+
+<!-- Registros de Monitoria (apenas para MonitorTEA) -->
+{% if is_monitor_tea %}
+<div class="info-section">
+    <h3>⏰ Registros de Monitoria (Últimos 10)</h3>
+    {% if registros %}
+        {% for registro in registros %}
+        <div class="registro-card">
+            <div class="registro-header">
+                <strong>{{ registro.data_monitoria|date:"d/m/Y" }}</strong>
+                <span style="color: var(--text-secondary);">
+                    {{ registro.horario_inicio }} - {{ registro.horario_fim }} 
+                    ({{ registro.horas_trabalhadas }}h)
+                </span>
+            </div>
+            <p><strong>Disciplina:</strong> {{ registro.codigo_disciplina }}</p>
+            <p><strong>Atividade:</strong> {{ registro.descricao_atividade|truncatewords:15 }}</p>
+            <p><strong>Alunos Atendidos:</strong> {{ registro.quantidade_alunos }}</p>
+        </div>
+        {% endfor %}
+        <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+            <strong>Total de horas registradas:</strong> 
+            {% widthratio registros|length 1 1 %} registros visualizados
+        </p>
+    {% else %}
+        <p style="color: var(--text-secondary);">Nenhum registro de monitoria encontrado.</p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Ações -->
+<div style="margin-top: 2rem;">
+    <a href="{% url 'painel_coordenador' %}" class="btn btn-secondary">Voltar ao Painel</a>
+</div>
+{% endblock %}

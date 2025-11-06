@@ -1,0 +1,518 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Painel do Coordenador - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/painel_coordenador.css' %}">
+{% endblock %}
+
+{% block content %}
+    /* container do painel */
+    .coordenador-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .coordenador-header {
+        margin-bottom: 2rem;
+    }
+
+    .coordenador-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .coordenador-header p {
+        color: var(--text-secondary);
+    }
+
+    /* barra de ações com filtros */
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .action-bar h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .filter-group {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    /* lista de candidatos */
+    .candidatos-list {
+        background-color: var(--bg-card);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .list-header-row {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: grid;
+        grid-template-columns: 3fr 2fr 2fr 1.5fr 1fr;
+        gap: 1rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .candidato-item {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: grid;
+        grid-template-columns: 3fr 2fr 2fr 1.5fr 1fr;
+        gap: 1rem;
+        align-items: center;
+        transition: var(--transition);
+    }
+
+    .candidato-item:hover {
+        background-color: var(--bg-hover);
+    }
+
+    .candidato-item:last-child {
+        border-bottom: none;
+    }
+
+    .candidato-info h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 0.25rem 0;
+    }
+
+    .candidato-info p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+
+    .candidato-disciplina {
+        color: var(--text-primary);
+        font-size: 0.9rem;
+    }
+
+    .candidato-data {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+    }
+
+    .candidato-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        font-size: 1.1rem;
+    }
+
+    .btn-icon.approve {
+        background-color: rgba(112, 196, 112, 0.2);
+        color: var(--accent-green);
+    }
+
+    .btn-icon.approve:hover {
+        background-color: rgba(112, 196, 112, 0.3);
+    }
+
+    .btn-icon.reject {
+        background-color: rgba(231, 76, 60, 0.2);
+        color: var(--accent-red);
+    }
+
+    .btn-icon.reject:hover {
+        background-color: rgba(231, 76, 60, 0.3);
+    }
+
+    @media (max-width: 1024px) {
+        .list-header-row,
+        .candidato-item {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .list-header-row {
+            display: none;
+        }
+
+        .candidato-actions {
+            justify-content: flex-start;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .coordenador-container {
+            padding: 1rem;
+        }
+
+        .filter-group {
+            width: 100%;
+        }
+
+        .filter-group .btn {
+            flex: 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="coordenador-container">
+    <div class="coordenador-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1>Painel do Coordenador</h1>
+                <p>Gerencie candidaturas e monitores do programa</p>
+            </div>
+            {% if user_type == 'coordenador' or user_type == 'casa' %}
+            <div>
+                <a href="{% url 'cadastro_vaga' %}" class="btn btn-primary" style="margin-right: 0.5rem;">+ Nova Vaga</a>
+                <a href="{% url 'cadastro_professor' %}" class="btn btn-success">+ Cadastrar Professor</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="candidaturas">Candidaturas</button>
+            <button class="tab-btn" data-tab="monitores">Monitores</button>
+            <button class="tab-btn" data-tab="vagas">Vagas</button>
+            <button class="tab-btn" data-tab="relatorios">Relatórios</button>
+        </div>
+    </div>
+
+    <!-- Tab Content: Candidaturas -->
+    <div class="tab-content active" id="candidaturas-content">
+        <div class="action-bar">
+            <h2>Candidaturas</h2>
+            <div class="filter-group">
+                <button class="btn btn-secondary active">Todos</button>
+                <button class="btn btn-secondary">APROVADOS</button>
+                <button class="btn btn-secondary">EM ANÁLISE</button>
+                <button class="btn btn-secondary">REJEITADOS</button>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="margin-bottom: 1.5rem;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="candidatos-list">
+            <div class="list-header-row">
+                <div>Candidato</div>
+                <div>Disciplina</div>
+                <div>Data</div>
+                <div>Status</div>
+                <div>Ações</div>
+            </div>
+
+            {% if candidaturas %}
+                {% for candidatura in candidaturas %}
+                    <div class="candidato-item">
+                        <div class="candidato-info">
+                            <h3>{{ candidatura.aluno.nome }}</h3>
+                            <p>{{ candidatura.aluno.email }}</p>
+                        </div>
+                        <div class="candidato-disciplina">
+                            {{ candidatura.vaga.disciplina.nome }}
+                        </div>
+                        <div class="candidato-data">
+                            {{ candidatura.data_candidatura|date:"d/m/Y H:i" }}
+                        </div>
+                        <div>
+                            {% if candidatura.status == 'APROVADO' %}
+                                <span class="badge badge-success">APROVADO</span>
+                            {% elif candidatura.status == 'EM_ANALISE' %}
+                                <span class="badge badge-warning">EM ANÁLISE</span>
+                            {% elif candidatura.status == 'REJEITADO' %}
+                                <span class="badge badge-danger">REJEITADO</span>
+                            {% else %}
+                                <span class="badge badge-secondary">{{ candidatura.status }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="candidato-actions">
+                            <button class="btn-icon approve" onclick="aprovarCandidatura({{ candidatura.id }})" title="Aprovar">
+                                ✓
+                            </button>
+                            <button class="btn-icon reject" onclick="rejeitarCandidatura({{ candidatura.id }})" title="Rejeitar">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- Sample Data for Demonstration -->
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>João Pedro Silva</h3>
+                        <p>joao.silva@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Cálculo I
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-success">APROVADO</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Maria Eduarda Santos</h3>
+                        <p>maria.santos@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Programação I
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-warning">EM ANÁLISE</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Carlos Alberto Oliveira</h3>
+                        <p>carlos.oliveira@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Física II
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-success">APROVADO</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Ana Julia Costa</h3>
+                        <p>ana.costa@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Banco de Dados
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-warning">EM ANÁLISE</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Rafael Henrique Lima</h3>
+                        <p>rafael.lima@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Algoritmos
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-success">APROVADO</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Beatriz Ferreira Souza</h3>
+                        <p>beatriz.souza@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Estrutura de Dados
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-warning">EM ANÁLISE</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Lucas Gabriel Alves</h3>
+                        <p>lucas.alves@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Redes de Computadores
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-danger">REJEITADO</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+
+                <div class="candidato-item">
+                    <div class="candidato-info">
+                        <h3>Fernanda Martins Rocha</h3>
+                        <p>fernanda.rocha@email.com</p>
+                    </div>
+                    <div class="candidato-disciplina">
+                        Sistemas Operacionais
+                    </div>
+                    <div class="candidato-data">
+                        {% now "d/m/Y H:i" %}
+                    </div>
+                    <div>
+                        <span class="badge badge-warning">EM ANÁLISE</span>
+                    </div>
+                    <div class="candidato-actions">
+                        <button class="btn-icon approve" title="Aprovar">✓</button>
+                        <button class="btn-icon reject" title="Rejeitar">✕</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tab Content: Monitores (Hidden by default) -->
+    <div class="tab-content" id="monitores-content" style="display: none;">
+        <div class="action-bar">
+            <h2>Monitores Ativos</h2>
+            <button class="btn btn-primary">+ Novo Monitor</button>
+        </div>
+        <div class="card">
+            <p style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                Lista de monitores ativos será exibida aqui
+            </p>
+        </div>
+    </div>
+
+    <!-- Tab Content: Vagas (Hidden by default) -->
+    <div class="tab-content" id="vagas-content" style="display: none;">
+        <div class="action-bar">
+            <h2>Vagas de Monitoria</h2>
+            <a href="{% url 'cadastro_vaga' %}" class="btn btn-primary">+ Nova Vaga</a>
+        </div>
+        <div class="card">
+            <p style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                Lista de vagas será exibida aqui
+            </p>
+        </div>
+    </div>
+
+    <!-- Tab Content: Relatórios (Hidden by default) -->
+    <div class="tab-content" id="relatorios-content" style="display: none;">
+        <div class="action-bar">
+            <h2>Relatórios</h2>
+            <button class="btn btn-primary">Gerar Relatório</button>
+        </div>
+        <div class="card">
+            <p style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                Relatórios e estatísticas serão exibidos aqui
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Função para alternar entre as tabs
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active de todos os botões e conteúdos
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Adiciona active no botão clicado
+            this.classList.add('active');
+            
+            // Mostra o conteúdo correspondente
+            const tabName = this.getAttribute('data-tab');
+            const tabContent = document.getElementById(tabName + '-content');
+            if (tabContent) {
+                tabContent.classList.add('active');
+                tabContent.style.display = 'block';
+            }
+        });
+    });
+
+    // Funções para aprovar e rejeitar candidaturas
+    function aprovarCandidatura(candidaturaId) {
+        if (confirm('Tem certeza que deseja aprovar esta candidatura?')) {
+            window.location.href = `/candidaturas/${candidaturaId}/aprovar/`;
+        }
+    }
+
+    function rejeitarCandidatura(candidaturaId) {
+        if (confirm('Tem certeza que deseja rejeitar esta candidatura?')) {
+            window.location.href = `/candidaturas/${candidaturaId}/rejeitar/`;
+        }
+    }
+</script>
+{% endblock %}

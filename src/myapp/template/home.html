@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* container da home */
+    .home-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* seção hero com gradiente */
+    .hero {
+        background: linear-gradient(135deg, rgba(91, 155, 213, 0.15) 0%, rgba(112, 196, 112, 0.15) 100%);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 4rem 2rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+    }
+
+    /* grade de funcionalidades */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* cartão de funcionalidade */
+    .feature-card {
+        background-color: var(--bg-card);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-blue);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .feature-description {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+
+    .cta-section h2 {
+        margin-bottom: 0.5rem;
+        color: var(--white);
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .cta-section p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-buttons .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+        background-color: var(--white);
+        color: var(--primary-color);
+        border: 2px solid var(--white);
+    }
+
+    .cta-buttons .btn:hover {
+        background-color: transparent;
+        color: var(--white);
+        border-color: var(--white);
+    }
+
+    .cta-buttons .btn-success {
+        background-color: var(--success);
+        color: var(--white);
+        border-color: var(--success);
+    }
+
+    .cta-buttons .btn-success:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-color: var(--white);
+    }
+
+    .cta-buttons .btn-secondary {
+        background-color: transparent;
+        color: var(--white);
+        border-color: var(--white);
+    }
+
+    .cta-buttons .btn-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        .home-container {
+            padding: 1rem;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+
+        .cta-buttons .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="hero">
+        <h1>Bem-vindo ao Sistema de Monitoria</h1>
+        <p>Conectando alunos e monitores para melhor aprendizado</p>
+    </div>
+
+    {% if not user_type %}
+    <div class="cta-section">
+        <h2>Comece Agora!</h2>
+        <p>Faça parte do programa de monitoria da sua instituição</p>
+        <div class="cta-buttons">
+            <a href="{% url 'login' %}" class="btn btn-primary">Fazer Login</a>
+            <a href="{% url 'cadastro_aluno' %}" class="btn btn-success">Cadastrar como Aluno</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if user_type %}
+    <div class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-value">{{ vagas_abertas|default:24 }}</div>
+            <div class="stat-label">Vagas Abertas</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_monitores|default:18 }}</div>
+            <div class="stat-label">Monitores Ativos</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_disciplinas|default:12 }}</div>
+            <div class="stat-label">Disciplinas</div>
+        </div>
+        {% if user_type == 'aluno' %}
+        <div class="stat-card">
+            <div class="stat-value">{{ minhas_candidaturas|default:3 }}</div>
+            <div class="stat-label">Minhas Candidaturas</div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3 class="feature-title">Vagas Disponíveis</h3>
+            <p class="feature-description">Encontre vagas de monitoria em diversas disciplinas</p>
+            <a href="{% url 'lista_vagas' %}" class="btn btn-primary">Ver Vagas</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h3 class="feature-title">Gestão Simplificada</h3>
+            <p class="feature-description">Acompanhe candidaturas e gerencie monitores facilmente</p>
+            {% if user_type == 'coordenador' or user_type == 'casa' or user_type == 'professor' %}
+            <a href="{% url 'painel_coordenador' %}" class="btn btn-primary">Painel Admin</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-secondary">Acessar</a>
+            {% endif %}
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Relatórios Detalhados</h3>
+            <p class="feature-description">Visualize métricas e registros de atividades</p>
+            {% if user_type == 'coordenador' or user_type == 'casa' %}
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-secondary">Ver Mais</a>
+            {% endif %}
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <h3 class="feature-title">Presença de Alunos</h3>
+            <p class="feature-description">Registre e acompanhe a presença dos alunos nas monitorias</p>
+            {% if user_type == 'monitor' %}
+            <a href="{% url 'presenca_alunos' %}" class="btn btn-primary">Registrar Presença</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-secondary">Ver Mais</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

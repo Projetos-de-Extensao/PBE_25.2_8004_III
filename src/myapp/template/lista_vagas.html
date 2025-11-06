@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vagas de Monitoria - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* cabeçalho com botão de nova vaga */
+    .vagas-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .vagas-header h1 {
+        color: var(--primary-color);
+    }
+
+    /* barra de filtros */
+    .filters {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    /* cartão de vaga */
+    .vaga-card {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .vaga-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .vaga-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+    }
+
+    .vaga-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .vaga-disciplina {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .vaga-details {
+        margin: 1rem 0;
+        color: var(--text-secondary);
+    }
+
+    .vaga-details p {
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .vaga-details strong {
+        margin-right: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .vaga-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+    }
+
+    .empty-state img {
+        max-width: 200px;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="vagas-header">
+    <h1>Vagas de Monitoria</h1>
+    {% if user_type == 'coordenador' or user_type == 'casa' %}
+    <a href="{% url 'cadastro_vaga' %}" class="btn btn-primary">+ Nova Vaga</a>
+    {% endif %}
+</div>
+
+<div class="filters">
+    <div class="filter-group">
+        <input type="text" id="search" class="form-input" placeholder="Buscar por título ou disciplina...">
+    </div>
+    <div class="filter-group">
+        <select id="status-filter" class="form-select">
+            <option value="">Todos os Status</option>
+            <option value="Aberta">Aberta</option>
+            <option value="Fechada">Fechada</option>
+            <option value="Em Análise">Em Análise</option>
+        </select>
+    </div>
+</div>
+
+{% if vagas %}
+    <div id="vagas-container">
+        {% for vaga in vagas %}
+        <div class="vaga-card" data-status="{{ vaga.status }}">
+            <div class="vaga-header">
+                <div>
+                    <h3 class="vaga-title">{{ vaga.titulo }}</h3>
+                    <p class="vaga-disciplina">{{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}</p>
+                </div>
+                <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
+                    {{ vaga.status }}
+                </span>
+            </div>
+
+            <div class="vaga-details">
+                <p><strong>Pré-requisitos:</strong> {{ vaga.pre_requisitos|truncatewords:20 }}</p>
+                <p><strong>Prazo de Inscrição:</strong> {{ vaga.prazo_inscricao|date:"d/m/Y" }}</p>
+                {% if vaga.coordenador %}
+                <p><strong>Coordenador:</strong> {{ vaga.coordenador.nome }}</p>
+                {% endif %}
+            </div>
+
+            <div class="vaga-actions">
+                <a href="{% url 'detalhes_vaga' vaga.id %}" class="btn btn-primary">Ver Detalhes</a>
+                {% if user_type == 'aluno' and vaga.status == 'Aberta' %}
+                <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-success">Candidatar-se</a>
+                {% endif %}
+                {% if user_type == 'coordenador' or user_type == 'casa' %}
+                <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-secondary">Editar</a>
+                <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-warning">Ver Candidaturas</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>Nenhuma vaga disponível no momento</h2>
+        <p>Volte mais tarde para verificar novas oportunidades de monitoria.</p>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Search functionality
+    const searchInput = document.getElementById('search');
+    const statusFilter = document.getElementById('status-filter');
+    const vagasCards = document.querySelectorAll('.vaga-card');
+
+    function filterVagas() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value;
+
+        vagasCards.forEach(card => {
+            const title = card.querySelector('.vaga-title').textContent.toLowerCase();
+            const disciplina = card.querySelector('.vaga-disciplina').textContent.toLowerCase();
+            const status = card.getAttribute('data-status');
+
+            const matchesSearch = title.includes(searchTerm) || disciplina.includes(searchTerm);
+            const matchesStatus = !statusValue || status === statusValue;
+
+            if (matchesSearch && matchesStatus) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterVagas);
+    statusFilter.addEventListener('change', filterVagas);
+</script>
+{% endblock %}
