@@ -188,12 +188,14 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
                 <h1>Painel do Coordenador</h1>
-                <p>Gerencie candidaturas e monitores do programa</p>
+                <p>Gerencie candidaturas, vagas e monitores do programa</p>
             </div>
-            {% if user_type == 'coordenador' or user_type == 'casa' %}
+            {% if user_type == 'coordenador' %}
             <div>
                 <a href="{% url 'cadastro_vaga' %}" class="btn btn-primary" style="margin-right: 0.5rem;">+ Nova Vaga</a>
+                {% if user_type == 'casa' %}
                 <a href="{% url 'cadastro_professor' %}" class="btn btn-success">+ Cadastrar Professor</a>
+                {% endif %}
             </div>
             {% endif %}
         </div>
@@ -252,23 +254,27 @@
                             {{ candidatura.data_candidatura|date:"d/m/Y H:i" }}
                         </div>
                         <div>
-                            {% if candidatura.status == 'APROVADO' %}
-                                <span class="badge badge-success">APROVADO</span>
-                            {% elif candidatura.status == 'EM_ANALISE' %}
-                                <span class="badge badge-warning">EM ANÁLISE</span>
-                            {% elif candidatura.status == 'REJEITADO' %}
-                                <span class="badge badge-danger">REJEITADO</span>
+                            {% if candidatura.status == 'Aprovada' %}
+                                <span class="badge badge-success">APROVADA</span>
+                            {% elif candidatura.status == 'Pendente' %}
+                                <span class="badge badge-warning">PENDENTE</span>
+                            {% elif candidatura.status == 'Rejeitada' %}
+                                <span class="badge badge-danger">REJEITADA</span>
                             {% else %}
                                 <span class="badge badge-secondary">{{ candidatura.status }}</span>
                             {% endif %}
                         </div>
                         <div class="candidato-actions">
-                            <button class="btn-icon approve" onclick="aprovarCandidatura({{ candidatura.id }})" title="Aprovar">
-                                ✓
-                            </button>
-                            <button class="btn-icon reject" onclick="rejeitarCandidatura({{ candidatura.id }})" title="Rejeitar">
-                                ✕
-                            </button>
+                            {% if candidatura.status == 'Pendente' %}
+                                <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn-icon approve" title="Aprovar e tornar monitor" onclick="return confirm('Confirma a aprovação? O aluno será registrado como monitor.')">
+                                    ✓
+                                </a>
+                                <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn-icon reject" title="Rejeitar" onclick="return confirm('Confirma a rejeição desta candidatura?')">
+                                    ✕
+                                </a>
+                            {% else %}
+                                <a href="{% url 'detalhes_candidatura' candidatura.id %}" class="btn btn-sm btn-primary">Ver detalhes</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

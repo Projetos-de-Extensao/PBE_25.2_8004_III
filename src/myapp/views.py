@@ -159,24 +159,19 @@ def lista_vagas(request):
 
 # Cadastro de Vaga (apenas coordenadores)
 def cadastro_vaga(request):
-    # Verificar permissão
+    # Verificar permissão - APENAS COORDENADOR
     user_type = request.session.get('user_type')
-    if user_type not in ['coordenador', 'casa']:
+    if user_type != 'coordenador':
         messages.error(request, 'Apenas coordenadores podem cadastrar vagas.')
         return redirect('lista_vagas')
     
     if request.method == 'POST':
         try:
             # Buscar coordenador logado
-            coordenador = None
-            if user_type == 'coordenador':
-                user_cpf = request.session.get('user_id')
-                coordenador = Coordenador.objects.filter(cpf=user_cpf).first()
-            elif user_type == 'casa':
-                # Casa pode criar vagas, mas não é um coordenador
-                # Deixar coordenador como None ou buscar o primeiro coordenador disponível
-                coordenador = None  # Casa não precisa ser associado como coordenador
+            user_cpf = request.session.get('user_id')
+            coordenador = get_object_or_404(Coordenador, cpf=user_cpf)
             
+            # Usar o método cadastrarVaga do coordenador
             vaga = VagaMonitoria(
                 titulo=request.POST.get('titulo'),
                 pre_requisitos=request.POST.get('pre_requisitos'),
@@ -185,7 +180,8 @@ def cadastro_vaga(request):
                 status=request.POST.get('status', 'Aberta'),
                 coordenador=coordenador
             )
-            vaga.save()
+            coordenador.cadastrarVaga(vaga)
+            
             messages.success(request, 'Vaga cadastrada com sucesso!')
             return redirect('lista_vagas')
         except Exception as e:
@@ -210,11 +206,14 @@ def painel_monitor(request):
 # Painel do Coordenador
 # @login_required  # Temporariamente desabilitado para testes
 def painel_coordenador(request):
+    user_type = request.session.get('user_type')
+    
     context = {
         'candidaturas_pendentes': Candidatura.objects.filter(status='Pendente').select_related('aluno', 'vaga'),
         'minhas_vagas': VagaMonitoria.objects.all(),
         'monitores_ativos': list(Monitor.objects.all()) + list(MonitorTEA.objects.all()),
         'registros_pendentes': RegistroMonitoria.objects.all()[:10],
+        'user_type': user_type
     }
     return render(request, 'painel_coordenador.html', context)
 
@@ -360,13 +359,21 @@ def candidatar_vaga(request, vaga_id):
 
 # Editar Vaga
 def editar_vaga(request, vaga_id):
-    # Verificar permissão
+    # Verificar permissão - APENAS COORDENADOR
     user_type = request.session.get('user_type')
-    if user_type not in ['coordenador', 'casa']:
-        messages.error(request, 'Você não tem permissão para editar vagas.')
+    if user_type != 'coordenador':
+        messages.error(request, 'Apenas coordenadores podem editar vagas.')
         return redirect('lista_vagas')
     
     vaga = get_object_or_404(VagaMonitoria, id=vaga_id)
+    
+    # Verificar se o coordenador logado é o dono da vaga
+    user_cpf = request.session.get('user_id')
+    coordenador = get_object_or_404(Coordenador, cpf=user_cpf)
+    
+    if vaga.coordenador and vaga.coordenador.cpf != coordenador.cpf:
+        messages.error(request, 'Você só pode editar suas próprias vagas.')
+        return redirect('lista_vagas')
     
     if request.method == 'POST':
         try:
@@ -391,9 +398,9 @@ def editar_vaga(request, vaga_id):
 
 # Ver Candidaturas de uma Vaga
 def candidaturas_vaga(request, vaga_id):
-    # Verificar permissão
+    # Verificar permissão - Professores, coordenadores e casa podem ver
     user_type = request.session.get('user_type')
-    if user_type not in ['coordenador', 'casa']:
+    if user_type not in ['coordenador', 'professor', 'casa']:
         messages.error(request, 'Você não tem permissão para visualizar candidaturas.')
         return redirect('lista_vagas')
     
@@ -402,7 +409,8 @@ def candidaturas_vaga(request, vaga_id):
     
     context = {
         'vaga': vaga,
-        'candidaturas': candidaturas
+        'candidaturas': candidaturas,
+        'user_type': user_type
     }
     return render(request, 'candidaturas_vaga.html', context)
 
@@ -421,32 +429,41 @@ def detalhes_candidatura(request, candidatura_id):
 
 # Aprovar Candidatura
 def aprovar_candidatura(request, candidatura_id):
-    # Verificar permissão
+    # Verificar permissão - Apenas professores, coordenadores e casa
     user_type = request.session.get('user_type')
-    if user_type not in ['coordenador', 'casa']:
-        messages.error(request, 'Você não tem permissão para aprovar candidaturas.')
+    if user_type not in ['professor', 'coordenador', 'casa']:
+        messages.error(request, 'Apenas professores podem aprovar candidaturas.')
         return redirect('lista_vagas')
     
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
     
     try:
-        candidatura.status = 'Aprovada'
-        candidatura.save()
+        # Buscar o professor logado
+        if user_type in ['professor', 'coordenador']:
+            user_cpf = request.session.get('user_id')
+            professor = get_object_or_404(Professor, cpf=user_cpf)
+            
+            # Usar o método do modelo para aprovar
+            professor.aprovarCandidatura(candidatura)
+        else:
+            # Casa também pode aprovar diretamente
+            candidatura.status = 'Aprovada'
+            candidatura.save()
+            
+            # Criar registro de Monitor
+            Monitor.objects.get_or_create(
+                matricula=candidatura.aluno.matricula,
+                defaults={
+                    'nome': candidatura.aluno.nome,
+                    'email': candidatura.aluno.email,
+                    'telefone': candidatura.aluno.telefone,
+                    'senha_hash': candidatura.aluno.senha_hash,
+                    'cr_geral': candidatura.aluno.cr_geral,
+                    'curso': candidatura.aluno.curso
+                }
+            )
         
-        # Criar registro de Monitor se ainda não existir
-        Monitor.objects.get_or_create(
-            matricula=candidatura.aluno.matricula,
-            defaults={
-                'nome': candidatura.aluno.nome,
-                'email': candidatura.aluno.email,
-                'telefone': candidatura.aluno.telefone,
-                'senha_hash': candidatura.aluno.senha_hash,
-                'cr_geral': candidatura.aluno.cr_geral,
-                'curso': candidatura.aluno.curso
-            }
-        )
-        
-        messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso!')
+        messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
     except Exception as e:
         messages.error(request, f'Erro ao aprovar candidatura: {str(e)}')
     
@@ -455,17 +472,27 @@ def aprovar_candidatura(request, candidatura_id):
 
 # Rejeitar Candidatura
 def rejeitar_candidatura(request, candidatura_id):
-    # Verificar permissão
+    # Verificar permissão - Apenas professores, coordenadores e casa
     user_type = request.session.get('user_type')
-    if user_type not in ['coordenador', 'casa']:
-        messages.error(request, 'Você não tem permissão para rejeitar candidaturas.')
+    if user_type not in ['professor', 'coordenador', 'casa']:
+        messages.error(request, 'Apenas professores podem rejeitar candidaturas.')
         return redirect('lista_vagas')
     
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
     
     try:
-        candidatura.status = 'Rejeitada'
-        candidatura.save()
+        # Buscar o professor logado
+        if user_type in ['professor', 'coordenador']:
+            user_cpf = request.session.get('user_id')
+            professor = get_object_or_404(Professor, cpf=user_cpf)
+            
+            # Usar o método do modelo para rejeitar
+            professor.rejeitarCandidatura(candidatura)
+        else:
+            # Casa também pode rejeitar diretamente
+            candidatura.status = 'Rejeitada'
+            candidatura.save()
+        
         messages.success(request, f'Candidatura de {candidatura.aluno.nome} rejeitada.')
     except Exception as e:
         messages.error(request, f'Erro ao rejeitar candidatura: {str(e)}')

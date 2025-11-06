@@ -103,8 +103,51 @@ class MonitorTEA(Aluno):
 class Professor(Usuario):
     cpf = models.CharField(max_length=14, unique=True, primary_key=True)
 
+    def aprovarCandidatura(self, candidatura):
+        """Professor pode aprovar candidatura de monitoria"""
+        candidatura.status = 'Aprovada'
+        candidatura.save()
+        
+        # Criar registro de Monitor se ainda não existir
+        try:
+            Monitor.objects.get_or_create(
+                matricula=candidatura.aluno.matricula,
+                defaults={
+                    'nome': candidatura.aluno.nome,
+                    'email': candidatura.aluno.email,
+                    'telefone': candidatura.aluno.telefone,
+                    'senha_hash': candidatura.aluno.senha_hash,
+                    'cr_geral': candidatura.aluno.cr_geral,
+                    'curso': candidatura.aluno.curso
+                }
+            )
+        except Exception as e:
+            print(f"Erro ao criar monitor: {e}")
+        
+        return candidatura
+    
+    def rejeitarCandidatura(self, candidatura):
+        """Professor pode rejeitar candidatura de monitoria"""
+        candidatura.status = 'Rejeitada'
+        candidatura.save()
+        return candidatura
+
     def __str__(self):
         return f"{self.cpf} - {self.nome}"
+
+
+# Professor com responsabilidades administrativas (gerencia programa de monitoria)
+class Coordenador(Professor):
+    class Meta:
+        verbose_name = 'Coordenador'
+        verbose_name_plural = 'Coordenadores'
+
+    def cadastrarVaga(self, vaga):
+        vaga.save()
+        return vaga
+
+    def __str__(self):
+        return f"Coordenador {self.cpf} - {self.nome}"
 
 
 # Administrador supremo do sistema - Apenas criado via Django Admin
@@ -123,31 +166,7 @@ class Casa(Usuario):
     def __str__(self):
         return f"Casa - {self.nome}"
 
-
-# Professor com responsabilidades administrativas (gerencia programa de monitoria)
-class Coordenador(Professor):
-    class Meta:
-        verbose_name = 'Coordenador'
-        verbose_name_plural = 'Coordenadores'
-
-    def cadastrarVaga(self, vaga):
-        vaga.save()
-        return vaga
-
-    def aprovarCandidatura(self, candidatura):
-        candidatura.status = 'Aprovada'
-        candidatura.save()
-        return candidatura
     
-    def rejeitarCandidatura(self, candidatura):
-        candidatura.status = 'Rejeitada'
-        candidatura.save()
-        return candidatura
-
-    def __str__(self):
-        return f"Coordenador {self.cpf} - {self.nome}"
-
-
 # Disciplina/matéria oferecida pela instituição
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)

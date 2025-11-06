@@ -205,8 +205,12 @@
             <div class="candidatura-actions">
                 <a href="{% url 'detalhes_candidatura' candidatura.id %}" class="btn btn-primary">Ver Detalhes</a>
                 {% if candidatura.status == 'Pendente' %}
-                    <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn btn-success" onclick="return confirm('Confirma a aprovação desta candidatura?')">Aprovar</a>
-                    <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn btn-danger" onclick="return confirm('Confirma a rejeição desta candidatura?')">Rejeitar</a>
+                    <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn btn-success" onclick="return confirm('Confirma a aprovação desta candidatura? O aluno será registrado como monitor.')">✓ Aprovar</a>
+                    <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn btn-danger" onclick="return confirm('Confirma a rejeição desta candidatura?')">✗ Rejeitar</a>
+                {% elif candidatura.status == 'Aprovada' %}
+                    <span style="color: var(--success-color); font-weight: 600;">✓ Aluno aprovado como monitor</span>
+                {% elif candidatura.status == 'Rejeitada' %}
+                    <span style="color: var(--danger-color); font-weight: 600;">✗ Candidatura rejeitada</span>
                 {% endif %}
             </div>
         </div>
