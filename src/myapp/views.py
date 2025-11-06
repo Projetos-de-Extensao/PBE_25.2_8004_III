@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from myapp.models import (
     Aluno, Monitor, MonitorTEA, Professor, Coordenador,
-    Disciplina, VagaMonitoria, Candidatura, RegistroMonitoria
+    Disciplina, VagaMonitoria, Candidatura, RegistroMonitoria, Casa
 )
 
 
@@ -45,6 +45,11 @@ def login_view(request):
                 user = Professor.objects.filter(email=email).first()
                 if user:
                     user_id = user.cpf
+            elif user_type == 'casa':
+                # Buscar casa por email
+                user = Casa.objects.filter(email=email).first()
+                if user:
+                    user_id = user.email
             elif user_type == 'coordenador':
                 # Buscar coordenador por email
                 user = Coordenador.objects.filter(email=email).first()
@@ -168,13 +173,9 @@ def cadastro_vaga(request):
                 user_cpf = request.session.get('user_id')
                 coordenador = Coordenador.objects.filter(cpf=user_cpf).first()
             elif user_type == 'casa':
-                # Casa também pode criar vagas, mas usa seu CPF como coordenador
-                from myapp.models import Casa
-                user_cpf = request.session.get('user_id')
-                casa = Casa.objects.filter(cpf=user_cpf).first()
-                # Casa herda de Coordenador, então podemos usar diretamente
-                if casa:
-                    coordenador = Coordenador.objects.filter(cpf=user_cpf).first()
+                # Casa pode criar vagas, mas não é um coordenador
+                # Deixar coordenador como None ou buscar o primeiro coordenador disponível
+                coordenador = None  # Casa não precisa ser associado como coordenador
             
             vaga = VagaMonitoria(
                 titulo=request.POST.get('titulo'),
