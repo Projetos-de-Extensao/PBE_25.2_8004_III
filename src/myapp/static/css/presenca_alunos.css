@@ -1,0 +1,168 @@
+/* container de presença */
+    .presenca-container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .presenca-header {
+        margin-bottom: 2rem;
+    }
+
+    .presenca-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .presenca-header p {
+        color: var(--text-secondary);
+    }
+
+    /* formulário de registro */
+    .presenca-form {
+        background-color: var(--bg-card);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 2fr 2fr 1fr;
+        gap: 1rem;
+        align-items: end;
+    }
+
+    /* lista de presenças registradas */
+    .presenca-list {
+        background-color: var(--bg-card);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .list-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .list-header h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .list-stats {
+        display: flex;
+        gap: 2rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .list-stats span {
+        color: var(--accent-blue);
+        font-weight: 600;
+    }
+
+    .presenca-item {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: grid;
+        grid-template-columns: 3fr 2fr 2fr 1fr;
+        gap: 1rem;
+        align-items: center;
+        transition: var(--transition);
+    }
+
+    .presenca-item:hover {
+        background-color: var(--bg-hover);
+    }
+
+    .presenca-item:last-child {
+        border-bottom: none;
+    }
+
+    .student-info h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 0.25rem 0;
+    }
+
+    .student-info p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .presenca-data {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .presenca-hora {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .presenca-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-remove {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        transition: var(--transition);
+    }
+
+    .btn-remove:hover {
+        color: var(--accent-red);
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+        .presenca-container {
+            padding: 1rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .presenca-item {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .presenca-actions {
+            justify-content: flex-start;
+        }
+
+        .list-stats {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }

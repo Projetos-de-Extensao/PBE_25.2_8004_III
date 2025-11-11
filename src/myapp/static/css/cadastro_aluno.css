@@ -1,0 +1,34 @@
+/* container do formulário */
+    .cadastro-container {
+        max-width: 700px;
+        margin: 2rem auto;
+    }
+
+    /* cabeçalho do cadastro */
+    .cadastro-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .cadastro-header h1 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .cadastro-header p {
+        color: var(--text-secondary);
+    }
+
+    /* layout de duas colunas */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    /* responsivo para mobile */
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
