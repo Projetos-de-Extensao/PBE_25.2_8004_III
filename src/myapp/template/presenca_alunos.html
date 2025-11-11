@@ -5,9 +5,8 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/presenca_alunos.css' %}">
-{% endblock %}
-
-{% block content %}
+<style>
+    .presenca-container {
         padding: 2rem;
         max-width: 1200px;
         margin: 0 auto;
@@ -269,133 +268,9 @@
                 </div>
             {% endfor %}
         {% else %}
-            <!-- Sample Data for Demonstration -->
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>João Silva Santos</h3>
-                    <p>Matrícula: 2024001234</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    14:30
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Maria Oliveira Costa</h3>
-                    <p>Matrícula: 2024001235</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    14:25
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Pedro Henrique Alves</h3>
-                    <p>Matrícula: 2024001236</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    14:15
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Ana Carolina Lima</h3>
-                    <p>Matrícula: 2024001237</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    14:10
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Carlos Eduardo Souza</h3>
-                    <p>Matrícula: 2024001238</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    14:05
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Juliana Ferreira Rocha</h3>
-                    <p>Matrícula: 2024001239</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    13:58
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Rafael Santos Melo</h3>
-                    <p>Matrícula: 2024001240</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    13:45
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
-            </div>
-
-            <div class="presenca-item">
-                <div class="student-info">
-                    <h3>Beatriz Gomes Martins</h3>
-                    <p>Matrícula: 2024001241</p>
-                </div>
-                <div class="presenca-data">
-                    {% now "d/m/Y" %}
-                </div>
-                <div class="presenca-hora">
-                    13:30
-                </div>
-                <div class="presenca-actions">
-                    <button class="btn-remove" title="Remover presença">✕</button>
-                </div>
+            <div class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <p>Nenhuma presença registrada ainda.</p>
             </div>
         {% endif %}
     </div>
