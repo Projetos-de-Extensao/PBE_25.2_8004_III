@@ -56,8 +56,20 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="tipo_monitoria" class="form-label">Tipo de Monitoria *</label>
+                <select id="tipo_monitoria" name="tipo_monitoria" class="form-input" required>
+                    <option value="Monitor" {% if vaga.tipo_monitoria == 'Monitor' %}selected{% endif %}>Monitor (Voluntário)</option>
+                    <option value="MonitorTEA" {% if vaga.tipo_monitoria == 'MonitorTEA' %}selected{% endif %}>Monitor TEA (Remunerado)</option>
+                </select>
+                <small class="form-help" style="display: block; margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                    <strong>Monitor Voluntário:</strong> Atividade voluntária sem remuneração.<br>
+                    <strong>Monitor TEA:</strong> Monitoria remunerada (Trabalho de Ensino Assistido).
+                </small>
+            </div>
+
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <button type="submit" class="btn btn-gradient-success">Salvar Alterações</button>
                 <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>

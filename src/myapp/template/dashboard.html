@@ -95,48 +95,69 @@
             <div class="activity-feed">
                 <div class="chart-header">Atividades Recentes</div>
                 
-                <div class="activity-item">
-                    <p><strong>Nova candidatura</strong> para Cálculo I</p>
-                    <p class="activity-time">Há 5 minutos</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Monitoria registrada</strong> - 3 horas</p>
-                    <p class="activity-time">Há 1 hora</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Nova vaga cadastrada</strong> - Física II</p>
-                    <p class="activity-time">Há 2 horas</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Candidatura aprovada</strong> para Programação</p>
-                    <p class="activity-time">Há 3 horas</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Monitor cadastrado</strong> - João Silva</p>
-                    <p class="activity-time">Há 5 horas</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Vaga fechada</strong> - Algoritmos</p>
-                    <p class="activity-time">Ontem</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Presença registrada</strong> - Maria Santos</p>
-                    <p class="activity-time">Ontem</p>
-                </div>
-
-                <div class="activity-item">
-                    <p><strong>Nova candidatura</strong> para Banco de Dados</p>
-                    <p class="activity-time">2 dias atrás</p>
-                </div>
+                {% if atividades_recentes %}
+                    {% for atividade in atividades_recentes %}
+                        <div class="activity-item">
+                            <p><strong>{{ atividade.descricao }}</strong></p>
+                            <p class="activity-time">{{ atividade.tempo }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="activity-item">
+                        <p>Nenhuma atividade recente.</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
+
+    <!-- Tabela de Monitorias Recentes -->
+    {% if monitorias_recentes %}
+    <div class="chart-card" style="margin-top: 2rem;">
+        <div class="chart-header">📚 Monitorias Realizadas (Últimas 20)</div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Monitor</th>
+                        <th>Disciplina</th>
+                        <th>Horário</th>
+                        <th>Horas</th>
+                        <th>Alunos</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for monitoria in monitorias_recentes %}
+                    <tr>
+                        <td>{{ monitoria.data|date:"d/m/Y" }}</td>
+                        <td>{{ monitoria.monitor }}</td>
+                        <td>
+                            <strong>{{ monitoria.codigo_disciplina }}</strong><br>
+                            <small>{{ monitoria.disciplina }}</small>
+                        </td>
+                        <td>{{ monitoria.horario_inicio|time:"H:i" }} - {{ monitoria.horario_fim|time:"H:i" }}</td>
+                        <td><span class="badge badge-info">{{ monitoria.horas_trabalhadas }}h</span></td>
+                        <td><span class="badge badge-success">{{ monitoria.quantidade_alunos }}</span></td>
+                        <td style="max-width: 200px; font-size: 0.85rem;">{{ monitoria.descricao }}</td>
+                        <td>
+                            <button 
+                                class="btn btn-sm btn-gradient-info" 
+                                onclick="verDetalhesMonitoria({{ monitoria.id }})"
+                                title="Ver detalhes completos"
+                            >
+                                👁️ Ver
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Status das Vagas -->
     <div class="chart-card">
@@ -174,6 +195,13 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Dados JSON para os gráficos -->
+<script id="presenca-labels-data" type="application/json">{{ presenca_labels|safe }}</script>
+<script id="presenca-data-data" type="application/json">{{ presenca_data|safe }}</script>
+<script id="disciplinas-labels-data" type="application/json">{{ disciplinas_labels|safe }}</script>
+<script id="disciplinas-data-data" type="application/json">{{ disciplinas_data|safe }}</script>
+
+<!-- Bibliotecas de gráficos -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

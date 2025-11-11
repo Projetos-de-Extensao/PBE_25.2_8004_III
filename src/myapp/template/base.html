@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Monitoria{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="icon" href="{% static 'img/Ibmec_logo.png' %}">
     {% block extra_css %}{% endblock %}
@@ -16,7 +17,6 @@
         <img src="{% static 'img/Ibmec_logo.png' %}" alt="Logo IBMEC" title="IBMEC">
     </div>
 
-    <!-- Barra de navegação -->
     {% block navbar %}
     {% if user_type %}
     <nav class="navbar">
@@ -54,12 +54,10 @@
     {% endif %}
     {% endblock %}
 
-    <!-- Conteúdo principal -->
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Rodapé -->
     {% block footer %}
     <footer class="footer">
         <p>&copy; 2025 Sistema de Monitoria - Todos os direitos reservados</p>

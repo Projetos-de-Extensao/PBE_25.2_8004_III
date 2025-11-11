@@ -6,7 +6,6 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/painel_coordenador.css' %}">
 <style>
-    /* container do painel */
     .coordenador-container {
         padding: 2rem;
         max-width: 1400px;
@@ -28,7 +27,6 @@
         color: var(--text-secondary);
     }
 
-    /* barra de ações com filtros */
     .action-bar {
         display: flex;
         justify-content: space-between;
@@ -51,7 +49,6 @@
         flex-wrap: wrap;
     }
 
-    /* lista de candidatos */
     .candidatos-list {
         background-color: var(--bg-card);
         border-radius: var(--border-radius);
@@ -201,7 +198,6 @@
         </div>
     </div>
 
-    <!-- Tabs -->
     <div class="tabs-container">
         <div class="tabs">
             <button class="tab-btn active" data-tab="candidaturas">Candidaturas</button>
@@ -290,7 +286,7 @@
     <div class="tab-content" id="monitores-content" style="display: none;">
         <div class="action-bar">
             <h2>Monitores Ativos</h2>
-            <button class="btn btn-primary">+ Novo Monitor</button>
+            <button class="btn btn-gradient-primary">+ Novo Monitor</button>
         </div>
         <div class="card">
             <p style="padding: 2rem; text-align: center; color: var(--text-muted);">
@@ -316,7 +312,7 @@
     <div class="tab-content" id="relatorios-content" style="display: none;">
         <div class="action-bar">
             <h2>Relatórios</h2>
-            <button class="btn btn-primary">Gerar Relatório</button>
+            <button class="btn btn-gradient-info">Gerar Relatório</button>
         </div>
         <div class="card">
             <p style="padding: 2rem; text-align: center; color: var(--text-muted);">

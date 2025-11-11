@@ -9,16 +9,13 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
-    <!-- página de login centralizada -->
     <div class="login-page">
         <div class="login-container">
-            <!-- cabeçalho com saudação -->
             <div class="login-header">
                 <h1>Bem-vindo de volta!</h1>
             </div>
 
             <div class="login-form">
-                <!-- mensagens de feedback -->
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">
@@ -27,7 +24,6 @@
                     {% endfor %}
                 {% endif %}
 
-                <!-- formulário de autenticação -->
                 <form method="POST" action="{% url 'login' %}">
                     {% csrf_token %}
                     
@@ -85,7 +81,7 @@
                         <a href="#" class="forgot-link">Esqueceu a senha?</a>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    <button type="submit" class="btn btn-gradient-primary btn-block">Entrar</button>
 
                     <div class="divider">
                         <span>ou continue com</span>

@@ -16,7 +16,7 @@ Sarah Ferrari
 Caique Rechuan  
 
 ## Instalação 
-**Linguagens**: Python, Django<br>
+**Linguagens**: Python, Django, JavaScripts, HTML, CSS, SQL<br>
 **Tecnologias**: Github, Visual Studio Code<br>
  os pré-requisitos para rodar o seu projeto são UX, Engenharia de Dados, POO.
-
+ 

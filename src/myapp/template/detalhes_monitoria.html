@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes da Monitoria - Sistema de Monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detalhes-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .monitoria-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .monitoria-header h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+    }
+
+    .monitoria-meta {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        opacity: 0.95;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #667eea;
+    }
+
+    .info-card h3 {
+        margin: 0 0 1rem 0;
+        color: #333;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        color: #666;
+        font-weight: 500;
+    }
+
+    .info-value {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .alunos-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .alunos-section h3 {
+        margin: 0 0 1.5rem 0;
+        color: #333;
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .alunos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .aluno-card {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 3px solid #28a745;
+        transition: transform 0.2s;
+    }
+
+    .aluno-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .aluno-nome {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.25rem;
+    }
+
+    .aluno-matricula {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #999;
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-info {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .actions {
+        margin-top: 2rem;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detalhes-container">
+    <!-- Cabeçalho da Monitoria -->
+    <div class="monitoria-header">
+        <h1>📚 {{ registro.disciplina }}</h1>
+        <div class="monitoria-meta">
+            <div class="meta-item">
+                <span>📅</span>
+                <span><strong>Data:</strong> {{ registro.data_monitoria|date:"d/m/Y" }}</span>
+            </div>
+            <div class="meta-item">
+                <span>⏰</span>
+                <span><strong>Horário:</strong> {{ registro.horario_inicio }} - {{ registro.horario_fim }}</span>
+            </div>
+            <div class="meta-item">
+                <span>⏱️</span>
+                <span><strong>Duração:</strong> {{ registro.horas_trabalhadas }}h</span>
+            </div>
+            <div class="meta-item">
+                <span>👥</span>
+                <span><strong>Alunos:</strong> {{ total_alunos }}</span>
+            </div>
+            <div class="meta-item">
+                <span>🕒</span>
+                <span>{{ tempo_decorrido }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Informações -->
+    <div class="info-grid">
+        <!-- Informações do Monitor -->
+        <div class="info-card">
+            <h3>👨‍🏫 Monitor</h3>
+            <div class="info-item">
+                <span class="info-label">Nome:</span>
+                <span class="info-value">{{ registro.monitor_tea.nome }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Matrícula:</span>
+                <span class="info-value">{{ registro.monitor_tea.matricula }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ registro.monitor_tea.email }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Tipo:</span>
+                <span class="info-value">
+                    <span class="badge badge-info">Monitor TEA (Remunerado)</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Informações da Monitoria -->
+        <div class="info-card">
+            <h3>📋 Detalhes da Monitoria</h3>
+            <div class="info-item">
+                <span class="info-label">Disciplina:</span>
+                <span class="info-value">{{ registro.disciplina }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Local:</span>
+                <span class="info-value">{{ registro.local|default:"Não especificado" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Horas Trabalhadas:</span>
+                <span class="info-value">{{ registro.horas_trabalhadas }}h</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Status:</span>
+                <span class="info-value">
+                    <span class="badge badge-success">Concluída</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Descrição das Atividades -->
+    {% if registro.descricao_atividade %}
+    <div class="info-card" style="margin-bottom: 2rem;">
+        <h3>📝 Descrição das Atividades</h3>
+        <p style="color: #555; line-height: 1.6; margin: 0;">
+            {{ registro.descricao_atividade }}
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Lista de Alunos Participantes -->
+    <div class="alunos-section">
+        <h3>👥 Alunos Participantes ({{ total_alunos }})</h3>
+        
+        {% if alunos %}
+            <div class="alunos-grid">
+                {% for aluno in alunos %}
+                <div class="aluno-card">
+                    <div class="aluno-nome">{{ aluno.nome }}</div>
+                    <div class="aluno-matricula">📋 {{ aluno.matricula }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">👤</div>
+                <p>Nenhum aluno registrado nesta monitoria</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Ações -->
+    <div class="actions">
+        <a href="{% url 'dashboard' %}" class="btn btn-gradient-light">← Voltar ao Dashboard</a>
+    </div>
+</div>
+{% endblock %}

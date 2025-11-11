@@ -5,14 +5,12 @@
 
 {% block extra_css %}
 <style>
-    /* container da home */
     .home-container {
         padding: 2rem;
         max-width: 1400px;
         margin: 0 auto;
     }
 
-    /* seção hero com gradiente */
     .hero {
         background: linear-gradient(135deg, rgba(91, 155, 213, 0.15) 0%, rgba(212, 160, 23, 0.15) 100%);
         border: 1px solid var(--border-color);
@@ -34,7 +32,6 @@
         color: var(--text-secondary);
     }
 
-    /* grade de funcionalidades */
     .features {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -111,39 +108,14 @@
         flex-wrap: wrap;
     }
 
-    .cta-buttons .btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.95rem;
-        background-color: var(--white);
-        color: var(--primary-color);
-        border: 2px solid var(--white);
-    }
-
-    .cta-buttons .btn:hover {
-        background-color: transparent;
-        color: var(--white);
-        border-color: var(--white);
-    }
-
-    .cta-buttons .btn-success {
-        background-color: var(--success);
-        color: var(--white);
-        border-color: var(--success);
-    }
-
-    .cta-buttons .btn-success:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-color: var(--white);
-    }
-
-    .cta-buttons .btn-secondary {
-        background-color: transparent;
-        color: var(--white);
-        border-color: var(--white);
-    }
-
-    .cta-buttons .btn-secondary:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+    .cta-buttons .btn-ibmec {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
     }
 
     @media (max-width: 768px) {
@@ -182,8 +154,8 @@
         <h2>Comece Agora!</h2>
         <p>Faça parte do programa de monitoria da sua instituição</p>
         <div class="cta-buttons">
-            <a href="{% url 'login' %}" class="btn-ibmec">Fazer Login</a>
-            <a href="{% url 'cadastro_aluno' %}" class="btn-ibmec">Cadastrar como Aluno</a>
+            <a href="{% url 'login' %}" class="btn btn-gradient-primary btn-ibmec">Fazer Login</a>
+            <a href="{% url 'cadastro_aluno' %}" class="btn btn-gradient-success btn-ibmec">Cadastrar como Aluno</a>
         </div>
     </div>
     {% endif %}

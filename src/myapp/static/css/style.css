@@ -1,3 +1,6 @@
+/* Importar variáveis globais do sistema */
+@import url('variables.css');
+
 /* reset básico */
 * {
     margin: 0;
@@ -5,39 +8,9 @@
     box-sizing: border-box;
 }
 
-/* variáveis do tema escuro */
-:root {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #242424;
-    --bg-card: #2a2a2a;
-    --bg-input: #1f1f1f;
-    --bg-hover: #333333;
-    
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #6b6b6b;
-    
-    --accent-blue: #5b9bd5;
-    --accent-green: #70c470;
-    --accent-red: #e74c3c;
-    --accent-orange: #f39c12;
-    --accent-purple: #9b59b6;
-    
-    --button-primary: #5b9bd5;
-    --button-hover: #77b5f7;
-    
-    --border-color: #3a3a3a;
-    --border-radius: 8px;
-    --border-radius-lg: 12px;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
-    
-    --transition: all 0.3s ease;
-}
-
 /* estilos globais */
 body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    font-family: var(--font-primary);
     color: var(--text-primary);
     background-color: var(--bg-primary);
     line-height: 1.6;
@@ -316,9 +289,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.logo-corner:hover {
-    /* sem animação */
-}
+/* Logo corner sem animação no hover */
 
 .logo-corner img {
     width: 120px;

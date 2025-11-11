@@ -5,13 +5,17 @@ Chart.defaults.borderColor = '#374151';
 /* gráfico de barras - presença dos alunos */
 const presencaCtx = document.getElementById('presencaChart');
 if (presencaCtx) {
+    // Pegar dados do contexto Django
+    const presencaLabels = JSON.parse(document.getElementById('presenca-labels-data')?.textContent || '["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]');
+    const presencaData = JSON.parse(document.getElementById('presenca-data-data')?.textContent || '[12, 35, 42, 38, 45, 40, 18]');
+    
     new Chart(presencaCtx, {
         type: 'bar',
         data: {
-            labels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            labels: presencaLabels,
             datasets: [{
                 label: 'Alunos Presentes',
-                data: [12, 35, 42, 38, 45, 40, 18],
+                data: presencaData,
                 backgroundColor: 'rgba(91, 155, 213, 0.8)',
                 borderColor: 'rgba(91, 155, 213, 1)',
                 borderWidth: 1,
@@ -39,7 +43,8 @@ if (presencaCtx) {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#9ca3af'
+                        color: '#9ca3af',
+                        stepSize: 1
                     },
                     grid: {
                         color: '#374151'
@@ -61,12 +66,16 @@ if (presencaCtx) {
 /* gráfico de pizza - distribuição por disciplina */
 const disciplinasCtx = document.getElementById('disciplinasChart');
 if (disciplinasCtx) {
+    // Pegar dados do contexto Django
+    const disciplinasLabels = JSON.parse(document.getElementById('disciplinas-labels-data')?.textContent || '["Cálculo I", "Programação", "Física II"]');
+    const disciplinasData = JSON.parse(document.getElementById('disciplinas-data-data')?.textContent || '[28, 22, 18]');
+    
     new Chart(disciplinasCtx, {
         type: 'pie',
         data: {
-            labels: ['Cálculo I', 'Programação', 'Física II', 'Banco de Dados', 'Algoritmos', 'Outros'],
+            labels: disciplinasLabels,
             datasets: [{
-                data: [28, 22, 18, 15, 12, 5],
+                data: disciplinasData,
                 backgroundColor: [
                     'rgba(91, 155, 213, 0.8)',
                     'rgba(112, 196, 112, 0.8)',
@@ -115,4 +124,10 @@ if (disciplinasCtx) {
             }
         }
     });
+}
+
+// Função para ver detalhes de uma monitoria
+function verDetalhesMonitoria(id) {
+    // Redireciona para a página de detalhes da monitoria
+    window.location.href = `/detalhes_monitoria/${id}/`;
 }

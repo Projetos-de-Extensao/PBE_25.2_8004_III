@@ -113,6 +113,15 @@
             <small>{{ vaga.disciplina.nome }}</small>
         </div>
         <div class="info-item">
+            <div class="info-label">Tipo de Monitoria</div>
+            <div class="info-value">
+                <span class="badge badge-{% if vaga.tipo_monitoria == 'MonitorTEA' %}primary{% else %}info{% endif %}" style="font-size: 0.9rem;">
+                    {{ vaga.get_tipo_monitoria_display }}
+                </span>
+            </div>
+            <small>{% if vaga.tipo_monitoria == 'MonitorTEA' %}Remunerada{% else %}Voluntária{% endif %}</small>
+        </div>
+        <div class="info-item">
             <div class="info-label">Status</div>
             <div class="info-value">
                 <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
@@ -156,16 +165,16 @@
 <!-- Ações -->
 <div class="action-buttons">
     {% if user_type == 'aluno' and vaga.status == 'Aberta' %}
-        <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-success">
+        <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-gradient-success">
             Candidatar-se a esta Vaga
         </a>
     {% endif %}
     
     {% if user_type == 'coordenador' or user_type == 'casa' %}
-        <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-primary">Editar Vaga</a>
-        <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-warning">Ver Candidaturas</a>
+        <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-gradient-primary">Editar Vaga</a>
+        <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-gradient-warning">Ver Candidaturas</a>
     {% endif %}
     
-    <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Voltar para Vagas</a>
+    <a href="{% url 'lista_vagas' %}" class="btn btn-gradient-light">Voltar para Vagas</a>
 </div>
 {% endblock %}

@@ -185,10 +185,10 @@
         <!-- Ações -->
         <div class="action-buttons">
             {% if candidatura.status == 'Pendente' %}
-                <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn btn-success" onclick="return confirm('Confirma a aprovação desta candidatura? O aluno será registrado como monitor.')">
+                <a href="{% url 'aprovar_candidatura' candidatura.id %}" class="btn btn-gradient-success" onclick="return confirm('Confirma a aprovação desta candidatura? O aluno será registrado como monitor.')">
                     ✓ Aprovar Candidatura e Tornar Monitor
                 </a>
-                <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn btn-danger" onclick="return confirm('Confirma a rejeição desta candidatura?')">
+                <a href="{% url 'rejeitar_candidatura' candidatura.id %}" class="btn btn-gradient-danger" onclick="return confirm('Confirma a rejeição desta candidatura?')">
                     ✗ Rejeitar Candidatura
                 </a>
             {% elif candidatura.status == 'Aprovada' %}
@@ -205,8 +205,8 @@
                     <p style="margin-top: 0.5rem; margin-bottom: 0;">Esta candidatura foi rejeitada pelo professor responsável.</p>
                 </div>
             {% endif %}
-            <a href="{% url 'candidaturas_vaga' candidatura.vaga.id %}" class="btn btn-secondary">Voltar para Candidaturas</a>
-            <a href="{% url 'lista_vagas' %}" class="btn btn-secondary">Voltar para Vagas</a>
+            <a href="{% url 'candidaturas_vaga' candidatura.vaga.id %}" class="btn btn-gradient-light">Voltar para Candidaturas</a>
+            <a href="{% url 'lista_vagas' %}" class="btn btn-gradient-light">Voltar para Vagas</a>
         </div>
     </div>
 </div>

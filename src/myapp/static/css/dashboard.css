@@ -1,19 +1,22 @@
+/* Importar variáveis globais do sistema */
+@import url('variables.css');
+
 /* container principal do dashboard */
 .dashboard-container {
-    padding: 2rem;
-    max-width: 1400px;
+    padding: var(--spacing-8);
+    max-width: var(--container-xl);
     margin: 0 auto;
 }
 
 .dashboard-header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-8);
 }
 
 .dashboard-header h1 {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-2);
 }
 
 .dashboard-header p {
@@ -24,8 +27,8 @@
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-8);
 }
 
 /* cartão individual de métrica */

@@ -3,8 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import date
 
 
-# Classe abstrata que serve como base para todos os tipos de usuários do sistema
-# Não cria tabela no banco, apenas fornece estrutura comum
+# Base para todos os usuários
 class Usuario(models.Model):
     nome = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
@@ -12,7 +11,7 @@ class Usuario(models.Model):
     senha_hash = models.CharField(max_length=128)
 
     class Meta:
-        abstract = True  # Define que esta classe não gera tabela no banco
+        abstract = True
 
     def login(self):
         raise NotImplementedError("Método login() deve ser implementado")
@@ -26,7 +25,6 @@ class Usuario(models.Model):
         return True
 
 
-# Estudante da instituição
 class Aluno(Usuario):
     matricula = models.CharField(max_length=12, unique=True, primary_key=True)
     cr_geral = models.FloatField()
@@ -46,7 +44,6 @@ class Aluno(Usuario):
         )
 
 
-# Aluno aprovado para dar monitoria
 class Monitor(Aluno):
     class Meta:
         verbose_name = 'Monitor'
@@ -56,20 +53,15 @@ class Monitor(Aluno):
 
 
 
-# Monitor TEA é um tipo especial de monitor que recebe remuneração
-# TEA = Trabalho de Ensino Assistido (monitoria remunerada)
-# Herda de Aluno (poderia herdar de Monitor também, dependendo da modelagem)
+# Monitoria remunerada
 class MonitorTEA(Aluno):
-    # Valor do salário mensal que o monitor TEA recebe
     salario = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         verbose_name = 'Monitor TEA'
         verbose_name_plural = 'Monitores TEA'
 
-    # Define os horários disponíveis do monitor TEA para atendimento
     def gerenciarDisponibilidade(self, horario):
-        # Lista de horários padrão de segunda a sexta, das 12h às 13h
         horarios = [
             {"dia": "Segunda", "inicio": "12:00", "fim": "13:00"},
             {"dia": "Terça", "inicio": "12:00", "fim": "13:00"},
@@ -78,23 +70,18 @@ class MonitorTEA(Aluno):
             {"dia": "Sexta", "inicio": "12:00", "fim": "13:00"}
         ]
 
-        # Lista que armazenará os horários escolhidos
         horario_escolhido = []
 
-        # Adiciona todos os horários na lista de escolhidos
         for horario in horarios:
             horario_escolhido.append(horario)
         
         return horario_escolhido
 
-    # Permite que o monitor TEA registre as horas trabalhadas
     def submeterRelatorioHoras(self, registro):
-        # Verifica se o registro tem o método 'submeter' antes de chamar
         if hasattr(registro, 'submeter'):
             return registro.submeter()
         raise ValueError("Registro inválido")
 
-    # Como o monitor TEA aparece quando convertido para texto
     def __str__(self):
         return f"MonitorTEA {self.matricula} - Salário: R$ {self.salario}"
 
@@ -136,7 +123,6 @@ class Professor(Usuario):
         return f"{self.cpf} - {self.nome}"
 
 
-# Professor com responsabilidades administrativas (gerencia programa de monitoria)
 class Coordenador(Professor):
     class Meta:
         verbose_name = 'Coordenador'
@@ -150,15 +136,13 @@ class Coordenador(Professor):
         return f"Coordenador {self.cpf} - {self.nome}"
 
 
-# Administrador supremo do sistema - Apenas criado via Django Admin
-# Tem permissão total e é o único que pode cadastrar coordenadores
+# Administrador do sistema
 class Casa(Usuario):
     class Meta:
         verbose_name = 'Casa (Administrador)'
         verbose_name_plural = 'Casa (Administradores)'
 
     def cadastrarCoordenador(self, coordenador_data):
-        """Apenas a Casa pode cadastrar novos coordenadores"""
         coordenador = Coordenador(**coordenador_data)
         coordenador.save()
         return coordenador
@@ -167,7 +151,6 @@ class Casa(Usuario):
         return f"Casa - {self.nome}"
 
     
-# Disciplina/matéria oferecida pela instituição
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)
     codigo = models.CharField(max_length=20, unique=True)
@@ -176,7 +159,6 @@ class Disciplina(models.Model):
         return f"{self.codigo} - {self.nome}"
 
 
-# Oportunidade de monitoria em uma disciplina
 class VagaMonitoria(models.Model):
     titulo = models.CharField(max_length=100)
     pre_requisitos = models.TextField()
@@ -229,7 +211,6 @@ class VagaMonitoria(models.Model):
         return self.candidaturas_recebidas.all()
 
 
-# Candidatura de um aluno a uma vaga de monitoria
 class Candidatura(models.Model):
     documentos = models.TextField()
     cr_disciplina = models.FloatField(default=0.0, help_text="CR (Coeficiente de Rendimento) na disciplina da vaga")
@@ -271,7 +252,6 @@ class Candidatura(models.Model):
         return f"Candidatura de {self.aluno.nome} para {self.vaga.titulo} - {self.status}"
 
 
-# Registro de uma sessão de monitoria realizada pelo MonitorTEA
 class RegistroMonitoria(models.Model):
     data_monitoria = models.DateField()
     horario_inicio = models.TimeField()

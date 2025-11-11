@@ -5,13 +5,11 @@
 
 {% block extra_css %}
 <style>
-    /* container do formulário */
     .cadastro-container {
         max-width: 700px;
         margin: 2rem auto;
     }
 
-    /* cabeçalho do cadastro */
     .cadastro-header {
         text-align: center;
         margin-bottom: 2rem;
@@ -26,14 +24,12 @@
         color: var(--text-secondary);
     }
 
-    /* layout de duas colunas */
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
     }
 
-    /* responsivo para mobile */
     @media (max-width: 768px) {
         .form-row {
             grid-template-columns: 1fr;
@@ -42,7 +38,6 @@
 </style>
 {% endblock %}
 
-<!-- remove navbar para página de cadastro -->
 {% block navbar %}{% endblock %}
 
 {% block content %}
@@ -53,7 +48,7 @@
             <p>Preencha os dados abaixo para criar sua conta</p>
         </div>
 
-        <!-- formulário de cadastro -->        {% if messages %}
+        {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}">
                     {{ message }}
@@ -112,7 +107,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+                <button type="submit" class="btn btn-gradient-success btn-block">Cadastrar</button>
             </div>
 
             <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">

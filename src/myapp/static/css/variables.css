@@ -1,0 +1,433 @@
+/**
+ * Variáveis Globais do Sistema de Monitoria
+ * 
+ * Este arquivo contém todas as variáveis de cores, tipografias e espaçamentos
+ * utilizadas em todo o sistema. Importe este arquivo em outros CSS quando necessário.
+ * 
+ * Uso: @import url('variables.css');
+ */
+
+:root {
+    /* ========== CORES PRINCIPAIS ========== */
+    
+    /* Cores Primárias */
+    --color-primary: #667eea;
+    --color-primary-dark: #5568d3;
+    --color-primary-light: #7c92f0;
+    --color-secondary: #764ba2;
+    --color-secondary-dark: #5f3d82;
+    --color-secondary-light: #8d5bb8;
+    
+    /* Cores de Estado */
+    --color-success: #28a745;
+    --color-success-light: #d4edda;
+    --color-success-dark: #155724;
+    --color-warning: #ffc107;
+    --color-warning-light: #fff3cd;
+    --color-warning-dark: #856404;
+    --color-danger: #dc3545;
+    --color-danger-light: #f8d7da;
+    --color-danger-dark: #721c24;
+    --color-info: #17a2b8;
+    --color-info-light: #d1ecf1;
+    --color-info-dark: #0c5460;
+    
+    /* Cores Neutras */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    
+    /* ========== CORES DE FUNDO ========== */
+    
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-dark: #2a2a2a;
+    --bg-darker: #1a1a1a;
+    --bg-overlay: rgba(0, 0, 0, 0.5);
+    
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    --gradient-warning: linear-gradient(135deg, #ffc107 0%, #ff6b6b 100%);
+    --gradient-info: linear-gradient(135deg, #17a2b8 0%, #3498db 100%);
+    --gradient-dark: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    
+    /* Gradientes para Botões (com leve overlay de preto) */
+    --btn-gradient-primary: linear-gradient(135deg, #667eea 0%, rgba(0, 0, 0, 0.15) 100%);
+    --btn-gradient-secondary: linear-gradient(135deg, #764ba2 0%, rgba(0, 0, 0, 0.15) 100%);
+    --btn-gradient-success: linear-gradient(135deg, #28a745 0%, rgba(0, 0, 0, 0.15) 100%);
+    --btn-gradient-danger: linear-gradient(135deg, #dc3545 0%, rgba(0, 0, 0, 0.15) 100%);
+    --btn-gradient-warning: linear-gradient(135deg, #ffc107 0%, rgba(0, 0, 0, 0.15) 100%);
+    --btn-gradient-info: linear-gradient(135deg, #17a2b8 0%, rgba(0, 0, 0, 0.15) 100%);
+    --btn-gradient-dark: linear-gradient(135deg, #2a2a2a 0%, rgba(0, 0, 0, 0.25) 100%);
+    --btn-gradient-light: linear-gradient(135deg, #f8f9fa 0%, rgba(0, 0, 0, 0.05) 100%);
+    
+    /* ========== CORES DE TEXTO ========== */
+    
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --text-light: #ffffff;
+    --text-muted: #6c757d;
+    --text-link: #667eea;
+    --text-link-hover: #5568d3;
+    
+    /* ========== CORES DE BORDAS ========== */
+    
+    --border-color: #e0e0e0;
+    --border-color-light: #f0f0f0;
+    --border-color-dark: #374151;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-full: 50%;
+    
+    /* ========== SOMBRAS ========== */
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.15);
+    --shadow-2xl: 0 12px 24px rgba(0, 0, 0, 0.2);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    
+    /* ========== TIPOGRAFIA ========== */
+    
+    /* Famílias de Fonte */
+    --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-secondary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+    
+    /* Tamanhos de Fonte */
+    --font-size-xs: 0.75rem;      /* 12px */
+    --font-size-sm: 0.875rem;     /* 14px */
+    --font-size-base: 1rem;       /* 16px */
+    --font-size-md: 1.125rem;     /* 18px */
+    --font-size-lg: 1.25rem;      /* 20px */
+    --font-size-xl: 1.5rem;       /* 24px */
+    --font-size-2xl: 1.875rem;    /* 30px */
+    --font-size-3xl: 2.25rem;     /* 36px */
+    --font-size-4xl: 3rem;        /* 48px */
+    
+    /* Pesos de Fonte */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    
+    /* Alturas de Linha */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    --line-height-loose: 2;
+    
+    /* ========== ESPAÇAMENTO ========== */
+    
+    --spacing-0: 0;
+    --spacing-1: 0.25rem;   /* 4px */
+    --spacing-2: 0.5rem;    /* 8px */
+    --spacing-3: 0.75rem;   /* 12px */
+    --spacing-4: 1rem;      /* 16px */
+    --spacing-5: 1.25rem;   /* 20px */
+    --spacing-6: 1.5rem;    /* 24px */
+    --spacing-8: 2rem;      /* 32px */
+    --spacing-10: 2.5rem;   /* 40px */
+    --spacing-12: 3rem;     /* 48px */
+    --spacing-16: 4rem;     /* 64px */
+    --spacing-20: 5rem;     /* 80px */
+    --spacing-24: 6rem;     /* 96px */
+    
+    /* ========== DIMENSÕES ========== */
+    
+    /* Larguras de Container */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1280px;
+    --container-2xl: 1536px;
+    
+    /* Alturas */
+    --header-height: 60px;
+    --footer-height: 80px;
+    
+    /* ========== TRANSIÇÕES ========== */
+    
+    --transition-fast: 150ms;
+    --transition-base: 300ms;
+    --transition-slow: 500ms;
+    --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --transition-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --transition-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Transições Compostas */
+    --transition-all: all var(--transition-base) var(--transition-ease);
+    --transition-colors: color var(--transition-base) var(--transition-ease),
+                         background-color var(--transition-base) var(--transition-ease),
+                         border-color var(--transition-base) var(--transition-ease);
+    --transition-transform: transform var(--transition-base) var(--transition-ease);
+    
+    /* ========== Z-INDEX ========== */
+    
+    --z-base: 0;
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    
+    /* ========== CORES ESPECÍFICAS DO SISTEMA ========== */
+    
+    /* Status de Vagas */
+    --status-aberta: #28a745;
+    --status-fechada: #dc3545;
+    --status-analise: #ffc107;
+    
+    /* Tipos de Monitoria */
+    --tipo-monitor: #17a2b8;
+    --tipo-monitor-tea: #667eea;
+    
+    /* Status de Candidatura */
+    --candidatura-aprovada: #28a745;
+    --candidatura-pendente: #ffc107;
+    --candidatura-rejeitada: #dc3545;
+    
+    /* Badges */
+    --badge-primary-bg: #e7f3ff;
+    --badge-primary-text: #004085;
+    --badge-success-bg: #d4edda;
+    --badge-success-text: #155724;
+    --badge-warning-bg: #fff3cd;
+    --badge-warning-text: #856404;
+    --badge-danger-bg: #f8d7da;
+    --badge-danger-text: #721c24;
+    --badge-info-bg: #d1ecf1;
+    --badge-info-text: #0c5460;
+    
+    /* ========== ÍCONES E EMOJIS ========== */
+    
+    /* Cores para ícones de métrica */
+    --icon-blue: #5b9bd5;
+    --icon-green: #70ad47;
+    --icon-orange: #ed7d31;
+    --icon-red: #e74c3c;
+    --icon-purple: #9b59b6;
+    --icon-yellow: #f1c40f;
+    
+    /* ========== BREAKPOINTS (para referência) ========== */
+    
+    /*
+    --breakpoint-xs: 0px;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+    */
+}
+
+/* ========== CLASSES UTILITÁRIAS ========== */
+
+/* Cores de Fundo */
+.bg-primary { background-color: var(--color-primary) !important; }
+.bg-secondary { background-color: var(--color-secondary) !important; }
+.bg-success { background-color: var(--color-success) !important; }
+.bg-danger { background-color: var(--color-danger) !important; }
+.bg-warning { background-color: var(--color-warning) !important; }
+.bg-info { background-color: var(--color-info) !important; }
+.bg-light { background-color: var(--bg-secondary) !important; }
+.bg-dark { background-color: var(--bg-dark) !important; }
+.bg-white { background-color: var(--color-white) !important; }
+
+/* Cores de Texto */
+.text-primary { color: var(--text-primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-danger { color: var(--color-danger) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-info { color: var(--color-info) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-white { color: var(--color-white) !important; }
+
+/* Pesos de Fonte */
+.font-light { font-weight: var(--font-weight-light) !important; }
+.font-normal { font-weight: var(--font-weight-normal) !important; }
+.font-medium { font-weight: var(--font-weight-medium) !important; }
+.font-semibold { font-weight: var(--font-weight-semibold) !important; }
+.font-bold { font-weight: var(--font-weight-bold) !important; }
+
+/* Tamanhos de Fonte */
+.text-xs { font-size: var(--font-size-xs) !important; }
+.text-sm { font-size: var(--font-size-sm) !important; }
+.text-base { font-size: var(--font-size-base) !important; }
+.text-lg { font-size: var(--font-size-lg) !important; }
+.text-xl { font-size: var(--font-size-xl) !important; }
+.text-2xl { font-size: var(--font-size-2xl) !important; }
+
+/* Sombras */
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow-md { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+.shadow-xl { box-shadow: var(--shadow-xl) !important; }
+.shadow-none { box-shadow: none !important; }
+
+/* Border Radius */
+.rounded-sm { border-radius: var(--border-radius-sm) !important; }
+.rounded-md { border-radius: var(--border-radius-md) !important; }
+.rounded-lg { border-radius: var(--border-radius-lg) !important; }
+.rounded-xl { border-radius: var(--border-radius-xl) !important; }
+.rounded-full { border-radius: var(--border-radius-full) !important; }
+
+/* Transições */
+.transition-all { transition: var(--transition-all) !important; }
+.transition-colors { transition: var(--transition-colors) !important; }
+.transition-transform { transition: var(--transition-transform) !important; }
+
+/* ========== BOTÕES COM GRADIENTE ========== */
+
+/* Classe base para botões */
+.btn {
+    display: inline-block;
+    padding: var(--spacing-3) var(--spacing-6);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition-all);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Botões com gradiente */
+.btn-gradient-primary {
+    background: var(--btn-gradient-primary);
+    color: var(--color-white);
+}
+
+.btn-gradient-primary:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, rgba(2, 2, 2, 0.2) 100%);
+}
+
+.btn-gradient-secondary {
+    background: var(--btn-gradient-secondary);
+    color: var(--color-white);
+}
+
+.btn-gradient-secondary:hover {
+    background: linear-gradient(135deg, var(--color-secondary-dark) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.btn-gradient-success {
+    background: var(--btn-gradient-success);
+    color: var(--color-white);
+}
+
+.btn-gradient-success:hover {
+    background: linear-gradient(135deg, var(--color-success-dark) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.btn-gradient-danger {
+    background: var(--btn-gradient-danger);
+    color: var(--color-white);
+}
+
+.btn-gradient-danger:hover {
+    background: linear-gradient(135deg, var(--color-danger-dark) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.btn-gradient-warning {
+    background: var(--btn-gradient-warning);
+    color: var(--color-gray-900);
+}
+
+.btn-gradient-warning:hover {
+    background: linear-gradient(135deg, var(--color-warning-dark) 0%, rgba(0, 0, 0, 0.2) 100%);
+    color: var(--color-white);
+}
+
+.btn-gradient-info {
+    background: var(--btn-gradient-info);
+    color: var(--color-white);
+}
+
+.btn-gradient-info:hover {
+    background: linear-gradient(135deg, var(--color-info-dark) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.btn-gradient-dark {
+    background: var(--btn-gradient-dark);
+    color: var(--color-white);
+}
+
+.btn-gradient-dark:hover {
+    background: linear-gradient(135deg, var(--bg-darker) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.btn-gradient-light {
+    background: var(--btn-gradient-light);
+    color: var(--text-primary);
+}
+
+.btn-gradient-light:hover {
+    background: linear-gradient(135deg, var(--color-gray-200) 0%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+/* Tamanhos de botões */
+.btn-sm {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+}
+
+.btn-lg {
+    padding: var(--spacing-4) var(--spacing-8);
+    font-size: var(--font-size-lg);
+}
+
+.btn-xl {
+    padding: var(--spacing-5) var(--spacing-10);
+    font-size: var(--font-size-xl);
+}
+
+/* Botão de largura total */
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Botão desabilitado */
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}

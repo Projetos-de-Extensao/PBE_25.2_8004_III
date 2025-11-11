@@ -1,8 +1,3 @@
-"""
-URLs para o app myapp - Sistema de Monitoria
-Copie este arquivo para: src/myapp/urls.py
-"""
-
 from django.urls import path
 from myapp import views
 
@@ -42,4 +37,7 @@ urlpatterns = [
     
     # ==================== MONITORES ====================
     path('monitores/<str:matricula>/', views.detalhes_monitor, name='detalhes_monitor'),
+    
+    # ==================== MONITORIAS ====================
+    path('detalhes_monitoria/<int:monitoria_id>/', views.detalhes_monitoria, name='detalhes_monitoria'),
 ]

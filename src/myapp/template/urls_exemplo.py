@@ -1,8 +1,3 @@
-"""
-Exemplo de configuração de URLs para o sistema de monitoria.
-Adicione estas rotas ao arquivo urls.py do seu projeto Django.
-"""
-
 from django.urls import path
 from myapp import views
 

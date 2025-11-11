@@ -4,11 +4,6 @@ from myapp.models import (
     Disciplina, VagaMonitoria, Candidatura, RegistroMonitoria
 )
 
-# models -> serializer -> url -> view
-# Models → Define a estrutura de dados (tabelas do banco)
-# Serializers → Converte modelos em JSON e valida dados
-# Views → Lógica de negócio e controle das requisições
-# URLs → Define as rotas/endpoints da API
 
 class DisciplinaSerializer(serializers.ModelSerializer):
     class Meta:
