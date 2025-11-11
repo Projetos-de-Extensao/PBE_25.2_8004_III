@@ -75,12 +75,14 @@ class CasaSerializer(serializers.ModelSerializer):
 class VagaMonitoriaSerializer(serializers.ModelSerializer):
     disciplina_detalhes = DisciplinaSerializer(source='disciplina', read_only=True)
     coordenador_detalhes = CoordenadorSerializer(source='coordenador', read_only=True)
+    tipo_monitoria_display = serializers.CharField(source='get_tipo_monitoria_display', read_only=True)
     
     class Meta:
         model = VagaMonitoria
         fields = [
             'id', 'titulo', 'pre_requisitos', 'disciplina', 'disciplina_detalhes',
-            'coordenador', 'coordenador_detalhes', 'status', 'prazo_inscricao'
+            'coordenador', 'coordenador_detalhes', 'status', 'tipo_monitoria', 
+            'tipo_monitoria_display', 'prazo_inscricao'
         ]
         read_only_fields = ['id']
 

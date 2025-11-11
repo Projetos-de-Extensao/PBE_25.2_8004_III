@@ -455,7 +455,12 @@ class FluxoCompletoMonitoriaTest(TestCase):
 
 # ==================== TESTES DE API REST ====================
 
-@override_settings(REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES': []})
+@override_settings(
+    REST_FRAMEWORK={
+        'DEFAULT_AUTHENTICATION_CLASSES': [],
+        'DEFAULT_PERMISSION_CLASSES': [],
+    }
+)
 class DisciplinaAPITest(APITestCase):
     """Testes para API de Disciplinas"""
     
@@ -504,7 +509,12 @@ class DisciplinaAPITest(APITestCase):
         self.assertEqual(Disciplina.objects.count(), 0)
 
 
-@override_settings(REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES': []})
+@override_settings(
+    REST_FRAMEWORK={
+        'DEFAULT_AUTHENTICATION_CLASSES': [],
+        'DEFAULT_PERMISSION_CLASSES': [],
+    }
+)
 class AlunoAPITest(APITestCase):
     """Testes para API de Alunos"""
     
@@ -558,7 +568,12 @@ class AlunoAPITest(APITestCase):
         self.assertEqual(Aluno.objects.count(), 0)
 
 
-@override_settings(REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES': []})
+@override_settings(
+    REST_FRAMEWORK={
+        'DEFAULT_AUTHENTICATION_CLASSES': [],
+        'DEFAULT_PERMISSION_CLASSES': [],
+    }
+)
 class VagaMonitoriaAPITest(APITestCase):
     """Testes para API de Vagas de Monitoria"""
     
@@ -616,6 +631,7 @@ class VagaMonitoriaAPITest(APITestCase):
             titulo='Vaga Aberta',
             pre_requisitos='CR > 7.0',
             disciplina=self.disciplina,
+            coordenador=self.coordenador,
             status='Aberta',
             prazo_inscricao=date.today() + timedelta(days=30)
         )
@@ -625,16 +641,23 @@ class VagaMonitoriaAPITest(APITestCase):
             titulo='Vaga Fechada',
             pre_requisitos='CR > 7.0',
             disciplina=self.disciplina,
+            coordenador=self.coordenador,
             status='Fechada',
             prazo_inscricao=date.today() - timedelta(days=1)
         )
         
         # Listar todas
         response = self.client.get('/api/vagas-monitoria/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
 
-@override_settings(REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES': []})
+@override_settings(
+    REST_FRAMEWORK={
+        'DEFAULT_AUTHENTICATION_CLASSES': [],
+        'DEFAULT_PERMISSION_CLASSES': [],
+    }
+)
 class CandidaturaAPITest(APITestCase):
     """Testes para API de Candidaturas"""
     
@@ -710,7 +733,12 @@ class CandidaturaAPITest(APITestCase):
         self.assertEqual(candidatura.status, 'Aprovada')
 
 
-@override_settings(REST_FRAMEWORK={'DEFAULT_PERMISSION_CLASSES': []})
+@override_settings(
+    REST_FRAMEWORK={
+        'DEFAULT_AUTHENTICATION_CLASSES': [],
+        'DEFAULT_PERMISSION_CLASSES': [],
+    }
+)
 class ProfessorAPITest(APITestCase):
     """Testes para API de Professores"""
     
@@ -738,6 +766,280 @@ class ProfessorAPITest(APITestCase):
         self.assertEqual(len(response.data), 1)
 
 
+# ==================== TESTES DE TIPO DE MONITORIA ====================
+
+class TipoMonitoriaAPITest(APITestCase):
+    """Testes para verificar se o campo tipo_monitoria está funcionando corretamente na API"""
+    
+    def setUp(self):
+        self.client = APIClient()
+        
+        # Criar disciplina
+        self.disciplina = Disciplina.objects.create(
+            codigo='TM001',
+            nome='Disciplina Tipo Monitoria'
+        )
+        
+        # Criar coordenador
+        self.coordenador = Coordenador.objects.create(
+            cpf='77777777777',
+            nome='Coord Tipo Monitoria',
+            email='coord.tm@test.com',
+            telefone='11977777777',
+            senha_hash=make_password('coord123')
+        )
+    
+    def test_serializer_vaga_monitor_voluntario(self):
+        """Testa serialização de vaga para Monitor Voluntário"""
+        vaga = VagaMonitoria.objects.create(
+            titulo='Vaga Monitor Voluntário',
+            pre_requisitos='CR >= 7.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='Monitor',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        from myapp.serializers import VagaMonitoriaSerializer
+        serializer = VagaMonitoriaSerializer(vaga)
+        data = serializer.data
+        
+        # Verificações
+        self.assertIn('tipo_monitoria', data)
+        self.assertEqual(data['tipo_monitoria'], 'Monitor')
+        self.assertIn('tipo_monitoria_display', data)
+        self.assertEqual(data['tipo_monitoria_display'], 'Monitor (Voluntário)')
+    
+    def test_serializer_vaga_monitor_tea(self):
+        """Testa serialização de vaga para Monitor TEA"""
+        vaga = VagaMonitoria.objects.create(
+            titulo='Vaga Monitor TEA',
+            pre_requisitos='CR >= 8.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='MonitorTEA',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        from myapp.serializers import VagaMonitoriaSerializer
+        serializer = VagaMonitoriaSerializer(vaga)
+        data = serializer.data
+        
+        # Verificações
+        self.assertIn('tipo_monitoria', data)
+        self.assertEqual(data['tipo_monitoria'], 'MonitorTEA')
+        self.assertIn('tipo_monitoria_display', data)
+        self.assertEqual(data['tipo_monitoria_display'], 'Monitor TEA (Remunerado)')
+    
+    def test_criar_vaga_monitor_via_api(self):
+        """Testa criação de vaga Monitor via API"""
+        vaga_data = {
+            'titulo': 'Vaga API Monitor',
+            'pre_requisitos': 'CR >= 7.0',
+            'disciplina': self.disciplina.id,
+            'coordenador': self.coordenador.cpf,
+            'status': 'Aberta',
+            'tipo_monitoria': 'Monitor',
+            'prazo_inscricao': (date.today() + timedelta(days=30)).isoformat()
+        }
+        
+        response = self.client.post('/api/vagas-monitoria/', vaga_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('tipo_monitoria', response.data)
+        self.assertEqual(response.data['tipo_monitoria'], 'Monitor')
+    
+    def test_criar_vaga_monitor_tea_via_api(self):
+        """Testa criação de vaga MonitorTEA via API"""
+        vaga_data = {
+            'titulo': 'Vaga API MonitorTEA',
+            'pre_requisitos': 'CR >= 8.0',
+            'disciplina': self.disciplina.id,
+            'coordenador': self.coordenador.cpf,
+            'status': 'Aberta',
+            'tipo_monitoria': 'MonitorTEA',
+            'prazo_inscricao': (date.today() + timedelta(days=30)).isoformat()
+        }
+        
+        response = self.client.post('/api/vagas-monitoria/', vaga_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('tipo_monitoria', response.data)
+        self.assertEqual(response.data['tipo_monitoria'], 'MonitorTEA')
+        self.assertIn('tipo_monitoria_display', response.data)
+        self.assertEqual(response.data['tipo_monitoria_display'], 'Monitor TEA (Remunerado)')
+    
+    def test_listar_vagas_com_tipos_diferentes(self):
+        """Testa listagem de vagas com tipos diferentes"""
+        # Criar vaga Monitor
+        VagaMonitoria.objects.create(
+            titulo='Vaga Monitor',
+            pre_requisitos='CR >= 7.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='Monitor',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        # Criar vaga MonitorTEA
+        VagaMonitoria.objects.create(
+            titulo='Vaga MonitorTEA',
+            pre_requisitos='CR >= 8.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='MonitorTEA',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        response = self.client.get('/api/vagas-monitoria/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+        
+        # Verificar que ambos os tipos estão presentes
+        tipos = [vaga['tipo_monitoria'] for vaga in response.data]
+        self.assertIn('Monitor', tipos)
+        self.assertIn('MonitorTEA', tipos)
+    
+    def test_atualizar_tipo_monitoria_via_api(self):
+        """Testa atualização do tipo de monitoria via API"""
+        vaga = VagaMonitoria.objects.create(
+            titulo='Vaga para Atualizar',
+            pre_requisitos='CR >= 7.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='Monitor',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        updated_data = {
+            'titulo': 'Vaga para Atualizar',
+            'pre_requisitos': 'CR >= 7.0',
+            'disciplina': self.disciplina.id,
+            'coordenador': self.coordenador.cpf,
+            'status': 'Aberta',
+            'tipo_monitoria': 'MonitorTEA',
+            'prazo_inscricao': (date.today() + timedelta(days=30)).isoformat()
+        }
+        
+        response = self.client.put(f'/api/vagas-monitoria/{vaga.id}/', updated_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        vaga.refresh_from_db()
+        self.assertEqual(vaga.tipo_monitoria, 'MonitorTEA')
+        self.assertEqual(vaga.get_tipo_monitoria_display(), 'Monitor TEA (Remunerado)')
+
+
+class TipoMonitoriaFluxoTest(TestCase):
+    """Testes para o fluxo completo com tipo de monitoria"""
+    
+    def setUp(self):
+        self.client = Client()
+        
+        # Criar coordenador
+        self.coordenador = Coordenador.objects.create(
+            cpf='66666666666',
+            nome='Coord Fluxo',
+            email='coord.fluxo@test.com',
+            telefone='11966666666',
+            senha_hash=make_password('coord123')
+        )
+        
+        # Criar disciplina
+        self.disciplina = Disciplina.objects.create(
+            codigo='FLUX001',
+            nome='Disciplina Fluxo Tipo'
+        )
+        
+        # Criar aluno
+        self.aluno = Aluno.objects.create(
+            matricula='202300020',
+            nome='Aluno Tipo Monitoria',
+            email='aluno.tipo@test.com',
+            telefone='11955555555',
+            senha_hash=make_password('aluno123'),
+            cr_geral=8.5,
+            curso='Computação'
+        )
+    
+    def test_criar_monitor_tea_ao_aprovar_candidatura(self):
+        """Testa criação automática de MonitorTEA ao aprovar candidatura de vaga MonitorTEA"""
+        
+        # Criar vaga MonitorTEA
+        vaga = VagaMonitoria.objects.create(
+            titulo='Vaga MonitorTEA Fluxo',
+            pre_requisitos='CR >= 8.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='MonitorTEA',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        # Criar candidatura
+        candidatura = Candidatura.objects.create(
+            aluno=self.aluno,
+            vaga=vaga,
+            cr_disciplina=9.0,
+            documentos='Documentos',
+            status='Pendente'
+        )
+        
+        # Fazer login como coordenador
+        session = self.client.session
+        session['user_type'] = 'coordenador'
+        session['user_id'] = '66666666666'
+        session.save()
+        
+        # Aprovar candidatura
+        response = self.client.get(reverse('aprovar_candidatura', args=[candidatura.id]))
+        
+        # Verificar se MonitorTEA foi criado (não Monitor comum)
+        self.assertTrue(MonitorTEA.objects.filter(matricula=self.aluno.matricula).exists())
+        
+        # Verificar que tem salário
+        monitor_tea = MonitorTEA.objects.get(matricula=self.aluno.matricula)
+        self.assertIsNotNone(monitor_tea.salario)
+        self.assertGreater(monitor_tea.salario, 0)
+    
+    def test_criar_monitor_voluntario_ao_aprovar_candidatura(self):
+        """Testa criação automática de Monitor ao aprovar candidatura de vaga Monitor"""
+        
+        # Criar vaga Monitor Voluntário
+        vaga = VagaMonitoria.objects.create(
+            titulo='Vaga Monitor Fluxo',
+            pre_requisitos='CR >= 7.0',
+            disciplina=self.disciplina,
+            coordenador=self.coordenador,
+            status='Aberta',
+            tipo_monitoria='Monitor',
+            prazo_inscricao=date.today() + timedelta(days=30)
+        )
+        
+        # Criar candidatura
+        candidatura = Candidatura.objects.create(
+            aluno=self.aluno,
+            vaga=vaga,
+            cr_disciplina=8.5,
+            documentos='Documentos',
+            status='Pendente'
+        )
+        
+        # Fazer login como coordenador
+        session = self.client.session
+        session['user_type'] = 'coordenador'
+        session['user_id'] = '66666666666'
+        session.save()
+        
+        # Aprovar candidatura
+        response = self.client.get(reverse('aprovar_candidatura', args=[candidatura.id]))
+        
+        # Verificar se Monitor foi criado
+        self.assertTrue(Monitor.objects.filter(matricula=self.aluno.matricula).exists())
+
+
 # ==================== EXECUTAR TESTES ====================
 # Para rodar os testes, use o comando:
 # python manage.py test myapp.tests
@@ -748,4 +1050,6 @@ class ProfessorAPITest(APITestCase):
 # python manage.py test myapp.tests.VagaMonitoriaAPITest
 # python manage.py test myapp.tests.CandidaturaAPITest
 # python manage.py test myapp.tests.ProfessorAPITest
+# python manage.py test myapp.tests.TipoMonitoriaAPITest
+# python manage.py test myapp.tests.TipoMonitoriaFluxoTest
 

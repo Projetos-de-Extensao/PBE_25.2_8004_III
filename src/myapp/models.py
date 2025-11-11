@@ -201,6 +201,15 @@ class VagaMonitoria(models.Model):
         ],
         default='Aberta'
     )
+    tipo_monitoria = models.CharField(
+        max_length=20,
+        choices=[
+            ('Monitor', 'Monitor (Voluntário)'),
+            ('MonitorTEA', 'Monitor TEA (Remunerado)')
+        ],
+        default='Monitor',
+        help_text="Tipo de monitoria: Monitor voluntário ou Monitor TEA remunerado"
+    )
     prazo_inscricao = models.DateField()
 
     def __str__(self):

@@ -178,6 +178,7 @@ def cadastro_vaga(request):
                 disciplina_id=request.POST.get('disciplina'),
                 prazo_inscricao=request.POST.get('prazo_inscricao'),
                 status=request.POST.get('status', 'Aberta'),
+                tipo_monitoria=request.POST.get('tipo_monitoria', 'Monitor'),
                 coordenador=coordenador
             )
             coordenador.cadastrarVaga(vaga)
@@ -438,32 +439,83 @@ def aprovar_candidatura(request, candidatura_id):
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
     
     try:
+        # Verificar o tipo de monitoria da vaga
+        tipo_monitoria = candidatura.vaga.tipo_monitoria
+        
         # Buscar o professor logado
         if user_type in ['professor', 'coordenador']:
             user_cpf = request.session.get('user_id')
             professor = get_object_or_404(Professor, cpf=user_cpf)
             
-            # Usar o método do modelo para aprovar
-            professor.aprovarCandidatura(candidatura)
+            # Aprovar candidatura
+            candidatura.status = 'Aprovada'
+            candidatura.save()
+            
+            # Criar registro de Monitor ou MonitorTEA baseado no tipo da vaga
+            if tipo_monitoria == 'MonitorTEA':
+                # Para MonitorTEA, solicitar salário via POST ou usar valor padrão
+                salario = request.POST.get('salario', '1000.00')  # Valor padrão
+                MonitorTEA.objects.get_or_create(
+                    matricula=candidatura.aluno.matricula,
+                    defaults={
+                        'nome': candidatura.aluno.nome,
+                        'email': candidatura.aluno.email,
+                        'telefone': candidatura.aluno.telefone,
+                        'senha_hash': candidatura.aluno.senha_hash,
+                        'cr_geral': candidatura.aluno.cr_geral,
+                        'curso': candidatura.aluno.curso,
+                        'salario': salario
+                    }
+                )
+                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um Monitor TEA (remunerado).')
+            else:
+                # Monitor voluntário
+                Monitor.objects.get_or_create(
+                    matricula=candidatura.aluno.matricula,
+                    defaults={
+                        'nome': candidatura.aluno.nome,
+                        'email': candidatura.aluno.email,
+                        'telefone': candidatura.aluno.telefone,
+                        'senha_hash': candidatura.aluno.senha_hash,
+                        'cr_geral': candidatura.aluno.cr_geral,
+                        'curso': candidatura.aluno.curso
+                    }
+                )
+                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
         else:
             # Casa também pode aprovar diretamente
             candidatura.status = 'Aprovada'
             candidatura.save()
             
-            # Criar registro de Monitor
-            Monitor.objects.get_or_create(
-                matricula=candidatura.aluno.matricula,
-                defaults={
-                    'nome': candidatura.aluno.nome,
-                    'email': candidatura.aluno.email,
-                    'telefone': candidatura.aluno.telefone,
-                    'senha_hash': candidatura.aluno.senha_hash,
-                    'cr_geral': candidatura.aluno.cr_geral,
-                    'curso': candidatura.aluno.curso
-                }
-            )
-        
-        messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
+            # Criar registro de Monitor ou MonitorTEA baseado no tipo da vaga
+            if tipo_monitoria == 'MonitorTEA':
+                salario = request.POST.get('salario', '1000.00')
+                MonitorTEA.objects.get_or_create(
+                    matricula=candidatura.aluno.matricula,
+                    defaults={
+                        'nome': candidatura.aluno.nome,
+                        'email': candidatura.aluno.email,
+                        'telefone': candidatura.aluno.telefone,
+                        'senha_hash': candidatura.aluno.senha_hash,
+                        'cr_geral': candidatura.aluno.cr_geral,
+                        'curso': candidatura.aluno.curso,
+                        'salario': salario
+                    }
+                )
+                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um Monitor TEA (remunerado).')
+            else:
+                Monitor.objects.get_or_create(
+                    matricula=candidatura.aluno.matricula,
+                    defaults={
+                        'nome': candidatura.aluno.nome,
+                        'email': candidatura.aluno.email,
+                        'telefone': candidatura.aluno.telefone,
+                        'senha_hash': candidatura.aluno.senha_hash,
+                        'cr_geral': candidatura.aluno.cr_geral,
+                        'curso': candidatura.aluno.curso
+                    }
+                )
+                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
     except Exception as e:
         messages.error(request, f'Erro ao aprovar candidatura: {str(e)}')
     
