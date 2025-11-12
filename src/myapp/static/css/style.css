@@ -15,6 +15,8 @@ body {
     background-color: var(--bg-primary);
     line-height: 1.6;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* === NAVBAR MODERNA COM LOGO IBMEC === */
@@ -72,11 +74,17 @@ body {
     font-weight: 500;
     transition: var(--transition);
     font-size: 0.95rem;
+    background-color: #1e3a5f;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-block;
 }
 
 .navbar-menu a:hover,
 .navbar-menu a.active {
-    color: var(--text-primary);
+    background-color: #2a5a8f;
+    color: white;
 }
 
 /* menu hamburguer mobile */
@@ -96,12 +104,49 @@ body {
     transition: var(--transition);
 }
 
+/* === CONTAINER COMECE AGORA === */
+.hero-section {
+    background-color: #1e3a5f;
+    color: var(--color-white);
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.hero-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-white);
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-section .btn {
+    margin: 0.5rem;
+}
+
+.cta-section {
+    background-color: #1e3a5f !important;
+    color: var(--color-white);
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
 /* === CONTEÚDO PRINCIPAL === */
 .main-content {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem 2rem 2rem;
-    min-height: calc(100vh - 80px);
+    flex: 1;
+    width: 100%;
 }
 
 .page-title {
@@ -358,13 +403,13 @@ body {
 
 /* === RODAPÉ === */
 .footer {
-    background-color: var(--bg-secondary);
+    background-color: #1e3a5f;
     text-align: center;
     padding: 1.5rem;
-    margin-top: 3rem;
-    color: var(--text-secondary);
+    color: white;
     border-top: 1px solid var(--border-color);
     font-size: 0.9rem;
+    width: 100%;
 }
 
 /* === RESPONSIVIDADE === */
@@ -438,8 +483,10 @@ body {
 
 /* Estilo para o nome do usuário */
 .user-info {
-    color: var(--text-primary);
+    color: white;
     padding: 0.5rem 1rem;
+    background-color: #1e3a5f;
+    border-radius: 6px;
 }
 
 /* === BOTÕES COM GRADIENTE AMARELO IBMEC === */
