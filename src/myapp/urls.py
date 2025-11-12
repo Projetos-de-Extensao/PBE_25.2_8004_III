@@ -8,6 +8,7 @@ urlpatterns = [
     # ==================== AUTENTICAÇÃO ====================
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('acesso-negado/', views.acesso_negado, name='acesso_negado'),
     
     # ==================== CADASTROS ====================
     path('cadastro/aluno/', views.cadastro_aluno, name='cadastro_aluno'),

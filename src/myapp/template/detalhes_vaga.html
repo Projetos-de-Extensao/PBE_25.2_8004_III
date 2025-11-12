@@ -105,7 +105,7 @@
 
 <!-- Informações da Vaga -->
 <div class="info-card">
-    <h3>📋 Informações da Vaga</h3>
+    <h3>Informações da Vaga</h3>
     <div class="info-grid">
         <div class="info-item">
             <div class="info-label">Disciplina</div>
@@ -138,13 +138,18 @@
             <div class="info-label">Coordenador Responsável</div>
             <div class="info-value" style="font-size: 0.95rem;">{{ vaga.coordenador.nome }}</div>
         </div>
+        {% elif vaga.casa %}
+        <div class="info-item">
+            <div class="info-label">Responsável (CASA)</div>
+            <div class="info-value" style="font-size: 0.95rem;">{{ vaga.casa.nome }}</div>
+        </div>
         {% endif %}
     </div>
 </div>
 
 <!-- Pré-requisitos -->
 <div class="info-card">
-    <h3>📚 Pré-requisitos</h3>
+    <h3>Pré-requisitos</h3>
     <div class="pre-requisitos">
         <p style="white-space: pre-line;">{{ vaga.pre_requisitos }}</p>
     </div>
@@ -165,9 +170,22 @@
 <!-- Ações -->
 <div class="action-buttons">
     {% if user_type == 'aluno' and vaga.status == 'Aberta' %}
+        {% if ja_candidatado %}
+        <div style="width: 100%;">
+            <div class="alert alert-info" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196F3; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <strong>✓ Você já se candidatou a esta vaga</strong><br>
+                <small>Data da candidatura: {{ candidatura_aluno.data_candidatura|date:"d/m/Y às H:i" }}</small><br>
+                <small>Status atual: <strong>{{ candidatura_aluno.status }}</strong></small>
+            </div>
+            <button class="btn btn-gradient-secondary" disabled style="cursor: not-allowed; opacity: 0.6; width: 100%;">
+                ✓ Candidatura Enviada
+            </button>
+        </div>
+        {% else %}
         <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-gradient-success">
             Candidatar-se a esta Vaga
         </a>
+        {% endif %}
     {% endif %}
     
     {% if user_type == 'coordenador' or user_type == 'casa' %}

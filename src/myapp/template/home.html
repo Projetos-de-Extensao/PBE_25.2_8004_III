@@ -4,41 +4,8 @@
 {% block title %}Home - Sistema de Monitoria{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
 <style>
-    .home-container {
-        padding: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .hero {
-        background: linear-gradient(135deg, rgba(91, 155, 213, 0.15) 0%, rgba(212, 160, 23, 0.15) 100%);
-        border: 1px solid var(--border-color);
-        color: var(--text-primary);
-        padding: 4rem 2rem;
-        border-radius: var(--border-radius);
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        font-weight: 700;
-    }
-
-    .hero p {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-    }
-
-    .features {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
     /* cartão de funcionalidade */
     .feature-card {
         background-color: var(--bg-card);
@@ -69,13 +36,6 @@
     .feature-description {
         color: var(--text-secondary);
         margin-bottom: 1rem;
-    }
-
-    .quick-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
     }
 
     .cta-section {
@@ -145,45 +105,25 @@
 {% block content %}
 <div class="home-container">
     <div class="hero">
-        <h1>Bem-vindo ao Sistema de Monitoria</h1>
-        <p>Conectando alunos e monitores para melhor aprendizado</p>
-    </div>
-
-    {% if not user_type %}
-    <div class="cta-section">
-        <h2>Comece Agora!</h2>
-        <p>Faça parte do programa de monitoria da sua instituição</p>
-        <div class="cta-buttons">
-            <a href="{% url 'login' %}" class="btn btn-gradient-primary btn-ibmec">Fazer Login</a>
-            <a href="{% url 'cadastro_aluno' %}" class="btn btn-gradient-success btn-ibmec">Cadastrar como Aluno</a>
+        <div class="content-wrapper">
+            <h1>Bem-vindo ao Sistema de Monitoria</h1>
+            <p>Conectando alunos e monitores para melhor aprendizado</p>
         </div>
     </div>
-    {% endif %}
 
-    {% if user_type %}
-    <div class="quick-stats">
-        <div class="stat-card">
-            <div class="stat-value">{{ vagas_abertas|default:24 }}</div>
-            <div class="stat-label">Vagas Abertas</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ total_monitores|default:18 }}</div>
-            <div class="stat-label">Monitores Ativos</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ total_disciplinas|default:12 }}</div>
-            <div class="stat-label">Disciplinas</div>
-        </div>
-        {% if user_type == 'aluno' %}
-        <div class="stat-card">
-            <div class="stat-value">{{ minhas_candidaturas|default:3 }}</div>
-            <div class="stat-label">Minhas Candidaturas</div>
+    <div class="content-wrapper">
+        {% if not user_type %}
+        <div class="cta-section">
+            <h2>Comece Agora!</h2>
+            <p>Faça parte do programa de monitoria da sua instituição</p>
+            <div class="cta-buttons">
+                <a href="{% url 'login' %}" class="btn btn-gradient-primary btn-ibmec">Fazer Login</a>
+                <a href="{% url 'cadastro_aluno' %}" class="btn btn-gradient-success btn-ibmec">Cadastrar como Aluno</a>
+            </div>
         </div>
         {% endif %}
-    </div>
-    {% endif %}
 
-    <div class="features">
+        <div class="features">
         <div class="feature-card">
             <div class="feature-icon">📚</div>
             <h3 class="feature-title">Vagas Disponíveis</h3>
@@ -223,6 +163,7 @@
             <a href="{% url 'login' %}" class="btn-ibmec">Ver Mais</a>
             {% endif %}
         </div>
+    </div>
     </div>
 </div>
 {% endblock %}

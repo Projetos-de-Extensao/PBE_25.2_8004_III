@@ -147,6 +147,10 @@ class Casa(Usuario):
         coordenador.save()
         return coordenador
 
+    def cadastrarVaga(self, vaga):
+        vaga.save()
+        return vaga
+
     def __str__(self):
         return f"Casa - {self.nome}"
 
@@ -173,6 +177,13 @@ class VagaMonitoria(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='vagas_cadastradas'
+    )
+    casa = models.ForeignKey(
+        'Casa',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='vagas_criadas'
     )
     status = models.CharField(
         max_length=20,

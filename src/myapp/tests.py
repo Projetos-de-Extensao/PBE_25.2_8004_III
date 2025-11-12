@@ -1039,6 +1039,244 @@ class TipoMonitoriaFluxoTest(TestCase):
         # Verificar se Monitor foi criado
         self.assertTrue(Monitor.objects.filter(matricula=self.aluno.matricula).exists())
 
+"""
+Script para testar todas as verificações de permissão do sistema
+"""
+from django.test import Client
+from django.urls import reverse
+import os
+import django
+
+# Configurar Django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+django.setup()
+
+from myapp.models import Aluno, Professor, Coordenador, Casa, Disciplina, VagaMonitoria
+from django.contrib.auth.hashers import make_password
+from datetime import date, timedelta
+
+def criar_usuarios_teste():
+    """Cria usuários de teste para cada tipo"""
+    print("🔧 Criando usuários de teste...")
+    
+    # Limpar dados anteriores
+    Aluno.objects.filter(matricula__startswith='TEST').delete()
+    Professor.objects.filter(cpf__startswith='99999').delete()
+    Coordenador.objects.filter(cpf__startswith='88888').delete()
+    Casa.objects.filter(email='casa.teste@test.com').delete()
+    
+    # Criar aluno
+    aluno = Aluno.objects.create(
+        matricula='TEST001',
+        nome='Aluno Teste',
+        email='aluno.teste@test.com',
+        telefone='11999999999',
+        senha_hash=make_password('senha123'),
+        cr_geral=8.5,
+        curso='Teste'
+    )
+    
+    # Criar professor
+    professor = Professor.objects.create(
+        cpf='99999999999',
+        nome='Professor Teste',
+        email='professor.teste@test.com',
+        telefone='11988888888',
+        senha_hash=make_password('senha123')
+    )
+    
+    # Criar coordenador
+    coordenador = Coordenador.objects.create(
+        cpf='88888888888',
+        nome='Coordenador Teste',
+        email='coordenador.teste@test.com',
+        telefone='11977777777',
+        senha_hash=make_password('senha123')
+    )
+    
+    # Criar casa
+    casa = Casa.objects.create(
+        nome='Casa Teste',
+        email='casa.teste@test.com',
+        telefone='11966666666',
+        senha_hash=make_password('senha123')
+    )
+    
+    # Criar disciplina e vaga para testes
+    disciplina, _ = Disciplina.objects.get_or_create(
+        codigo='TEST101',
+        defaults={'nome': 'Disciplina Teste'}
+    )
+    
+    vaga, _ = VagaMonitoria.objects.get_or_create(
+        titulo='Vaga Teste Permissões',
+        defaults={
+            'pre_requisitos': 'Nenhum',
+            'disciplina': disciplina,
+            'coordenador': coordenador,
+            'status': 'Aberta',
+            'prazo_inscricao': date.today() + timedelta(days=30)
+        }
+    )
+    
+    print("✅ Usuários criados com sucesso!\n")
+    return aluno, professor, coordenador, casa, vaga
+
+def testar_permissao(client, user_type, user_id, url_name, url_args=None, deve_permitir=False):
+    """Testa uma permissão específica"""
+    # Fazer login
+    session = client.session
+    session['user_type'] = user_type
+    session['user_id'] = user_id
+    session.save()
+    
+    # Acessar URL
+    url_args = url_args or []
+    try:
+        url = reverse(url_name, args=url_args)
+        response = client.get(url, follow=False)
+        
+        # Verificar se foi redirecionado para acesso negado
+        if response.status_code == 302:
+            redirect_url = response.url
+            if 'acesso-negado' in redirect_url:
+                resultado = "🚫 NEGADO"
+                status = "❌" if deve_permitir else "✅"
+            else:
+                resultado = f"↪️  REDIRECT ({redirect_url})"
+                status = "⚠️"
+        elif response.status_code == 200:
+            resultado = "✓ PERMITIDO"
+            status = "✅" if deve_permitir else "❌"
+        else:
+            resultado = f"? STATUS {response.status_code}"
+            status = "⚠️"
+        
+        return status, resultado
+    except Exception as e:
+        return "❌", f"ERRO: {str(e)}"
+
+def main():
+    print("=" * 80)
+    print("🔒 TESTE DE VERIFICAÇÃO DE PERMISSÕES")
+    print("=" * 80)
+    print()
+    
+    # Criar usuários
+    aluno, professor, coordenador, casa, vaga = criar_usuarios_teste()
+    
+    client = Client()
+    
+    # Definir testes
+    testes = [
+        # (user_type, user_id, url_name, url_args, deve_permitir, descrição)
+        
+        # CADASTRO DE PROFESSOR
+        ("Cadastro de Professor", [
+            ('aluno', 'TEST001', 'cadastro_professor', None, False, "Aluno"),
+            ('professor', '99999999999', 'cadastro_professor', None, False, "Professor"),
+            ('coordenador', '88888888888', 'cadastro_professor', None, True, "Coordenador"),
+            ('casa', str(casa.id), 'cadastro_professor', None, True, "Casa"),
+        ]),
+        
+        # CADASTRO DE VAGA
+        ("Cadastro de Vaga", [
+            ('aluno', 'TEST001', 'cadastro_vaga', None, False, "Aluno"),
+            ('professor', '99999999999', 'cadastro_vaga', None, False, "Professor"),
+            ('coordenador', '88888888888', 'cadastro_vaga', None, True, "Coordenador"),
+            ('casa', str(casa.id), 'cadastro_vaga', None, True, "Casa"),
+        ]),
+        
+        # DASHBOARD
+        ("Dashboard", [
+            ('aluno', 'TEST001', 'dashboard', None, False, "Aluno"),
+            ('professor', '99999999999', 'dashboard', None, False, "Professor"),
+            ('coordenador', '88888888888', 'dashboard', None, True, "Coordenador"),
+            ('casa', str(casa.id), 'dashboard', None, True, "Casa"),
+        ]),
+        
+        # PAINEL COORDENADOR
+        ("Painel Coordenador", [
+            ('aluno', 'TEST001', 'painel_coordenador', None, False, "Aluno"),
+            ('professor', '99999999999', 'painel_coordenador', None, False, "Professor"),
+            ('coordenador', '88888888888', 'painel_coordenador', None, True, "Coordenador"),
+            ('casa', str(casa.id), 'painel_coordenador', None, True, "Casa"),
+        ]),
+        
+        # PAINEL MONITOR
+        ("Painel Monitor", [
+            ('aluno', 'TEST001', 'painel_monitor', None, False, "Aluno"),
+            ('professor', '99999999999', 'painel_monitor', None, False, "Professor"),
+            ('coordenador', '88888888888', 'painel_monitor', None, False, "Coordenador"),
+            ('monitor', 'MONITOR001', 'painel_monitor', None, True, "Monitor"),
+        ]),
+        
+        # CANDIDATAR A VAGA
+        ("Candidatar-se a Vaga", [
+            ('aluno', 'TEST001', 'candidatar_vaga', [vaga.id], True, "Aluno"),
+            ('professor', '99999999999', 'candidatar_vaga', [vaga.id], False, "Professor"),
+            ('coordenador', '88888888888', 'candidatar_vaga', [vaga.id], False, "Coordenador"),
+            ('casa', str(casa.id), 'candidatar_vaga', [vaga.id], False, "Casa"),
+        ]),
+        
+        # EDITAR VAGA
+        ("Editar Vaga", [
+            ('aluno', 'TEST001', 'editar_vaga', [vaga.id], False, "Aluno"),
+            ('professor', '99999999999', 'editar_vaga', [vaga.id], False, "Professor"),
+            ('coordenador', '88888888888', 'editar_vaga', [vaga.id], True, "Coordenador"),
+            ('casa', str(casa.id), 'editar_vaga', [vaga.id], True, "Casa"),
+        ]),
+        
+        # VER CANDIDATURAS
+        ("Ver Candidaturas", [
+            ('aluno', 'TEST001', 'candidaturas_vaga', [vaga.id], False, "Aluno"),
+            ('professor', '99999999999', 'candidaturas_vaga', [vaga.id], True, "Professor"),
+            ('coordenador', '88888888888', 'candidaturas_vaga', [vaga.id], True, "Coordenador"),
+            ('casa', str(casa.id), 'candidaturas_vaga', [vaga.id], True, "Casa"),
+        ]),
+    ]
+    
+    # Executar testes
+    total_testes = 0
+    testes_ok = 0
+    testes_falha = 0
+    
+    for categoria, casos in testes:
+        print(f"\n📋 {categoria}")
+        print("-" * 80)
+        
+        for user_type, user_id, url_name, url_args, deve_permitir, descricao in casos:
+            status, resultado = testar_permissao(client, user_type, user_id, url_name, url_args, deve_permitir)
+            esperado = "DEVE PERMITIR" if deve_permitir else "DEVE NEGAR"
+            
+            print(f"{status} {descricao:15} → {resultado:20} ({esperado})")
+            
+            total_testes += 1
+            if status == "✅":
+                testes_ok += 1
+            elif status == "❌":
+                testes_falha += 1
+    
+    # Resumo
+    print("\n" + "=" * 80)
+    print("📊 RESUMO DOS TESTES")
+    print("=" * 80)
+    print(f"Total de testes: {total_testes}")
+    print(f"✅ Passou: {testes_ok}")
+    print(f"❌ Falhou: {testes_falha}")
+    print(f"⚠️  Avisos: {total_testes - testes_ok - testes_falha}")
+    print()
+    
+    if testes_falha == 0:
+        print("🎉 TODOS OS TESTES DE PERMISSÃO PASSARAM!")
+    else:
+        print("⚠️  ALGUNS TESTES FALHARAM - VERIFICAR IMPLEMENTAÇÃO")
+    
+    print("=" * 80)
+
+if __name__ == '__main__':
+    main()
+
 
 # ==================== EXECUTAR TESTES ====================
 # Para rodar os testes, use o comando:

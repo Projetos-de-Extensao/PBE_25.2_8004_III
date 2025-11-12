@@ -9,6 +9,51 @@
         margin-bottom: 2rem;
     }
 
+    /* sistema de abas/tabs */
+    .tabs-container {
+        margin-bottom: 2rem;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        bottom: -2px;
+    }
+
+    .tab-btn:hover {
+        color: var(--text-primary);
+        background-color: var(--color-gray-100);
+    }
+
+    .tab-btn.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
     .coordenador-header h1 {
         font-size: 2rem;
         font-weight: 600;
@@ -45,8 +90,8 @@
 
     /* lista de candidatos */
     .candidatos-list {
-        background-color: var(--bg-card);
-        border-radius: var(--border-radius);
+        background-color: var(--color-white);
+        border-radius: var(--border-radius-md);
         border: 1px solid var(--border-color);
         overflow: hidden;
     }
@@ -71,11 +116,11 @@
         grid-template-columns: 3fr 2fr 2fr 1.5fr 1fr;
         gap: 1rem;
         align-items: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
     }
 
     .candidato-item:hover {
-        background-color: var(--bg-hover);
+        background-color: var(--color-gray-50);
     }
 
     .candidato-item:last-child {
@@ -120,26 +165,26 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         font-size: 1.1rem;
     }
 
     .btn-icon.approve {
-        background-color: rgba(112, 196, 112, 0.2);
-        color: var(--accent-green);
+        background-color: rgba(40, 167, 69, 0.2);
+        color: var(--color-success);
     }
 
     .btn-icon.approve:hover {
-        background-color: rgba(112, 196, 112, 0.3);
+        background-color: rgba(40, 167, 69, 0.3);
     }
 
     .btn-icon.reject {
-        background-color: rgba(231, 76, 60, 0.2);
-        color: var(--accent-red);
+        background-color: rgba(220, 53, 69, 0.2);
+        color: var(--color-danger);
     }
 
     .btn-icon.reject:hover {
-        background-color: rgba(231, 76, 60, 0.3);
+        background-color: rgba(220, 53, 69, 0.3);
     }
 
     @media (max-width: 1024px) {

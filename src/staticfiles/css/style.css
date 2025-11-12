@@ -1,3 +1,6 @@
+/* Importar variáveis globais do sistema */
+@import url('variables.css');
+
 /* reset básico */
 * {
     margin: 0;
@@ -5,39 +8,9 @@
     box-sizing: border-box;
 }
 
-/* variáveis do tema escuro */
-:root {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #242424;
-    --bg-card: #2a2a2a;
-    --bg-input: #1f1f1f;
-    --bg-hover: #333333;
-    
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #6b6b6b;
-    
-    --accent-blue: #5b9bd5;
-    --accent-green: #70c470;
-    --accent-red: #e74c3c;
-    --accent-orange: #f39c12;
-    --accent-purple: #9b59b6;
-    
-    --button-primary: #5b9bd5;
-    --button-hover: #77b5f7;
-    
-    --border-color: #3a3a3a;
-    --border-radius: 8px;
-    --border-radius-lg: 12px;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
-    
-    --transition: all 0.3s ease;
-}
-
 /* estilos globais */
 body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    font-family: var(--font-primary);
     color: var(--text-primary);
     background-color: var(--bg-primary);
     line-height: 1.6;
@@ -221,6 +194,136 @@ body {
     box-shadow: var(--shadow);
 }
 
+.btn-secondary {
+    background-color: var(--color-gray-200);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-gray-300);
+    transform: translateY(-1px);
+}
+
+.btn-secondary.active {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.btn-success:hover {
+    background-color: var(--color-success-dark);
+    transform: translateY(-1px);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-gradient-primary {
+    background: var(--gradient-primary);
+    color: var(--color-white);
+    border: none;
+}
+
+.btn-gradient-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-gradient-info {
+    background: var(--gradient-info);
+    color: var(--color-white);
+    border: none;
+}
+
+.btn-gradient-info:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* === BADGES === */
+.badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+}
+
+.badge-success {
+    background-color: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.badge-warning {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning-dark);
+}
+
+.badge-danger {
+    background-color: var(--color-danger-light);
+    color: var(--color-danger-dark);
+}
+
+.badge-secondary {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+
+/* === ALERTS === */
+.alert {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-md);
+}
+
+.alert-success {
+    background-color: var(--color-success-light);
+    border-color: var(--color-success);
+    color: var(--color-success-dark);
+}
+
+.alert-danger {
+    background-color: var(--color-danger-light);
+    border-color: var(--color-danger);
+    color: var(--color-danger-dark);
+}
+
+.alert-warning {
+    background-color: var(--color-warning-light);
+    border-color: var(--color-warning);
+    color: var(--color-warning-dark);
+}
+
+.alert-info {
+    background-color: var(--color-info-light);
+    border-color: var(--color-info);
+    color: var(--color-info-dark);
+}
+
+/* Animação para mensagens */
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 /* === TABELAS === */
 .table-container {
     overflow-x: auto;
@@ -307,28 +410,26 @@ body {
     background: #4a4a4a;
 }
 
-/* Logo no canto inferior esquerdo - visível em TODAS as páginas */
+/* Logo no canto superior direito - visível em TODAS as páginas */
 .logo-corner {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 99;
-    padding: 8px;
-    border-radius: 8px;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
     transition: all 0.3s ease;
 }
 
-.logo-corner:hover {
-    transform: scale(1.05);
-}
+/* Logo corner sem animação no hover */
 
 .logo-corner img {
-    width: 50px;
+    width: 120px;
     height: auto;
     opacity: 1;
     transition: opacity 0.3s ease;
     cursor: pointer;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .logo-corner img:hover {
@@ -369,4 +470,31 @@ body {
 .btn-ibmec:active {
     transform: translateY(0);
     box-shadow: none;
+}
+
+/* ========== TIPOGRAFIA COM FONTES CUSTOMIZADAS ========== */
+
+/* H1 e H2 com Montserrat ExtraBold */
+h1, h2 {
+    font-family: var(--font-primary);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+/* Demais títulos com Montserrat Bold */
+h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+}
+
+/* Texto do corpo com Montserrat Regular */
+body, p, span, a, li {
+    font-family: var(--font-primary);
+    font-weight: 400;
+}
+
+/* Botões e labels com Montserrat SemiBold */
+button, .btn, label, .navbar-menu a {
+    font-family: var(--font-primary);
+    font-weight: 600;
 }
