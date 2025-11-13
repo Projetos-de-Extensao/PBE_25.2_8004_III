@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Botões com Gradiente - Sistema de Monitoria</title>
+    <link rel="stylesheet" href="variables.css">
+    <style>
+        body {
+            font-family: var(--font-primary);
+            padding: var(--spacing-8);
+            background: var(--bg-secondary);
+            max-width: var(--container-lg);
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: var(--font-size-3xl);
+            margin-bottom: var(--spacing-8);
+            text-align: center;
+        }
+        
+        .section {
+            background: var(--bg-primary);
+            padding: var(--spacing-6);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: var(--spacing-6);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .section h2 {
+            color: var(--text-primary);
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--spacing-4);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: var(--spacing-2);
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .code-block {
+            background: var(--bg-dark);
+            color: var(--color-gray-300);
+            padding: var(--spacing-4);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            overflow-x: auto;
+            margin-top: var(--spacing-4);
+        }
+        
+        .label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--spacing-2);
+            font-weight: var(--font-weight-medium);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Botões com Gradiente Sutil</h1>
+    
+    <!-- Botões Padrão com Gradiente -->
+    <div class="section">
+        <h2>Botões com Gradiente (Tamanho Padrão)</h2>
+        <div class="button-grid">
+            <div>
+                <span class="label">Primary</span>
+                <button class="btn btn-gradient-primary">Botão Primary</button>
+            </div>
+            <div>
+                <span class="label">Secondary</span>
+                <button class="btn btn-gradient-secondary">Botão Secondary</button>
+            </div>
+            <div>
+                <span class="label">Success</span>
+                <button class="btn btn-gradient-success">Botão Success</button>
+            </div>
+            <div>
+                <span class="label">Danger</span>
+                <button class="btn btn-gradient-danger">Botão Danger</button>
+            </div>
+            <div>
+                <span class="label">Warning</span>
+                <button class="btn btn-gradient-warning">Botão Warning</button>
+            </div>
+            <div>
+                <span class="label">Info</span>
+                <button class="btn btn-gradient-info">Botão Info</button>
+            </div>
+            <div>
+                <span class="label">Dark</span>
+                <button class="btn btn-gradient-dark">Botão Dark</button>
+            </div>
+            <div>
+                <span class="label">Light</span>
+                <button class="btn btn-gradient-light">Botão Light</button>
+            </div>
+        </div>
+        
+        <div class="code-block">
+&lt;button class="btn btn-gradient-primary"&gt;Botão Primary&lt;/button&gt;
+&lt;button class="btn btn-gradient-success"&gt;Botão Success&lt;/button&gt;
+&lt;button class="btn btn-gradient-danger"&gt;Botão Danger&lt;/button&gt;
+        </div>
+    </div>
+    
+    <!-- Tamanhos de Botões -->
+    <div class="section">
+        <h2>Tamanhos de Botões</h2>
+        <div style="display: flex; gap: var(--spacing-4); align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-gradient-primary btn-sm">Pequeno (sm)</button>
+            <button class="btn btn-gradient-primary">Padrão (md)</button>
+            <button class="btn btn-gradient-primary btn-lg">Grande (lg)</button>
+            <button class="btn btn-gradient-primary btn-xl">Extra Grande (xl)</button>
+        </div>
+        
+        <div class="code-block">
+&lt;button class="btn btn-gradient-primary btn-sm"&gt;Pequeno&lt;/button&gt;
+&lt;button class="btn btn-gradient-primary"&gt;Padrão&lt;/button&gt;
+&lt;button class="btn btn-gradient-primary btn-lg"&gt;Grande&lt;/button&gt;
+&lt;button class="btn btn-gradient-primary btn-xl"&gt;Extra Grande&lt;/button&gt;
+        </div>
+    </div>
+    
+    <!-- Botão Largura Total -->
+    <div class="section">
+        <h2>Botão de Largura Total</h2>
+        <button class="btn btn-gradient-primary btn-block">Botão de Largura Completa</button>
+        
+        <div class="code-block">
+&lt;button class="btn btn-gradient-primary btn-block"&gt;Largura Total&lt;/button&gt;
+        </div>
+    </div>
+    
+    <!-- Botões Desabilitados -->
+    <div class="section">
+        <h2>Botões Desabilitados</h2>
+        <div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap;">
+            <button class="btn btn-gradient-primary" disabled>Primary Desabilitado</button>
+            <button class="btn btn-gradient-success" disabled>Success Desabilitado</button>
+            <button class="btn btn-gradient-danger" disabled>Danger Desabilitado</button>
+        </div>
+        
+        <div class="code-block">
+&lt;button class="btn btn-gradient-primary" disabled&gt;Desabilitado&lt;/button&gt;
+        </div>
+    </div>
+    
+    <!-- Exemplos de Uso Real -->
+    <div class="section">
+        <h2>Exemplos de Uso em Formulários</h2>
+        
+        <form style="max-width: 500px;">
+            <div style="margin-bottom: var(--spacing-4);">
+                <label style="display: block; margin-bottom: var(--spacing-2); font-weight: var(--font-weight-medium);">
+                    Nome da Disciplina
+                </label>
+                <input type="text" placeholder="Ex: Cálculo I" 
+                       style="width: 100%; padding: var(--spacing-3); border: 1px solid var(--border-color); 
+                              border-radius: var(--border-radius-md); font-family: var(--font-primary);">
+            </div>
+            
+            <div style="margin-bottom: var(--spacing-6);">
+                <label style="display: block; margin-bottom: var(--spacing-2); font-weight: var(--font-weight-medium);">
+                    Tipo de Monitoria
+                </label>
+                <select style="width: 100%; padding: var(--spacing-3); border: 1px solid var(--border-color); 
+                               border-radius: var(--border-radius-md); font-family: var(--font-primary);">
+                    <option>Monitor Voluntário</option>
+                    <option>Monitor TEA (Remunerado)</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: var(--spacing-3);">
+                <button type="submit" class="btn btn-gradient-success">
+                    ✅ Salvar Vaga
+                </button>
+                <button type="button" class="btn btn-gradient-light">
+                    ❌ Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Variáveis CSS Disponíveis -->
+    <div class="section">
+        <h2>Variáveis CSS Disponíveis</h2>
+        <div class="code-block">
+/* Gradientes de Botões */
+--btn-gradient-primary: linear-gradient(135deg, #667eea 0%, rgba(0, 0, 0, 0.15) 100%);
+--btn-gradient-secondary: linear-gradient(135deg, #764ba2 0%, rgba(0, 0, 0, 0.15) 100%);
+--btn-gradient-success: linear-gradient(135deg, #28a745 0%, rgba(0, 0, 0, 0.15) 100%);
+--btn-gradient-danger: linear-gradient(135deg, #dc3545 0%, rgba(0, 0, 0, 0.15) 100%);
+--btn-gradient-warning: linear-gradient(135deg, #ffc107 0%, rgba(0, 0, 0, 0.15) 100%);
+--btn-gradient-info: linear-gradient(135deg, #17a2b8 0%, rgba(0, 0, 0, 0.15) 100%);
+--btn-gradient-dark: linear-gradient(135deg, #2a2a2a 0%, rgba(0, 0, 0, 0.25) 100%);
+--btn-gradient-light: linear-gradient(135deg, #f8f9fa 0%, rgba(0, 0, 0, 0.05) 100%);
+
+/* Uso direto em CSS customizado */
+.meu-botao-customizado {
+    background: var(--btn-gradient-primary);
+    color: var(--color-white);
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-all);
+}
+        </div>
+    </div>
+    
+    <div style="text-align: center; color: var(--text-secondary); margin-top: var(--spacing-8); padding: var(--spacing-4);">
+        <p>💡 <strong>Dica:</strong> Todos os botões têm efeito hover que escurece levemente o gradiente e eleva o botão</p>
+        <p>🎨 Gradientes sutis com overlay de preto (15-25%) para dar profundidade</p>
+    </div>
+</body>
+</html>

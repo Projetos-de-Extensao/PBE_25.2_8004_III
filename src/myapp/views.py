@@ -9,6 +9,11 @@ from myapp.models import (
 )
 
 
+def acesso_negado(request):
+    """View para exibir página de acesso negado"""
+    return render(request, 'acesso_negado.html')
+
+
 def home(request):
     context = {
         'vagas_abertas': VagaMonitoria.objects.filter(status='Aberta').count(),
@@ -99,8 +104,7 @@ def cadastro_professor(request):
     # Verificar permissão - apenas coordenador e casa podem cadastrar professores
     user_type = request.session.get('user_type')
     if user_type not in ['coordenador', 'casa']:
-        messages.error(request, 'Apenas coordenadores podem cadastrar novos professores.')
-        return redirect('home')
+        return redirect('acesso_negado')
     
     if request.method == 'POST':
         try:
@@ -139,31 +143,62 @@ def cadastro_professor(request):
 
 def lista_vagas(request):
     vagas = VagaMonitoria.objects.all().select_related('disciplina', 'coordenador')
-    context = {'vagas': vagas}
+    user_type = request.session.get('user_type')
+    user_id = request.session.get('user_id')
+    
+    # Se for aluno, marcar vagas às quais já se candidatou
+    candidaturas_aluno = []
+    if user_type == 'aluno' and user_id:
+        candidaturas_aluno = list(Candidatura.objects.filter(
+            aluno__matricula=user_id
+        ).values_list('vaga_id', flat=True))
+    
+    context = {
+        'vagas': vagas,
+        'user_type': user_type,
+        'candidaturas_aluno': candidaturas_aluno
+    }
     return render(request, 'lista_vagas.html', context)
 
 
 def cadastro_vaga(request):
     user_type = request.session.get('user_type')
-    if user_type != 'coordenador':
-        messages.error(request, 'Apenas coordenadores podem cadastrar vagas.')
-        return redirect('lista_vagas')
+    if user_type not in ['coordenador', 'casa']:
+        return redirect('acesso_negado')
     
     if request.method == 'POST':
         try:
             user_cpf = request.session.get('user_id')
-            coordenador = get_object_or_404(Coordenador, cpf=user_cpf)
             
-            vaga = VagaMonitoria(
-                titulo=request.POST.get('titulo'),
-                pre_requisitos=request.POST.get('pre_requisitos'),
-                disciplina_id=request.POST.get('disciplina'),
-                prazo_inscricao=request.POST.get('prazo_inscricao'),
-                status=request.POST.get('status', 'Aberta'),
-                tipo_monitoria=request.POST.get('tipo_monitoria', 'Monitor'),
-                coordenador=coordenador
-            )
-            coordenador.cadastrarVaga(vaga)
+            # Buscar o usuário (seja do tipo 'coordenador' ou 'casa')
+            if user_type == 'casa':
+                # Para casa, user_id é o email
+                usuario = get_object_or_404(Casa, email=user_cpf)
+                
+                vaga = VagaMonitoria(
+                    titulo=request.POST.get('titulo'),
+                    pre_requisitos=request.POST.get('pre_requisitos'),
+                    disciplina_id=request.POST.get('disciplina'),
+                    prazo_inscricao=request.POST.get('prazo_inscricao'),
+                    status=request.POST.get('status', 'Aberta'),
+                    tipo_monitoria=request.POST.get('tipo_monitoria', 'Monitor'),
+                    casa=usuario  # Atribui ao campo casa
+                )
+            else:
+                # Para coordenador, user_id é o cpf
+                usuario = get_object_or_404(Coordenador, cpf=user_cpf)
+                
+                vaga = VagaMonitoria(
+                    titulo=request.POST.get('titulo'),
+                    pre_requisitos=request.POST.get('pre_requisitos'),
+                    disciplina_id=request.POST.get('disciplina'),
+                    prazo_inscricao=request.POST.get('prazo_inscricao'),
+                    status=request.POST.get('status', 'Aberta'),
+                    tipo_monitoria=request.POST.get('tipo_monitoria', 'Monitor'),
+                    coordenador=usuario  # Atribui ao campo coordenador
+                )
+            
+            usuario.cadastrarVaga(vaga)
             
             messages.success(request, 'Vaga cadastrada com sucesso!')
             return redirect('lista_vagas')
@@ -176,6 +211,11 @@ def cadastro_vaga(request):
 
 
 def painel_monitor(request):
+    # Verificar se o usuário é monitor
+    user_type = request.session.get('user_type')
+    if user_type != 'monitor':
+        return redirect('acesso_negado')
+    
     context = {
         'atividades_pendentes': [],
         'historico': [],
@@ -185,10 +225,34 @@ def painel_monitor(request):
 
 def painel_coordenador(request):
     user_type = request.session.get('user_type')
+    user_id = request.session.get('user_id')
+    
+    # Verificar permissão - apenas coordenador e casa
+    if user_type not in ['coordenador', 'casa']:
+        return redirect('acesso_negado')
+    
+    # Se for CASA, mostra tudo. Se for coordenador, filtra por suas vagas
+    if user_type == 'casa':
+        # CASA vê tudo
+        minhas_vagas = VagaMonitoria.objects.all()
+        candidaturas_pendentes = Candidatura.objects.filter(status='Pendente').select_related('aluno', 'vaga')
+    elif user_type == 'coordenador':
+        # Coordenador vê apenas suas vagas
+        coordenador = Coordenador.objects.get(cpf=user_id)
+        minhas_vagas = VagaMonitoria.objects.filter(coordenador=coordenador)
+        # Candidaturas apenas das vagas do coordenador
+        candidaturas_pendentes = Candidatura.objects.filter(
+            status='Pendente',
+            vaga__coordenador=coordenador
+        ).select_related('aluno', 'vaga')
+    else:
+        # Professor ou outros tipos
+        minhas_vagas = VagaMonitoria.objects.all()
+        candidaturas_pendentes = Candidatura.objects.filter(status='Pendente').select_related('aluno', 'vaga')
     
     context = {
-        'candidaturas_pendentes': Candidatura.objects.filter(status='Pendente').select_related('aluno', 'vaga'),
-        'minhas_vagas': VagaMonitoria.objects.all(),
+        'candidaturas_pendentes': candidaturas_pendentes,
+        'minhas_vagas': minhas_vagas,
         'monitores_ativos': list(Monitor.objects.all()) + list(MonitorTEA.objects.all()),
         'registros_pendentes': RegistroMonitoria.objects.all()[:10],
         'user_type': user_type
@@ -199,8 +263,7 @@ def painel_coordenador(request):
 def dashboard(request):
     user_type = request.session.get('user_type')
     if user_type not in ['coordenador', 'casa']:
-        messages.error(request, 'Acesso negado. Apenas coordenadores e administradores podem acessar o dashboard.')
-        return redirect('home')
+        return redirect('acesso_negado')
     
     # Métricas principais
     total_vagas = VagaMonitoria.objects.count()
@@ -471,8 +534,7 @@ def presenca_alunos(request):
     # Verificar se o usuário é monitor
     user_type = request.session.get('user_type')
     if user_type != 'monitor':
-        messages.error(request, 'Apenas monitores podem registrar presença de alunos.')
-        return redirect('home')
+        return redirect('acesso_negado')
     
     # Buscar o monitor logado
     user_id = request.session.get('user_id')
@@ -614,7 +676,25 @@ def presenca_alunos(request):
 # Detalhes da Vaga
 def detalhes_vaga(request, vaga_id):
     vaga = get_object_or_404(VagaMonitoria, id=vaga_id)
-    context = {'vaga': vaga}
+    
+    # Verificar se o aluno logado já se candidatou
+    ja_candidatado = False
+    candidatura_aluno = None
+    user_type = request.session.get('user_type')
+    user_id = request.session.get('user_id')
+    
+    if user_type == 'aluno' and user_id:
+        candidatura_aluno = Candidatura.objects.filter(
+            aluno__matricula=user_id,
+            vaga=vaga
+        ).first()
+        ja_candidatado = candidatura_aluno is not None
+    
+    context = {
+        'vaga': vaga,
+        'ja_candidatado': ja_candidatado,
+        'candidatura_aluno': candidatura_aluno
+    }
     return render(request, 'detalhes_vaga.html', context)
 
 
@@ -624,21 +704,26 @@ def candidatar_vaga(request, vaga_id):
     
     # Verificar se o usuário é aluno
     if request.session.get('user_type') != 'aluno':
-        messages.error(request, 'Apenas alunos podem se candidatar a vagas.')
-        return redirect('lista_vagas')
+        return redirect('acesso_negado')
+    
+    # Obter matrícula do aluno logado da sessão
+    matricula_aluno = request.session.get('user_id')
+    if not matricula_aluno:
+        messages.error(request, 'Você precisa estar logado como aluno para se candidatar.')
+        return redirect('login')
+    
+    # Buscar o aluno no banco
+    aluno = get_object_or_404(Aluno, matricula=matricula_aluno)
+    
+    # Verificar se já existe candidatura (antes de mostrar o formulário)
+    candidatura_existente = Candidatura.objects.filter(aluno=aluno, vaga=vaga).first()
+    if candidatura_existente:
+        messages.warning(request, f'Você já se candidatou a esta vaga em {candidatura_existente.data_candidatura.strftime("%d/%m/%Y")}. Status: {candidatura_existente.status}')
+        return redirect('detalhes_vaga', vaga_id=vaga.id)
     
     if request.method == 'POST':
         try:
-            # Obter matrícula do aluno logado da sessão
-            matricula_aluno = request.session.get('user_id')
-            if not matricula_aluno:
-                messages.error(request, 'Você precisa estar logado como aluno para se candidatar.')
-                return redirect('login')
-            
-            # Buscar o aluno no banco
-            aluno = get_object_or_404(Aluno, matricula=matricula_aluno)
-            
-            # Verificar se já existe candidatura
+            # Verificar novamente se já existe candidatura (segurança dupla)
             candidatura_existente = Candidatura.objects.filter(aluno=aluno, vaga=vaga).first()
             if candidatura_existente:
                 messages.warning(request, 'Você já se candidatou a esta vaga.')
@@ -665,21 +750,24 @@ def candidatar_vaga(request, vaga_id):
 
 # Editar Vaga
 def editar_vaga(request, vaga_id):
-    # Verificar permissão - APENAS COORDENADOR
+    # Verificar permissão - COORDENADOR e CASA
     user_type = request.session.get('user_type')
-    if user_type != 'coordenador':
-        messages.error(request, 'Apenas coordenadores podem editar vagas.')
-        return redirect('lista_vagas')
+    if user_type not in ['coordenador', 'casa']:
+        return redirect('acesso_negado')
     
     vaga = get_object_or_404(VagaMonitoria, id=vaga_id)
     
-    # Verificar se o coordenador logado é o dono da vaga
-    user_cpf = request.session.get('user_id')
-    coordenador = get_object_or_404(Coordenador, cpf=user_cpf)
+    # Verificar se o usuário logado é o dono da vaga
+    user_id = request.session.get('user_id')
     
-    if vaga.coordenador and vaga.coordenador.cpf != coordenador.cpf:
-        messages.error(request, 'Você só pode editar suas próprias vagas.')
-        return redirect('lista_vagas')
+    if user_type == 'coordenador':
+        coordenador = get_object_or_404(Coordenador, cpf=user_id)
+        if vaga.coordenador and vaga.coordenador.cpf != coordenador.cpf:
+            messages.error(request, 'Você só pode editar suas próprias vagas.')
+            return redirect('lista_vagas')
+    elif user_type == 'casa':
+        # Casa pode editar qualquer vaga
+        pass
     
     if request.method == 'POST':
         try:
@@ -708,8 +796,7 @@ def candidaturas_vaga(request, vaga_id):
     # Verificar permissão - Professores, coordenadores e casa podem ver
     user_type = request.session.get('user_type')
     if user_type not in ['coordenador', 'professor', 'casa']:
-        messages.error(request, 'Você não tem permissão para visualizar candidaturas.')
-        return redirect('lista_vagas')
+        return redirect('acesso_negado')
     
     vaga = get_object_or_404(VagaMonitoria, id=vaga_id)
     candidaturas = Candidatura.objects.filter(vaga=vaga).select_related('aluno').order_by('-data_candidatura')
@@ -725,7 +812,20 @@ def candidaturas_vaga(request, vaga_id):
 # Detalhes da Candidatura
 # @login_required  # Temporariamente desabilitado para testes
 def detalhes_candidatura(request, candidatura_id):
+    # Verificar se o usuário está logado
+    user_type = request.session.get('user_type')
+    user_id = request.session.get('user_id')
+    
+    if not user_type:
+        return redirect('acesso_negado')
+    
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
+    
+    # Verificar permissão - Aluno só pode ver sua própria candidatura
+    if user_type == 'aluno' and candidatura.aluno.matricula != user_id:
+        return redirect('acesso_negado')
+    elif user_type not in ['aluno', 'professor', 'coordenador', 'casa']:
+        return redirect('acesso_negado')
     
     context = {
         'candidatura': candidatura,
@@ -739,8 +839,7 @@ def aprovar_candidatura(request, candidatura_id):
     # Verificar permissão - Apenas professores, coordenadores e casa
     user_type = request.session.get('user_type')
     if user_type not in ['professor', 'coordenador', 'casa']:
-        messages.error(request, 'Apenas professores podem aprovar candidaturas.')
-        return redirect('lista_vagas')
+        return redirect('acesso_negado')
     
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
     
@@ -748,80 +847,46 @@ def aprovar_candidatura(request, candidatura_id):
         # Verificar o tipo de monitoria da vaga
         tipo_monitoria = candidatura.vaga.tipo_monitoria
         
-        # Buscar o professor logado
+        # Aprovar candidatura
         if user_type in ['professor', 'coordenador']:
             user_cpf = request.session.get('user_id')
             professor = get_object_or_404(Professor, cpf=user_cpf)
-            
-            # Aprovar candidatura
+            professor.aprovarCandidatura(candidatura)
+        else:  # casa
             candidatura.status = 'Aprovada'
             candidatura.save()
             
-            # Criar registro de Monitor ou MonitorTEA baseado no tipo da vaga
-            if tipo_monitoria == 'MonitorTEA':
-                # Para MonitorTEA, solicitar salário via POST ou usar valor padrão
-                salario = request.POST.get('salario', '1000.00')  # Valor padrão
-                MonitorTEA.objects.get_or_create(
-                    matricula=candidatura.aluno.matricula,
-                    defaults={
-                        'nome': candidatura.aluno.nome,
-                        'email': candidatura.aluno.email,
-                        'telefone': candidatura.aluno.telefone,
-                        'senha_hash': candidatura.aluno.senha_hash,
-                        'cr_geral': candidatura.aluno.cr_geral,
-                        'curso': candidatura.aluno.curso,
-                        'salario': salario
-                    }
-                )
-                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um Monitor TEA (remunerado).')
-            else:
-                # Monitor voluntário
-                Monitor.objects.get_or_create(
-                    matricula=candidatura.aluno.matricula,
-                    defaults={
-                        'nome': candidatura.aluno.nome,
-                        'email': candidatura.aluno.email,
-                        'telefone': candidatura.aluno.telefone,
-                        'senha_hash': candidatura.aluno.senha_hash,
-                        'cr_geral': candidatura.aluno.cr_geral,
-                        'curso': candidatura.aluno.curso
-                    }
-                )
-                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
+            # Criar registro de Monitor se ainda não existir
+            Monitor.objects.get_or_create(
+                matricula=candidatura.aluno.matricula,
+                defaults={
+                    'nome': candidatura.aluno.nome,
+                    'email': candidatura.aluno.email,
+                    'telefone': candidatura.aluno.telefone,
+                    'senha_hash': candidatura.aluno.senha_hash,
+                    'cr_geral': candidatura.aluno.cr_geral,
+                    'curso': candidatura.aluno.curso
+                }
+            )
+        
+        # Criar MonitorTEA se o tipo de monitoria for remunerado
+        if tipo_monitoria == 'MonitorTEA':
+            salario = request.POST.get('salario', '1000.00')  # Valor padrão
+            MonitorTEA.objects.get_or_create(
+                matricula=candidatura.aluno.matricula,
+                defaults={
+                    'nome': candidatura.aluno.nome,
+                    'email': candidatura.aluno.email,
+                    'telefone': candidatura.aluno.telefone,
+                    'senha_hash': candidatura.aluno.senha_hash,
+                    'cr_geral': candidatura.aluno.cr_geral,
+                    'curso': candidatura.aluno.curso,
+                    'salario': salario
+                }
+            )
+            messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um Monitor TEA (remunerado).')
         else:
-            # Casa também pode aprovar diretamente
-            candidatura.status = 'Aprovada'
-            candidatura.save()
-            
-            # Criar registro de Monitor ou MonitorTEA baseado no tipo da vaga
-            if tipo_monitoria == 'MonitorTEA':
-                salario = request.POST.get('salario', '1000.00')
-                MonitorTEA.objects.get_or_create(
-                    matricula=candidatura.aluno.matricula,
-                    defaults={
-                        'nome': candidatura.aluno.nome,
-                        'email': candidatura.aluno.email,
-                        'telefone': candidatura.aluno.telefone,
-                        'senha_hash': candidatura.aluno.senha_hash,
-                        'cr_geral': candidatura.aluno.cr_geral,
-                        'curso': candidatura.aluno.curso,
-                        'salario': salario
-                    }
-                )
-                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um Monitor TEA (remunerado).')
-            else:
-                Monitor.objects.get_or_create(
-                    matricula=candidatura.aluno.matricula,
-                    defaults={
-                        'nome': candidatura.aluno.nome,
-                        'email': candidatura.aluno.email,
-                        'telefone': candidatura.aluno.telefone,
-                        'senha_hash': candidatura.aluno.senha_hash,
-                        'cr_geral': candidatura.aluno.cr_geral,
-                        'curso': candidatura.aluno.curso
-                    }
-                )
-                messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
+            messages.success(request, f'Candidatura de {candidatura.aluno.nome} aprovada com sucesso! O aluno agora é um monitor.')
     except Exception as e:
         messages.error(request, f'Erro ao aprovar candidatura: {str(e)}')
     
@@ -833,21 +898,17 @@ def rejeitar_candidatura(request, candidatura_id):
     # Verificar permissão - Apenas professores, coordenadores e casa
     user_type = request.session.get('user_type')
     if user_type not in ['professor', 'coordenador', 'casa']:
-        messages.error(request, 'Apenas professores podem rejeitar candidaturas.')
-        return redirect('lista_vagas')
+        return redirect('acesso_negado')
     
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
     
     try:
-        # Buscar o professor logado
+        # Rejeitar candidatura
         if user_type in ['professor', 'coordenador']:
             user_cpf = request.session.get('user_id')
             professor = get_object_or_404(Professor, cpf=user_cpf)
-            
-            # Usar o método do modelo para rejeitar
             professor.rejeitarCandidatura(candidatura)
-        else:
-            # Casa também pode rejeitar diretamente
+        else:  # casa
             candidatura.status = 'Rejeitada'
             candidatura.save()
         
@@ -897,7 +958,7 @@ def detalhes_monitoria(request, monitoria_id):
     """
     # Verificar autenticação
     if 'user_type' not in request.session:
-        return redirect('login')
+        return redirect('acesso_negado')
     
     user_type = request.session.get('user_type')
     
@@ -909,10 +970,10 @@ def detalhes_monitoria(request, monitoria_id):
         # Monitor só pode ver suas próprias monitorias
         matricula = request.session.get('user_id')
         if registro.monitor_tea.matricula != matricula:
-            return redirect('painel_monitor')
+            return redirect('acesso_negado')
     elif user_type not in ['Casa', 'Coordenador']:
         # Outros tipos de usuário não têm acesso
-        return redirect('home')
+        return redirect('acesso_negado')
     
     # Processar lista de alunos participantes
     alunos = registro.alunos_participantes if registro.alunos_participantes else []

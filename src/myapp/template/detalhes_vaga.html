@@ -5,176 +5,482 @@
 
 {% block extra_css %}
 <style>
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
     .vaga-header {
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         color: var(--white);
-        padding: 2rem;
+        padding: 2.5rem;
         border-radius: var(--border-radius);
         margin-bottom: 2rem;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .vaga-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        transform: translate(30%, -30%);
     }
 
     .vaga-header h1 {
         margin-bottom: 0.5rem;
+        font-size: 2rem;
+        position: relative;
+        z-index: 1;
     }
 
     .vaga-header .subtitle {
-        font-size: 1.1rem;
-        opacity: 0.9;
+        font-size: 1.2rem;
+        opacity: 0.95;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .vaga-header .badges {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+        position: relative;
+        z-index: 1;
     }
 
     .info-card {
         background-color: var(--white);
-        padding: 1.5rem;
+        padding: 2rem;
         border-radius: var(--border-radius);
         box-shadow: var(--shadow);
         margin-bottom: 1.5rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .info-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
     }
 
     .info-card h3 {
         color: var(--primary-color);
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--border-color);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid var(--primary-color);
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card h3::before {
+        content: '';
+        width: 4px;
+        height: 1.4rem;
+        background: var(--primary-color);
+        border-radius: 2px;
     }
 
     .info-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
+        gap: 1.5rem;
         margin-top: 1rem;
     }
 
     .info-item {
-        padding: 0.75rem;
-        background-color: var(--bg-light);
+        padding: 1.25rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .info-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .info-label {
         font-size: 0.85rem;
         color: var(--text-secondary);
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
     }
 
     .info-value {
-        font-weight: 600;
+        font-weight: 700;
         color: var(--text-primary);
-        font-size: 1.1rem;
+        font-size: 1.15rem;
+        margin-bottom: 0.25rem;
     }
 
-    .pre-requisitos {
-        background-color: #f8f9fa;
-        padding: 1rem;
+    .info-item small {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+    }
+
+    .descricao-vaga {
+        background-color: #ffffff;
+        padding: 1.5rem;
         border-radius: var(--border-radius);
         border-left: 4px solid var(--primary-color);
-        margin-top: 1rem;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        white-space: pre-line;
+    }
+
+    .requisitos-list {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        border-left: 4px solid #2196F3;
+    }
+
+    .requisitos-list ul {
+        margin: 1rem 0 0 1.5rem;
+        list-style-type: none;
+    }
+
+    .requisitos-list li {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+        font-size: 1.05rem;
+    }
+
+    .requisitos-list li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #2196F3;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .timeline {
+        background-color: #fff3cd;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        border-left: 4px solid #ffc107;
+    }
+
+    .timeline-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        background: #ffc107;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .timeline-content {
+        flex: 1;
+    }
+
+    .timeline-content strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--text-primary);
+    }
+
+    .timeline-content small {
+        color: var(--text-secondary);
     }
 
     .action-buttons {
         display: flex;
-        gap: 0.5rem;
+        gap: 1rem;
         margin-top: 2rem;
         flex-wrap: wrap;
     }
 
-    .requisitos-list {
-        background-color: #e7f3ff;
-        padding: 1rem;
+    .action-buttons .btn {
+        flex: 1;
+        min-width: 200px;
+        padding: 1rem 1.5rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .alert-candidatura {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
         border-radius: var(--border-radius);
-        margin-top: 1rem;
+        margin-bottom: 1.5rem;
     }
 
-    .requisitos-list ul {
-        margin: 0.5rem 0 0 1.5rem;
-    }
-
-    .requisitos-list li {
+    .alert-candidatura strong {
+        font-size: 1.1rem;
+        color: #155724;
+        display: block;
         margin-bottom: 0.5rem;
+    }
+
+    .alert-candidatura small {
+        display: block;
+        margin-top: 0.25rem;
+        color: #155724;
+    }
+
+    .status-badge-large {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+        .vaga-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons .btn {
+            min-width: 100%;
+        }
+    }
+
+    /* Ícone de monitoria */
+    .monitoria-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="vaga-header">
-    <h1>{{ vaga.titulo }}</h1>
-    <p class="subtitle">{{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}</p>
-    <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}" style="font-size: 1rem; margin-top: 0.5rem;">
-        {{ vaga.status }}
-    </span>
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+    <a href="{% url 'home' %}">Início</a>
+    <span>›</span>
+    <a href="{% url 'lista_vagas' %}">Vagas de Monitoria</a>
+    <span>›</span>
+    <span>{{ vaga.titulo }}</span>
 </div>
 
-<!-- Informações da Vaga -->
+<!-- Cabeçalho da Vaga -->
+<div class="vaga-header">
+    <h1>{{ vaga.titulo }}</h1>
+    <p class="subtitle">📚 {{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}</p>
+    <div class="badges">
+        <span class="status-badge-large badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
+            {{ vaga.status }}
+        </span>
+        <span class="status-badge-large badge-{% if vaga.tipo_monitoria == 'MonitorTEA' %}primary{% else %}info{% endif %}">
+            {% if vaga.tipo_monitoria == 'MonitorTEA' %}💰 Remunerada{% else %}🎓 Voluntária{% endif %}
+        </span>
+    </div>
+</div>
+
+<!-- Alerta de Candidatura Existente -->
+{% if user_type == 'aluno' and ja_candidatado %}
+<div class="alert-candidatura">
+    <strong>✓ Você já se candidatou a esta vaga!</strong>
+    <small>Data da candidatura: {{ candidatura_aluno.data_candidatura|date:"d/m/Y" }}</small>
+    <small>Status atual: <span class="badge badge-{% if candidatura_aluno.status == 'Aprovada' %}success{% elif candidatura_aluno.status == 'Rejeitada' %}danger{% else %}warning{% endif %}">{{ candidatura_aluno.status }}</span></small>
+</div>
+{% endif %}
+
+<!-- Informações Principais -->
 <div class="info-card">
     <h3>📋 Informações da Vaga</h3>
     <div class="info-grid">
         <div class="info-item">
-            <div class="info-label">Disciplina</div>
+            <div class="info-label">📚 Disciplina</div>
             <div class="info-value">{{ vaga.disciplina.codigo }}</div>
             <small>{{ vaga.disciplina.nome }}</small>
         </div>
         <div class="info-item">
-            <div class="info-label">Tipo de Monitoria</div>
-            <div class="info-value">
-                <span class="badge badge-{% if vaga.tipo_monitoria == 'MonitorTEA' %}primary{% else %}info{% endif %}" style="font-size: 0.9rem;">
-                    {{ vaga.get_tipo_monitoria_display }}
-                </span>
-            </div>
-            <small>{% if vaga.tipo_monitoria == 'MonitorTEA' %}Remunerada{% else %}Voluntária{% endif %}</small>
+            <div class="info-label">🎯 Tipo de Monitoria</div>
+            <div class="info-value">{{ vaga.get_tipo_monitoria_display }}</div>
+            <small>{% if vaga.tipo_monitoria == 'MonitorTEA' %}Monitoria com bolsa/remuneração{% else %}Monitoria voluntária{% endif %}</small>
         </div>
         <div class="info-item">
-            <div class="info-label">Status</div>
+            <div class="info-label">📊 Status da Vaga</div>
             <div class="info-value">
-                <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
+                <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}" style="font-size: 1rem;">
                     {{ vaga.status }}
                 </span>
             </div>
+            <small>{% if vaga.status == 'Aberta' %}Candidaturas abertas{% elif vaga.status == 'Fechada' %}Candidaturas encerradas{% else %}Em processo de análise{% endif %}</small>
         </div>
         <div class="info-item">
-            <div class="info-label">Prazo de Inscrição</div>
+            <div class="info-label">📅 Prazo de Inscrição</div>
             <div class="info-value">{{ vaga.prazo_inscricao|date:"d/m/Y" }}</div>
+            <small>Até {{ vaga.prazo_inscricao|date:"d \d\e F \d\e Y" }}</small>
         </div>
         {% if vaga.coordenador %}
         <div class="info-item">
-            <div class="info-label">Coordenador Responsável</div>
-            <div class="info-value" style="font-size: 0.95rem;">{{ vaga.coordenador.nome }}</div>
+            <div class="info-label">👤 Coordenador Responsável</div>
+            <div class="info-value" style="font-size: 1rem;">{{ vaga.coordenador.nome }}</div>
+            <small>{{ vaga.coordenador.email }}</small>
+        </div>
+        {% elif vaga.casa %}
+        <div class="info-item">
+            <div class="info-label">👤 Responsável (CASA)</div>
+            <div class="info-value" style="font-size: 1rem;">{{ vaga.casa.nome }}</div>
+            <small>Administrador do sistema</small>
         </div>
         {% endif %}
     </div>
 </div>
 
-<!-- Pré-requisitos -->
+<!-- Descrição e Pré-requisitos -->
 <div class="info-card">
-    <h3>📚 Pré-requisitos</h3>
-    <div class="pre-requisitos">
-        <p style="white-space: pre-line;">{{ vaga.pre_requisitos }}</p>
+    <h3>📝 Descrição da Vaga e Pré-requisitos</h3>
+    <div class="descricao-vaga">
+        {{ vaga.pre_requisitos }}
     </div>
 </div>
 
-<!-- Requisitos Mínimos -->
+<!-- Requisitos Mínimos para Candidatura -->
 <div class="info-card">
-    <h3>✓ Requisitos Mínimos para Candidatura</h3>
+    <h3>✅ Requisitos Mínimos para Candidatura</h3>
     <div class="requisitos-list">
         <ul>
-            <li><strong>CR Geral:</strong> Mínimo de 7.0</li>
-            <li><strong>CR na Disciplina:</strong> Mínimo de 8.0</li>
-            <li><strong>Prazo:</strong> Candidatura deve ser realizada até {{ vaga.prazo_inscricao|date:"d/m/Y" }}</li>
+            <li>
+                <strong>Coeficiente de Rendimento (CR) Geral:</strong> Mínimo de 7.0<br>
+                <small>Seu CR geral deve ser igual ou superior a 7.0 para se candidatar</small>
+            </li>
+            <li>
+                <strong>CR Específico na Disciplina:</strong> Mínimo de 8.0<br>
+                <small>Você deve ter obtido CR igual ou superior a 8.0 na disciplina {{ vaga.disciplina.nome }}</small>
+            </li>
+            <li>
+                <strong>Prazo de Candidatura:</strong> Até {{ vaga.prazo_inscricao|date:"d/m/Y" }}<br>
+                <small>Candidaturas devem ser enviadas antes do prazo limite</small>
+            </li>
+            <li>
+                <strong>Documentação:</strong> Histórico escolar e informações complementares<br>
+                <small>Serão solicitados durante o processo de candidatura</small>
+            </li>
         </ul>
     </div>
 </div>
 
-<!-- Ações -->
+<!-- Processo Seletivo -->
+<div class="info-card">
+    <h3>📍 Fluxo do Processo Seletivo</h3>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-icon">1</div>
+            <div class="timeline-content">
+                <strong>Candidatura</strong>
+                <small>Envie sua candidatura preenchendo o formulário com seus dados e documentos</small>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-icon">2</div>
+            <div class="timeline-content">
+                <strong>Análise</strong>
+                <small>Sua candidatura será analisada pelo professor/coordenador responsável</small>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-icon">3</div>
+            <div class="timeline-content">
+                <strong>Resultado</strong>
+                <small>Você será notificado sobre a aprovação ou rejeição de sua candidatura</small>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-icon">4</div>
+            <div class="timeline-content">
+                <strong>Início da Monitoria</strong>
+                <small>Se aprovado, você iniciará suas atividades como monitor da disciplina</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botões de Ação -->
 <div class="action-buttons">
     {% if user_type == 'aluno' and vaga.status == 'Aberta' %}
-        <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-gradient-success">
-            Candidatar-se a esta Vaga
+        {% if ja_candidatado %}
+        <button class="btn btn-gradient-secondary" disabled style="cursor: not-allowed; opacity: 0.6;">
+            ✓ Candidatura Já Enviada
+        </button>
+        <a href="{% url 'lista_vagas' %}" class="btn btn-gradient-info">
+            Ver Minhas Candidaturas
         </a>
+        {% else %}
+        <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-gradient-success">
+            🎯 Candidatar-se a Esta Vaga
+        </a>
+        {% endif %}
+    {% elif user_type == 'aluno' and vaga.status != 'Aberta' %}
+        <div class="alert alert-warning" style="width: 100%; padding: 1rem; border-radius: 8px;">
+            <strong>⚠️ Candidaturas Encerradas</strong><br>
+            <small>Esta vaga não está mais aceitando candidaturas.</small>
+        </div>
     {% endif %}
     
     {% if user_type == 'coordenador' or user_type == 'casa' %}
-        <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-gradient-primary">Editar Vaga</a>
-        <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-gradient-warning">Ver Candidaturas</a>
+        <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-gradient-primary">
+            ✏️ Editar Vaga
+        </a>
+        <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-gradient-warning">
+            👥 Ver Candidaturas ({{ vaga.candidatura_set.count }})
+        </a>
     {% endif %}
     
-    <a href="{% url 'lista_vagas' %}" class="btn btn-gradient-light">Voltar para Vagas</a>
+    <a href="{% url 'lista_vagas' %}" class="btn btn-gradient-light">
+        ← Voltar para Lista de Vagas
+    </a>
 </div>
 {% endblock %}

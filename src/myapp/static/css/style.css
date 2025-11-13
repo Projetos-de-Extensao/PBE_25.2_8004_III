@@ -15,6 +15,8 @@ body {
     background-color: var(--bg-primary);
     line-height: 1.6;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* === NAVBAR MODERNA COM LOGO IBMEC === */
@@ -72,11 +74,17 @@ body {
     font-weight: 500;
     transition: var(--transition);
     font-size: 0.95rem;
+    background-color: #1e3a5f;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-block;
 }
 
 .navbar-menu a:hover,
 .navbar-menu a.active {
-    color: var(--text-primary);
+    background-color: #2a5a8f;
+    color: white;
 }
 
 /* menu hamburguer mobile */
@@ -96,12 +104,49 @@ body {
     transition: var(--transition);
 }
 
+/* === CONTAINER COMECE AGORA === */
+.hero-section {
+    background-color: #1e3a5f;
+    color: var(--color-white);
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.hero-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-white);
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-section .btn {
+    margin: 0.5rem;
+}
+
+.cta-section {
+    background-color: #1e3a5f !important;
+    color: var(--color-white);
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
 /* === CONTEÚDO PRINCIPAL === */
 .main-content {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem;
-    min-height: calc(100vh - 80px);
+    padding: 0 2rem 2rem 2rem;
+    flex: 1;
+    width: 100%;
 }
 
 .page-title {
@@ -194,6 +239,136 @@ body {
     box-shadow: var(--shadow);
 }
 
+.btn-secondary {
+    background-color: var(--color-gray-200);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-gray-300);
+    transform: translateY(-1px);
+}
+
+.btn-secondary.active {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.btn-success:hover {
+    background-color: var(--color-success-dark);
+    transform: translateY(-1px);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-gradient-primary {
+    background: var(--gradient-primary);
+    color: var(--color-white);
+    border: none;
+}
+
+.btn-gradient-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-gradient-info {
+    background: var(--gradient-info);
+    color: var(--color-white);
+    border: none;
+}
+
+.btn-gradient-info:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* === BADGES === */
+.badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+}
+
+.badge-success {
+    background-color: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.badge-warning {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning-dark);
+}
+
+.badge-danger {
+    background-color: var(--color-danger-light);
+    color: var(--color-danger-dark);
+}
+
+.badge-secondary {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+
+/* === ALERTS === */
+.alert {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-md);
+}
+
+.alert-success {
+    background-color: var(--color-success-light);
+    border-color: var(--color-success);
+    color: var(--color-success-dark);
+}
+
+.alert-danger {
+    background-color: var(--color-danger-light);
+    border-color: var(--color-danger);
+    color: var(--color-danger-dark);
+}
+
+.alert-warning {
+    background-color: var(--color-warning-light);
+    border-color: var(--color-warning);
+    color: var(--color-warning-dark);
+}
+
+.alert-info {
+    background-color: var(--color-info-light);
+    border-color: var(--color-info);
+    color: var(--color-info-dark);
+}
+
+/* Animação para mensagens */
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 /* === TABELAS === */
 .table-container {
     overflow-x: auto;
@@ -228,13 +403,13 @@ body {
 
 /* === RODAPÉ === */
 .footer {
-    background-color: var(--bg-secondary);
+    background-color: #1e3a5f;
     text-align: center;
     padding: 1.5rem;
-    margin-top: 3rem;
-    color: var(--text-secondary);
+    color: white;
     border-top: 1px solid var(--border-color);
     font-size: 0.9rem;
+    width: 100%;
 }
 
 /* === RESPONSIVIDADE === */
@@ -308,8 +483,10 @@ body {
 
 /* Estilo para o nome do usuário */
 .user-info {
-    color: var(--text-primary);
+    color: white;
     padding: 0.5rem 1rem;
+    background-color: #1e3a5f;
+    border-radius: 6px;
 }
 
 /* === BOTÕES COM GRADIENTE AMARELO IBMEC === */
@@ -340,4 +517,31 @@ body {
 .btn-ibmec:active {
     transform: translateY(0);
     box-shadow: none;
+}
+
+/* ========== TIPOGRAFIA COM FONTES CUSTOMIZADAS ========== */
+
+/* H1 e H2 com Montserrat ExtraBold */
+h1, h2 {
+    font-family: var(--font-primary);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+/* Demais títulos com Montserrat Bold */
+h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+}
+
+/* Texto do corpo com Montserrat Regular */
+body, p, span, a, li {
+    font-family: var(--font-primary);
+    font-weight: 400;
+}
+
+/* Botões e labels com Montserrat SemiBold */
+button, .btn, label, .navbar-menu a {
+    font-family: var(--font-primary);
+    font-weight: 600;
 }

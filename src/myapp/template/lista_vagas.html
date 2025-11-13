@@ -114,6 +114,7 @@
     </div>
     <div class="filter-group">
         <select id="tipo-filter" class="form-select">
+            <option value="">Todos</option>
             <option value="Monitor">Monitor (Voluntário)</option>
             <option value="MonitorTEA">Monitor TEA (Remunerado)</option>
         </select>
@@ -139,7 +140,7 @@
                 </div>
                 <div style="display: flex; gap: 0.5rem; align-items: center;">
                     <span class="badge badge-{% if vaga.tipo_monitoria == 'MonitorTEA' %}primary{% else %}info{% endif %}" style="font-size: 0.85rem;">
-                        {% if vaga.tipo_monitoria == 'MonitorTEA' %}💰 Remunerada{% else %}🤝 Voluntária{% endif %}
+                        {% if vaga.tipo_monitoria == 'MonitorTEA' %}Remunerada{% else %}Voluntária{% endif %}
                     </span>
                     <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
                         {{ vaga.status }}
@@ -152,14 +153,22 @@
                 <p><strong>Pré-requisitos:</strong> {{ vaga.pre_requisitos|truncatewords:20 }}</p>
                 <p><strong>Prazo de Inscrição:</strong> {{ vaga.prazo_inscricao|date:"d/m/Y" }}</p>
                 {% if vaga.coordenador %}
-                <p><strong>Coordenador:</strong> {{ vaga.coordenador.nome }}</p>
+                <p><strong>Responsável:</strong> {{ vaga.coordenador.nome }}</p>
+                {% elif vaga.casa %}
+                <p><strong>Responsável:</strong> {{ vaga.casa.nome }} (CASA)</p>
                 {% endif %}
             </div>
 
             <div class="vaga-actions">
                 <a href="{% url 'detalhes_vaga' vaga.id %}" class="btn btn-gradient-info">Ver Detalhes</a>
                 {% if user_type == 'aluno' and vaga.status == 'Aberta' %}
-                <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-gradient-success">Candidatar-se</a>
+                    {% if vaga.id in candidaturas_aluno %}
+                    <button class="btn btn-gradient-secondary" disabled style="cursor: not-allowed; opacity: 0.6;">
+                        ✓ Já Candidatado
+                    </button>
+                    {% else %}
+                    <a href="{% url 'candidatar_vaga' vaga.id %}" class="btn btn-gradient-success">Candidatar-se</a>
+                    {% endif %}
                 {% endif %}
                 {% if user_type == 'coordenador' or user_type == 'casa' %}
                 <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-gradient-light">Editar</a>

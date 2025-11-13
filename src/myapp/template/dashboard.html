@@ -18,55 +18,55 @@
     <div class="metrics-grid">
         <div class="metric-card">
             <div class="metric-header">
-                <div class="metric-icon blue">📊</div>
+                <div class="metric-icon blue"></div>
             </div>
-            <div class="metric-value">{{ total_vagas|default:24 }}</div>
+            <div class="metric-value">{{ total_vagas|default:0 }}</div>
             <div class="metric-label">Total de Vagas</div>
-            <div class="metric-trend">↑ +{{ novas_vagas_mes|default:5 }} este mês</div>
+            <div class="metric-trend">↑ +{{ novas_vagas_mes|default:0 }} este mês</div>
         </div>
 
         <div class="metric-card">
             <div class="metric-header">
-                <div class="metric-icon green">📝</div>
+                <div class="metric-icon green"></div>
             </div>
-            <div class="metric-value">{{ total_candidaturas|default:156 }}</div>
+            <div class="metric-value">{{ total_candidaturas|default:0 }}</div>
             <div class="metric-label">Candidaturas</div>
-            <div class="metric-trend">↑ +{{ candidaturas_mes|default:23 }} este mês</div>
+            <div class="metric-trend">↑ +{{ candidaturas_mes|default:0 }} este mês</div>
         </div>
 
         <div class="metric-card">
             <div class="metric-header">
-                <div class="metric-icon orange">👥</div>
+                <div class="metric-icon orange"></div>
             </div>
-            <div class="metric-value">{{ monitores_ativos|default:18 }}</div>
+            <div class="metric-value">{{ monitores_ativos|default:0 }}</div>
             <div class="metric-label">Monitores Ativos</div>
-            <div class="metric-trend">↑ {{ monitores_novos|default:3 }} novos</div>
+            <div class="metric-trend">↑ {{ monitores_novos|default:0 }} novos</div>
         </div>
 
         <div class="metric-card">
             <div class="metric-header">
-                <div class="metric-icon red">⏰</div>
+                <div class="metric-icon red"></div>
             </div>
-            <div class="metric-value">{{ horas_monitoria|default:342 }}</div>
+            <div class="metric-value">{{ horas_monitoria|default:0 }}</div>
             <div class="metric-label">Horas de Monitoria</div>
-            <div class="metric-trend">↑ {{ horas_mes|default:78 }}h este mês</div>
+            <div class="metric-trend">↑ {{ horas_mes|default:0 }}h este mês</div>
         </div>
 
         <div class="metric-card">
             <div class="metric-header">
-                <div class="metric-icon blue">✅</div>
+                <div class="metric-icon blue"></div>
             </div>
-            <div class="metric-value">{{ taxa_aprovacao|default:87 }}%</div>
+            <div class="metric-value">{{ taxa_aprovacao|default:0 }}%</div>
             <div class="metric-label">Taxa de Aprovação</div>
         </div>
 
         <div class="metric-card">
             <div class="metric-header">
-                <div class="metric-icon green">🎓</div>
+                <div class="metric-icon green"></div>
             </div>
-            <div class="metric-value">{{ alunos_atendidos|default:234 }}</div>
+            <div class="metric-value">{{ alunos_atendidos|default:0 }}</div>
             <div class="metric-label">Alunos Atendidos</div>
-            <div class="metric-trend">↑ {{ alunos_mes|default:45 }} este mês</div>
+            <div class="metric-trend">↑ {{ alunos_mes|default:0 }} este mês</div>
         </div>
     </div>
 
@@ -114,7 +114,7 @@
     <!-- Tabela de Monitorias Recentes -->
     {% if monitorias_recentes %}
     <div class="chart-card" style="margin-top: 2rem;">
-        <div class="chart-header">📚 Monitorias Realizadas (Últimas 20)</div>
+        <div class="chart-header">Monitorias Realizadas (Últimas 20)</div>
         <div class="table-container">
             <table class="table">
                 <thead>
@@ -148,7 +148,7 @@
                                 onclick="verDetalhesMonitoria({{ monitoria.id }})"
                                 title="Ver detalhes completos"
                             >
-                                👁️ Ver
+                                Ver
                             </button>
                         </td>
                     </tr>
@@ -174,18 +174,18 @@
                 <tbody>
                     <tr>
                         <td><span class="badge badge-success">Aberta</span></td>
-                        <td>{{ vagas_abertas|default:15 }}</td>
-                        <td>{{ vagas_abertas_percent|default:62 }}%</td>
+                        <td>{{ vagas_abertas|default:0 }}</td>
+                        <td>{{ vagas_abertas_percent|default:0 }}%</td>
                     </tr>
                     <tr>
                         <td><span class="badge badge-warning">Em Análise</span></td>
-                        <td>{{ vagas_analise|default:6 }}</td>
-                        <td>{{ vagas_analise_percent|default:25 }}%</td>
+                        <td>{{ vagas_analise|default:0 }}</td>
+                        <td>{{ vagas_analise_percent|default:0 }}%</td>
                     </tr>
                     <tr>
                         <td><span class="badge badge-danger">Fechada</span></td>
-                        <td>{{ vagas_fechadas|default:3 }}</td>
-                        <td>{{ vagas_fechadas_percent|default:13 }}%</td>
+                        <td>{{ vagas_fechadas|default:0 }}</td>
+                        <td>{{ vagas_fechadas_percent|default:0 }}%</td>
                     </tr>
                 </tbody>
             </table>

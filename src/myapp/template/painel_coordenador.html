@@ -50,8 +50,8 @@
     }
 
     .candidatos-list {
-        background-color: var(--bg-card);
-        border-radius: var(--border-radius);
+        background-color: var(--color-white);
+        border-radius: var(--border-radius-md);
         border: 1px solid var(--border-color);
         overflow: hidden;
     }
@@ -76,11 +76,11 @@
         grid-template-columns: 3fr 2fr 2fr 1.5fr 1fr;
         gap: 1rem;
         align-items: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
     }
 
     .candidato-item:hover {
-        background-color: var(--bg-hover);
+        background-color: var(--color-gray-50);
     }
 
     .candidato-item:last-child {
@@ -125,26 +125,26 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         font-size: 1.1rem;
     }
 
     .btn-icon.approve {
-        background-color: rgba(112, 196, 112, 0.2);
-        color: var(--accent-green);
+        background-color: rgba(40, 167, 69, 0.2);
+        color: var(--color-success);
     }
 
     .btn-icon.approve:hover {
-        background-color: rgba(112, 196, 112, 0.3);
+        background-color: rgba(40, 167, 69, 0.3);
     }
 
     .btn-icon.reject {
-        background-color: rgba(231, 76, 60, 0.2);
-        color: var(--accent-red);
+        background-color: rgba(220, 53, 69, 0.2);
+        color: var(--color-danger);
     }
 
     .btn-icon.reject:hover {
-        background-color: rgba(231, 76, 60, 0.3);
+        background-color: rgba(220, 53, 69, 0.3);
     }
 
     @media (max-width: 1024px) {
@@ -301,11 +301,51 @@
             <h2>Vagas de Monitoria</h2>
             <a href="{% url 'cadastro_vaga' %}" class="btn btn-primary">+ Nova Vaga</a>
         </div>
+        
+        {% if minhas_vagas %}
+        <div class="candidatos-list">
+            <div class="list-header-row">
+                <div>Título</div>
+                <div>Disciplina</div>
+                <div>Tipo</div>
+                <div>Status</div>
+                <div>Ações</div>
+            </div>
+            {% for vaga in minhas_vagas %}
+            <div class="candidato-item">
+                <div class="candidato-info">
+                    <h3>{{ vaga.titulo }}</h3>
+                    <p>Prazo: {{ vaga.prazo_inscricao|date:"d/m/Y" }}</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ vaga.disciplina.codigo }}</p>
+                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">{{ vaga.disciplina.nome }}</p>
+                </div>
+                <div>
+                    <span class="badge badge-{% if vaga.tipo_monitoria == 'MonitorTEA' %}primary{% else %}info{% endif %}">
+                        {{ vaga.get_tipo_monitoria_display }}
+                    </span>
+                </div>
+                <div>
+                    <span class="badge badge-{% if vaga.status == 'Aberta' %}success{% elif vaga.status == 'Fechada' %}danger{% else %}warning{% endif %}">
+                        {{ vaga.status }}
+                    </span>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="{% url 'detalhes_vaga' vaga.id %}" class="btn btn-sm btn-gradient-info">Ver</a>
+                    <a href="{% url 'editar_vaga' vaga.id %}" class="btn btn-sm btn-gradient-primary">Editar</a>
+                    <a href="{% url 'candidaturas_vaga' vaga.id %}" class="btn btn-sm btn-gradient-warning">Candidaturas</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
         <div class="card">
             <p style="padding: 2rem; text-align: center; color: var(--text-muted);">
-                Lista de vagas será exibida aqui
+                Nenhuma vaga cadastrada ainda. <a href="{% url 'cadastro_vaga' %}">Cadastre a primeira vaga</a>
             </p>
         </div>
+        {% endif %}
     </div>
 
     <!-- Tab Content: Relatórios (Hidden by default) -->
@@ -330,7 +370,10 @@
         button.addEventListener('click', function() {
             // Remove active de todos os botões e conteúdos
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
             
             // Adiciona active no botão clicado
             this.classList.add('active');
@@ -342,6 +385,39 @@
                 tabContent.classList.add('active');
                 tabContent.style.display = 'block';
             }
+        });
+    });
+
+    // Função para filtrar candidaturas
+    document.querySelectorAll('.filter-group .btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active de todos os botões de filtro
+            document.querySelectorAll('.filter-group .btn').forEach(btn => btn.classList.remove('active'));
+            // Adiciona active no botão clicado
+            this.classList.add('active');
+            
+            const filter = this.textContent.trim().toUpperCase();
+            const items = document.querySelectorAll('.candidato-item');
+            
+            items.forEach(item => {
+                if (filter === 'TODOS') {
+                    item.style.display = 'grid';
+                } else {
+                    const badge = item.querySelector('.badge');
+                    if (badge) {
+                        const status = badge.textContent.trim().toUpperCase();
+                        if (filter === 'APROVADOS' && status === 'APROVADA') {
+                            item.style.display = 'grid';
+                        } else if (filter === 'EM ANÁLISE' && status === 'PENDENTE') {
+                            item.style.display = 'grid';
+                        } else if (filter === 'REJEITADOS' && status === 'REJEITADA') {
+                            item.style.display = 'grid';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                }
+            });
         });
     });
 

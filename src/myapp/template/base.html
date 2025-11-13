@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Monitoria{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/variables.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="icon" href="{% static 'img/Ibmec_logo.png' %}">
@@ -23,7 +24,7 @@
         <div class="navbar-container">
             <!-- Logo + título -->
             <div class="navbar-left">
-                <h1 class="navbar-title">Sistema de Monitoria</h1>
+                <img src="{% static 'img/Ibmec_logo.png' %}" alt="Logo IBMEC" class="ibmec-logo">
             </div>
 
             <!-- Menu principal -->
@@ -45,7 +46,7 @@
                 {% endif %}
 
                 {% if user_nome %}
-                    <li class="user-info">👤 {{ user_nome }}</li>
+                    <li class="user-info">{{ user_nome }}</li>
                 {% endif %}
                 <li><a href="{% url 'logout' %}">Sair</a></li>
             </ul>
@@ -54,13 +55,24 @@
     {% endif %}
     {% endblock %}
 
+    <!-- Mensagens do sistema (sucesso, erro, aviso, etc.) -->
+    {% if messages %}
+    <div class="messages-container" style="max-width: 1200px; margin: 1rem auto; padding: 0 1rem;">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="animation: slideInDown 0.3s ease-out;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
 
     {% block footer %}
     <footer class="footer">
-        <p>&copy; 2025 Sistema de Monitoria - Todos os direitos reservados</p>
+        <p>&copy; 2025 Sistema de Monitoria - Todos os direitos reservados a equipe Frello</p>
     </footer>
     {% endblock %}
 

@@ -22,7 +22,9 @@
             <p><strong>Pré-requisitos:</strong> {{ vaga.pre_requisitos }}</p>
             <p><strong>Prazo de Inscrição:</strong> {{ vaga.prazo_inscricao|date:"d/m/Y" }}</p>
             {% if vaga.coordenador %}
-            <p><strong>Coordenador:</strong> {{ vaga.coordenador.nome }}</p>
+            <p><strong>Responsável:</strong> {{ vaga.coordenador.nome }}</p>
+            {% elif vaga.casa %}
+            <p><strong>Responsável:</strong> {{ vaga.casa.nome }} (CASA)</p>
             {% endif %}
         </div>
 
