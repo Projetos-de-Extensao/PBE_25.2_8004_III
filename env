@@ -1,0 +1,11 @@
+# Teste 1: Usuário sem prefixo "postgres."
+# DATABASE_URL=postgresql://postgres:ggwtZ6XYy1ksEvjr@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
+
+# Teste 2: Host direto (não pooler)
+DATABASE_URL=postgresql://postgres:ggwtZ6XYy1ksEvjr@db.zkonmdojdbmdptmeeinf.supabase.co:5432/postgres
+
+# Teste 3: Formato completo com projeto
+# DATABASE_URL=postgresql://postgres.zkonmdojdbmdptmeeinf:ggwtZ6XYy1ksEvjr@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
+
+DEBUG=True
+PYTHONPATH=src
