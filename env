@@ -1,11 +1,10 @@
-# Teste 1: Usuário sem prefixo "postgres."
-# DATABASE_URL=postgresql://postgres:ggwtZ6XYy1ksEvjr@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
+# Django Settings
+SECRET_KEY=odo2mjh)(8fyiua0p10)v0ab&)a9h%7ct40+mhc*l+&=qz6p9w
+DEBUG=False
+ALLOWED_HOSTS=.onrender.com,.vercel.app,localhost,127.0.0.1
 
-# Teste 2: Host direto (não pooler)
+# Database
 DATABASE_URL=postgresql://postgres:ggwtZ6XYy1ksEvjr@db.zkonmdojdbmdptmeeinf.supabase.co:5432/postgres
 
-# Teste 3: Formato completo com projeto
-# DATABASE_URL=postgresql://postgres.zkonmdojdbmdptmeeinf:ggwtZ6XYy1ksEvjr@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
-
-DEBUG=True
-PYTHONPATH=src
+# Python
+PYTHON_VERSION=3.11.0
