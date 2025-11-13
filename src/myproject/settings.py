@@ -20,11 +20,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ex%g3@(tysd2m8-)ydv3))o^f+o)af0^cgas#2+#r#1v^5nlw8'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ex%g3@(tysd2m8-)ydv3))o^f+o)af0^cgas#2+#r#1v^5nlw8')
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']  # Configure com seu domínio Vercel depois
+# Allowed hosts - configure com seus domínios
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
 
 
 # Application definition
